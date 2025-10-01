@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace LiquidLight\Anthology\Controller;
 
 use LiquidLight\Anthology\Factory\RepositoryFactory;
+use LiquidLight\Anthology\Provider\PageTitleProvider;
 use Psr\Http\Message\ResponseInterface;
 use RuntimeException;
 use TYPO3\CMS\Core\Error\Http\PageNotFoundException;
 use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\CMS\Core\Pagination\SlidingWindowPagination;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Http\ForwardResponse;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Pagination\QueryResultPaginator;
@@ -28,6 +31,7 @@ class AnthologyController extends ActionController
 
 	public function __construct(
 		private RepositoryFactory $repositoryFactory,
+		private PageTitleProvider $pageTitleProvider,
 		private PackageManager $packageManager
 	) {
 	}
@@ -90,7 +94,7 @@ class AnthologyController extends ActionController
 			);
 		}
 
-		// @todo Page title
+		$this->pageTitleProvider->setTitle($record, $this->settings['tca']);
 		$this->view->assign('record', $record);
 
 		return $this->htmlResponse();

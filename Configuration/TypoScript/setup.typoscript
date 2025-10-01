@@ -6,3 +6,12 @@ plugin.tx_llanthology {
 		}
 	}
 }
+
+config {
+	pageTitleProviders {
+		tx_llanthology {
+			provider = LiquidLight\Anthology\Provider\PageTitleProvider
+			before = record
+		}
+	}
+}
