@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LiquidLight\Anthology\Controller;
 
+use LiquidLight\Anthology\Domain\Repository\FilterRepository;
 use LiquidLight\Anthology\Factory\RepositoryFactory;
 use LiquidLight\Anthology\Provider\PageTitleProvider;
 use Psr\Http\Message\ResponseInterface;
@@ -17,6 +18,7 @@ use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Http\ForwardResponse;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Pagination\QueryResultPaginator;
+use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
 use TYPO3\CMS\Extbase\Persistence\Repository;
 
 class AnthologyController extends ActionController
@@ -58,9 +60,9 @@ class AnthologyController extends ActionController
 
 	public function listAction(): ResponseInterface
 	{
-		// @todo Filtering
-
 		$this->addTemplatePaths();
+
+		$this->view->assign('filters', $this->getFilters());
 		$this->view->assignMultiple($this->getPaginatedItems());
 
 		return $this->htmlResponse();
@@ -192,5 +194,18 @@ class AnthologyController extends ActionController
 		}
 
 		return $this->repositoryFactory->getRepository($repositoryClass);
+	}
+
+	private function getFilters(): QueryResult
+	{
+		$filterRepository = GeneralUtility::makeInstance(FilterRepository::class);
+
+		$filterQuerySettings = $filterRepository->createQuery()->getQuerySettings();
+		$filterQuerySettings->setRespectStoragePage(false);
+		$filterRepository->setDefaultQuerySettings($filterQuerySettings);
+
+		return $filterRepository->findByUids(
+			GeneralUtility::intExplode(',', $this->settings['filters'])
+		);
 	}
 }

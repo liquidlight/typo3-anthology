@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+	<file source-language="en" datatype="plaintext"  date="2025-09-16T15:22:34Z" product-name="ll_anthology">
+		<body>
+			<trans-unit id="tx_anthology_domain_model_filter">
+				<source>Filter</source>
+			</trans-unit>
+
+			<trans-unit id="tx_anthology_domain_model_filter.filter_type">
+				<source>Filter type</source>
+			</trans-unit>
+			<trans-unit id="tx_anthology_domain_model_filter.filter_type.please_select">
+				<source>Please select...</source>
+			</trans-unit>
+			<trans-unit id="tx_anthology_domain_model_filter.filter_type.search">
+				<source>Keyword search</source>
+			</trans-unit>
+			<trans-unit id="tx_anthology_domain_model_filter.filter_type.category">
+				<source>Category</source>
+			</trans-unit>
+			<trans-unit id="tx_anthology_domain_model_filter.filter_type.date">
+				<source>Date</source>
+			</trans-unit>
+
+			<trans-unit id="tx_anthology_domain_model_filter.display_mode">
+				<source>Display mode</source>
+			</trans-unit>
+			<trans-unit id="tx_anthology_domain_model_filter.display_mode.select">
+				<source>Dropdown</source>
+			</trans-unit>
+			<trans-unit id="tx_anthology_domain_model_filter.display_mode.link">
+				<source>Link</source>
+			</trans-unit>
+			<trans-unit id="tx_anthology_domain_model_filter.display_mode.check">
+				<source>Checkbox</source>
+			</trans-unit>
+
+			<trans-unit id="tx_anthology_domain_model_filter.search_fields">
+				<source>Search fields</source>
+			</trans-unit>
+			<trans-unit id="tx_anthology_domain_model_filter.search_fields.description">
+				<source>@todo</source>
+			</trans-unit>
+
+			<trans-unit id="tx_anthology_domain_model_filter.date_field">
+				<source>Date field</source>
+			</trans-unit>
+			<trans-unit id="tx_anthology_domain_model_filter.date_span">
+				<source>Date span</source>
+			</trans-unit>
+			<trans-unit id="tx_anthology_domain_model_filter.date_span.years">
+				<source>Years</source>
+			</trans-unit>
+			<trans-unit id="tx_anthology_domain_model_filter.date_span.months">
+				<source>Months</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>
