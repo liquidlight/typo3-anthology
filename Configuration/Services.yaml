@@ -10,3 +10,6 @@ services:
 
   LiquidLight\Anthology\Hook\PluginConfigurationHook:
     public: true
+
+  LiquidLight\Anthology\Hook\FilterConfigurationHook:
+    public: true

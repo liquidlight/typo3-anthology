@@ -120,5 +120,21 @@
 				</el>
 			</ROOT>
 		</sDisplay>
+		<sFilters>
+			<ROOT>
+				<sheetTitle>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_be.xlf:filters</sheetTitle>
+				<type>array</type>
+				<el>
+					<settings.filters>
+						<label>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_be.xlf:filters</label>
+						<displayCond>FIELD:sDEF.settings.mode:=:list</displayCond>
+						<config>
+							<type>inline</type>
+							<foreign_table>tx_anthology_domain_model_filter</foreign_table>
+						</config>
+					</settings.filters>
+				</el>
+			</ROOT>
+		</sFilters>
 	</sheets>
 </T3DataStructure>
