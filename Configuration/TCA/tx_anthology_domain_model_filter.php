@@ -96,6 +96,13 @@ return [
 				'minitems' => 1,
 			],
 		],
+		'placeholder' => [
+			'label' => 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.placeholder',
+			'config' => [
+				'type' => 'input',
+				'eval' => 'trim',
+			],
+		],
 
 		// Category
 		'category' => [
@@ -177,6 +184,7 @@ return [
 			--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,
 			--palette--;;general,
 			search_fields,
+			placeholder,
 			--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,
 			hidden,
 			--palette--;;start_end,

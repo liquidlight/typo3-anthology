@@ -204,8 +204,27 @@ class AnthologyController extends ActionController
 		$filterQuerySettings->setRespectStoragePage(false);
 		$filterRepository->setDefaultQuerySettings($filterQuerySettings);
 
-		return $filterRepository->findByUids(
+		$filters = $filterRepository->findByUids(
 			GeneralUtility::intExplode(',', $this->settings['filters'])
 		);
+
+		$activeFilters = $this->getActiveFilters();
+
+		foreach ($filters as $filter) {
+			$filter->setValue($activeFilters[$filter->getUid()] ?? null);
+		}
+
+		return $filters;
+	}
+
+	private function getActiveFilters(): ?array
+	{
+		$activeFilters = $this->request->hasArgument('filter')
+			? array_filter($this->request->getArgument('filter'))
+			: [];
+
+		unset($activeFilters['init']);
+
+		return count($activeFilters) ? $activeFilters : null;
 	}
 }

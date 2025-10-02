@@ -10,6 +10,7 @@
         }
     ],
     "require": {
+        "fluidtypo3/vhs": "^7.1",
         "typo3/cms-core": "^13.4"
     },
     "require-dev": {
