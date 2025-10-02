@@ -1,0 +1,15 @@
+<html
+	xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+	data-namespace-typo3-fluid="true"
+>
+	<f:form class="anthology-filters">
+		<f:for each="{filters}" as="filter">
+			<div class="filter">
+				<f:variable name="filterPartial">{filter.filterType -> f:format.case(mode: 'capital')}</f:variable>
+				<f:render partial="Filter/{filterPartial}" arguments="{filter: filter}" />
+			</div>
+		</f:for>
+
+		<f:form.button type="submit">{f:translate(key: 'filterResults')}</f:form.button>
+	</f:form>
+</html>

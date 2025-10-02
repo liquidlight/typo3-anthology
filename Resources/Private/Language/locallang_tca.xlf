@@ -41,6 +41,9 @@
 			<trans-unit id="tx_anthology_domain_model_filter.search_fields.description">
 				<source>@todo</source>
 			</trans-unit>
+			<trans-unit id="tx_anthology_domain_model_filter.placeholder">
+				<source>Placeholder</source>
+			</trans-unit>
 
 			<trans-unit id="tx_anthology_domain_model_filter.date_field">
 				<source>Date field</source>

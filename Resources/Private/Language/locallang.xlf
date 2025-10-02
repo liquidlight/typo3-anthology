@@ -8,6 +8,14 @@
 			<trans-unit id="description">
 				<source>Display records from in a list/single view</source>
 			</trans-unit>
+
+			<trans-unit id="filterResults">
+				<source>Filter results</source>
+			</trans-unit>
+
+			<trans-unit id="all">
+				<source>All</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
