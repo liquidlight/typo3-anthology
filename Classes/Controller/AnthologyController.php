@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LiquidLight\Anthology\Controller;
 
+use LiquidLight\Anthology\Domain\Query\ConstraintBuilder;
 use LiquidLight\Anthology\Domain\Repository\FilterRepository;
 use LiquidLight\Anthology\Factory\RepositoryFactory;
 use LiquidLight\Anthology\Provider\PageTitleProvider;
@@ -32,6 +33,7 @@ class AnthologyController extends ActionController
 	private const DEFAULT_MAXIMUM_LINKS = 8;
 
 	public function __construct(
+		private ConstraintBuilder $constraintBuilder,
 		private RepositoryFactory $repositoryFactory,
 		private PageTitleProvider $pageTitleProvider,
 		private PackageManager $packageManager
@@ -95,8 +97,8 @@ class AnthologyController extends ActionController
 				1759233928
 			);
 		}
-
 		$this->pageTitleProvider->setTitle($record, $this->settings['tca']);
+
 		$this->view->assign('record', $record);
 
 		return $this->htmlResponse();
@@ -153,8 +155,10 @@ class AnthologyController extends ActionController
 			? (int)$this->request->getArgument('page')
 			: 1;
 
+		$records = $this->getRecords($repository);
+
 		$paginator = new QueryResultPaginator(
-			$repository->findAll(),
+			$records,
 			$currentPage,
 			(int)(
 				$this->settings['itemsPerPage'] ?? false
@@ -179,6 +183,33 @@ class AnthologyController extends ActionController
 		];
 	}
 
+	private function getRecords(Repository $repository): QueryResult
+	{
+		$filters = $this->getFilters(true);
+
+		if (count($filters) === 0) {
+			return $repository->findAll();
+		}
+
+		$query = $repository->createQuery();
+
+		$constraints = $this->constraintBuilder->getConstraints(
+			$filters,
+			$query
+		);
+
+		// @todo Switch between `logicalAnd()` and `logicalOr()`
+
+		return $query
+			->matching(
+				$query->logicalAnd(
+					...$constraints
+				)
+			)
+			->execute()
+		;
+	}
+
 	private function getRepository(): Repository
 	{
 		$repositoryClass = $this->settings['repositories'][$this->settings['tca']] ?? null;
@@ -196,7 +227,7 @@ class AnthologyController extends ActionController
 		return $this->repositoryFactory->getRepository($repositoryClass);
 	}
 
-	private function getFilters(): QueryResult
+	private function getFilters(bool $ignoreUnsetFilters = false): QueryResult
 	{
 		$filterRepository = GeneralUtility::makeInstance(FilterRepository::class);
 
@@ -204,11 +235,14 @@ class AnthologyController extends ActionController
 		$filterQuerySettings->setRespectStoragePage(false);
 		$filterRepository->setDefaultQuerySettings($filterQuerySettings);
 
-		$filters = $filterRepository->findByUids(
-			GeneralUtility::intExplode(',', $this->settings['filters'])
-		);
-
 		$activeFilters = $this->getActiveFilters();
+		$filterUids = GeneralUtility::intExplode(',', $this->settings['filters'], true);
+
+		$filters = $filterRepository->findByUids(
+			$ignoreUnsetFilters
+				? array_intersect($filterUids, array_keys($activeFilters ?? []))
+				: $filterUids
+		);
 
 		foreach ($filters as $filter) {
 			$filter->setValue($activeFilters[$filter->getUid()] ?? null);
