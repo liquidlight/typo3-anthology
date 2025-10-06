@@ -11,6 +11,9 @@ final class FilterRepository extends Repository
 {
 	public function findByUids(array $uids): QueryResultInterface
 	{
+		// Set a value that will return nothing to prevent `in()` throwing an exception
+		$uids[] = 0;
+
 		$query = $this->createQuery();
 
 		return $query

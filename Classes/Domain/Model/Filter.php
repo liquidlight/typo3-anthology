@@ -19,8 +19,6 @@ class Filter extends AbstractEntity
 
 	public string $displayMode = '';
 
-	public array $searchFields = [];
-
 	public string $placeholder = '';
 
 	public string $dateField = '';
@@ -28,6 +26,8 @@ class Filter extends AbstractEntity
 	public string $dateSpan = '';
 
 	public ?Category $category = null;
+
+	protected string $searchFields = '';
 
 	protected mixed $value = null;
 
@@ -69,6 +69,20 @@ class Filter extends AbstractEntity
 				),
 			$childCategoryUids
 		);
+	}
+
+	public function getSearchFields(): array
+	{
+		if (empty($this->searchFields)) {
+			return [];
+		}
+
+		return GeneralUtility::trimExplode(',', $this->searchFields, true);
+	}
+
+	public function setSearchFields(string $searchFields): void
+	{
+		$this->searchFields = $searchFields;
 	}
 
 	public function getValue(): mixed
