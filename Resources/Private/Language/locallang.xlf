@@ -16,6 +16,17 @@
 			<trans-unit id="all">
 				<source>All</source>
 			</trans-unit>
+
+			<trans-unit id="noResults">
+				<source><![CDATA[
+					<h2>Unfortunately your search did not return any results</h2>
+					<ul>
+						<li>Make sure all your keywords are spelt correctly</li>
+						<li>Try more generic keywords</li>
+						<li>Try less restrictive filters</li>
+					</ul>
+				]]></source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

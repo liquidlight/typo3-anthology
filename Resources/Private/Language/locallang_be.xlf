@@ -38,6 +38,12 @@
 			<trans-unit id="template.description">
 				<source>Enter the template name to override the template (optional, template root path must already be configured)</source>
 			</trans-unit>
+			<trans-unit id="noResultsText">
+				<source>Custom empty results text</source>
+			</trans-unit>
+			<trans-unit id="noResultsText.description">
+				<source>Leave blank to use Anthology default</source>
+			</trans-unit>
 			<trans-unit id="filters">
 				<source>Filters</source>
 			</trans-unit>

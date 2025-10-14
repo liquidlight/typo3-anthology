@@ -11,6 +11,10 @@
 			<f:for each="{paginator.paginatedItems}" as="record">
 				<f:render partial="ListRecord" arguments="{record: record, singleView: settings.singleView}" />
 			</f:for>
+
+			<f:if condition="!{paginator.paginatedItems}">
+				<f:render partial="ListNoRecords" />
+			</f:if>
 		</div>
 
 		<f:if condition="{settings.enablePagination}">
