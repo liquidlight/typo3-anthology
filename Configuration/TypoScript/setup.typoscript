@@ -7,6 +7,7 @@ plugin.tx_llanthology {
 		filterImplementations {
 			search = LiquidLight\Anthology\Domain\Query\SearchConstraint
 			category = LiquidLight\Anthology\Domain\Query\CategoryConstraint
+			date = LiquidLight\Anthology\Domain\Query\DateConstraint
 		}
 	}
 }
