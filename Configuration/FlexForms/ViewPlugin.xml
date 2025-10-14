@@ -109,6 +109,14 @@
 							<default>5</default>
 						</config>
 					</settings.maximumPaginationLinks>
+					<settings.noResultsText>
+						<label>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_be.xlf:noResultsText</label>
+						<description>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_be.xlf:noResultsText.description</description>
+						<config>
+							<type>text</type>
+							<enableRichtext>true</enableRichtext>
+						</config>
+					</settings.noResultsText>
 					<settings.template>
 						<label>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_be.xlf:template</label>
 						<description>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_be.xlf:template.description</description>
