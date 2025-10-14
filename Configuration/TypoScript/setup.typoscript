@@ -4,6 +4,10 @@ plugin.tx_llanthology {
 			// Add table -> repository mapping to enable repository anthologies, e.g.
 			// tx_news_domain_model_news = \GeorgRinger\News\Domain\Repository\NewsRepository
 		}
+		filterImplementations {
+			search = LiquidLight\Anthology\Domain\Query\SearchConstraint
+			category = LiquidLight\Anthology\Domain\Query\CategoryConstraint
+		}
 	}
 }
 

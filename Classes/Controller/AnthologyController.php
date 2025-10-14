@@ -195,7 +195,8 @@ class AnthologyController extends ActionController
 
 		$constraints = $this->constraintBuilder->getConstraints(
 			$filters,
-			$query
+			$query,
+			$this->settings['filterImplementations']
 		);
 
 		// @todo Switch between `logicalAnd()` and `logicalOr()`
