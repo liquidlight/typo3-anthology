@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+	<file source-language="en" datatype="plaintext"  date="2025-09-16T15:22:34Z" product-name="ll_anthology">
+		<body>
+			<trans-unit id="mode">
+				<source>Display mode</source>
+			</trans-unit>
+			<trans-unit id="mode.list">
+				<source>List</source>
+			</trans-unit>
+			<trans-unit id="mode.single">
+				<source>Single</source>
+			</trans-unit>
+			<trans-unit id="tca">
+				<source>Model name</source>
+			</trans-unit>
+			<trans-unit id="itemsPerPage">
+				<source>Items per page</source>
+			</trans-unit>
+			<trans-unit id="enablePagination">
+				<source>Enable pagination</source>
+			</trans-unit>
+			<trans-unit id="maximumPaginationLinks">
+				<source>Pagination link count</source>
+			</trans-unit>
+			<trans-unit id="maximumPaginationLinks.description">
+				<source>Maximum number of pagination links to display</source>
+			</trans-unit>
+			<trans-unit id="listView">
+				<source>List page</source>
+			</trans-unit>
+			<trans-unit id="singleView">
+				<source>Single page</source>
+			</trans-unit>
+			<trans-unit id="template">
+				<source>Template</source>
+			</trans-unit>
+			<trans-unit id="template.description">
+				<source>Enter the template name to override the template (optional, template root path must already be configured)</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>
