@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+	<file source-language="en" datatype="plaintext"  date="2025-09-16T15:22:34Z" product-name="ll_anthology">
+		<body>
+			<trans-unit id="title">
+				<source>Anthology</source>
+			</trans-unit>
+			<trans-unit id="description">
+				<source>Display records from in a list/single view</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>
