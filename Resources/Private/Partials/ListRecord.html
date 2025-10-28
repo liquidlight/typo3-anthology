@@ -1,0 +1,30 @@
+<html
+	xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+	data-namespace-typo3-fluid="true"
+>
+	<div class="record">
+		<f:link.action pageUid="{singleView}" action="single" arguments="{record: record.uid}">
+
+			<h2>{record.title}</h2>
+
+			<f:if condition="{record.image}">
+				<!-- @todo Record image -->
+			</f:if>
+
+			<f:if condition="{record.categories}">
+				<ul>
+					<f:for each="{record.categories}" as="category">
+						<li>{category.title}</li>
+					</f:for>
+				</ul>
+			</f:if>
+
+			<f:if condition="{record.abstract}">
+				<p>{record.abstract}</p>
+			</f:if>
+
+			<f:debug inline="true">{_all}</f:debug>
+
+		</f:link.action>
+	</div>
+</html>
