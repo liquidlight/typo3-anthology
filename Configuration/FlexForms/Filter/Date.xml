@@ -20,10 +20,14 @@
 							<renderType>selectSingle</renderType>
 							<items>
 								<numIndex index="0">
+									<label>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.date_span.relative</label>
+									<value>relative</value>
+								</numIndex>
+								<numIndex index="1">
 									<label>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.date_span.months</label>
 									<value>months</value>
 								</numIndex>
-								<numIndex index="1">
+								<numIndex index="2">
 									<label>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.date_span.years</label>
 									<value>years</value>
 								</numIndex>

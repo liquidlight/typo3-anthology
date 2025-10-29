@@ -8,8 +8,8 @@
 
 	<f:link.action arguments="{filter: filterArguments}">{f:translate(key: 'all')}</f:link.action>
 
-	<f:for each="{filter.options}" as="category">
-		<v:variable.set name="filterArguments.{filter.uid}" value="{category.uid}" />
-		<f:link.action arguments="{filter: filterArguments}" class="{f:if(condition: '{filter.parameter} == {category.uid}', then: 'active')}">{category.title}</f:link.action>
+	<f:for each="{filter.options}" as="filterOption">
+		<v:variable.set name="filterArguments.{filter.uid}" value="{filterOption.value}" />
+		<f:link.action arguments="{filter: filterArguments}" class="{f:if(condition: '{filter.parameter} == {filterOption.value}', then: 'active')}">{filterOption.title}</f:link.action>
 	</f:for>
 </html>
