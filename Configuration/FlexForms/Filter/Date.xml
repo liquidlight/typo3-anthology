@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3DataStructure>
+	<sheets>
+		<sDEF>
+			<ROOT>
+				<type>array</type>
+				<el>
+					<settings.dateField>
+						<label>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.date_field</label>
+						<config>
+							<type>select</type>
+							<renderType>selectSingle</renderType>
+							<itemsProcFunc>LiquidLight\Anthology\Hook\FilterConfigurationHook->getDateFields</itemsProcFunc>
+						</config>
+					</settings.dateField>
+					<settings.dateSpan>
+						<label>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.date_span</label>
+						<config>
+							<type>select</type>
+							<renderType>selectSingle</renderType>
+							<items>
+								<numIndex index="0">
+									<label>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.date_span.months</label>
+									<value>months</value>
+								</numIndex>
+								<numIndex index="1">
+									<label>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.date_span.years</label>
+									<value>years</value>
+								</numIndex>
+							</items>
+						</config>
+					</settings.dateSpan>
+					<settings.displayMode>
+						<label>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.display_mode</label>
+						<config>
+							<type>select</type>
+							<renderType>selectSingle</renderType>
+							<items>
+								<numIndex index="0">
+									<label>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.display_mode.select</label>
+									<value>select</value>
+								</numIndex>
+								<numIndex index="1">
+									<label>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.display_mode.link</label>
+									<value>link</value>
+								</numIndex>
+								<numIndex index="2">
+									<label>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.display_mode.check</label>
+									<value>check</value>
+								</numIndex>
+							</items>
+						</config>
+					</settings.displayMode>
+				</el>
+			</ROOT>
+		</sDEF>
+	</sheets>
+</T3DataStructure>

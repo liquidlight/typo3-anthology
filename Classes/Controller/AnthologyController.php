@@ -15,7 +15,6 @@ use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\CMS\Core\Pagination\SlidingWindowPagination;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Http\ForwardResponse;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Pagination\QueryResultPaginator;
@@ -35,6 +34,7 @@ class AnthologyController extends ActionController
 	public function __construct(
 		private ConstraintBuilder $constraintBuilder,
 		private RepositoryFactory $repositoryFactory,
+		private FilterRepository $filterRepository,
 		private PageTitleProvider $pageTitleProvider,
 		private PackageManager $packageManager
 	) {
@@ -230,23 +230,24 @@ class AnthologyController extends ActionController
 
 	private function getFilters(bool $ignoreUnsetFilters = false): QueryResult
 	{
-		$filterRepository = GeneralUtility::makeInstance(FilterRepository::class);
-
-		$filterQuerySettings = $filterRepository->createQuery()->getQuerySettings();
+		$filterQuerySettings = $this->filterRepository->createQuery()->getQuerySettings();
 		$filterQuerySettings->setRespectStoragePage(false);
-		$filterRepository->setDefaultQuerySettings($filterQuerySettings);
+		$this->filterRepository->setDefaultQuerySettings($filterQuerySettings);
 
 		$activeFilters = $this->getActiveFilters();
 		$filterUids = GeneralUtility::intExplode(',', $this->settings['filters'], true);
 
-		$filters = $filterRepository->findByUids(
+		$filters = $this->filterRepository->findByUids(
 			$ignoreUnsetFilters
 				? array_intersect($filterUids, array_keys($activeFilters ?? []))
 				: $filterUids
 		);
 
+		$this->settings['recordStorageUids'] = $filterQuerySettings->getStoragePageIds();
+
 		foreach ($filters as $filter) {
-			$filter->setValue($activeFilters[$filter->getUid()] ?? null);
+			$filter->setOptions($this->settings['filterImplementations'][$filter->filterType]::getOptions($filter, $this->settings));
+			$filter->setParameter($activeFilters[$filter->getUid()] ?? null);
 		}
 
 		return $filters;

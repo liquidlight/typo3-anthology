@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3DataStructure>
+	<sheets>
+		<sDEF>
+			<ROOT>
+				<type>array</type>
+				<el>
+					<settings.category>
+						<label>LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:sys_category.category</label>
+						<description>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.category.description</description>
+						<config>
+							<type>category</type>
+							<minitems>1</minitems>
+							<!-- <maxitems>1</maxitems> -->
+						</config>
+					</settings.category>
+					<settings.displayMode>
+						<label>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.display_mode</label>
+						<config>
+							<type>select</type>
+							<renderType>selectSingle</renderType>
+							<items>
+								<numIndex index="0">
+									<label>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.display_mode.select</label>
+									<value>select</value>
+								</numIndex>
+								<numIndex index="1">
+									<label>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.display_mode.link</label>
+									<value>link</value>
+								</numIndex>
+								<numIndex index="2">
+									<label>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.display_mode.check</label>
+									<value>check</value>
+								</numIndex>
+							</items>
+						</config>
+					</settings.displayMode>
+				</el>
+			</ROOT>
+		</sDEF>
+	</sheets>
+</T3DataStructure>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3DataStructure>
+	<sheets>
+		<sDEF>
+			<ROOT>
+				<type>array</type>
+				<el>
+					<settings.searchFields>
+						<label>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.search_fields</label>
+						<description>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.search_fields.description</description>
+						<config>
+							<type>select</type>
+							<renderType>selectMultipleSideBySide</renderType>
+							<itemsProcFunc>LiquidLight\Anthology\Hook\FilterConfigurationHook->getSearchFields</itemsProcFunc>
+							<minitems>1</minitems>
+						</config>
+					</settings.searchFields>
+					<settings.placeholder>
+						<label>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.placeholder</label>
+						<config>
+							<type>input</type>
+							<eval>trim</eval>
+						</config>
+					</settings.placeholder>
+				</el>
+			</ROOT>
+		</sDEF>
+	</sheets>
+</T3DataStructure>
