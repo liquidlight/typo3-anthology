@@ -1,0 +1,18 @@
+#CODEOWNERS
+
+[Frontend] @team/feds
+*.scss
+*.css
+*.js
+*.ts
+package.*
+
+[Backend] @team/beds
+*.php
+*.sql
+composer*
+
+[DevOps] @team/devops
+.gitlab-ci.yml
+*Dockerfile
+.ddev/*
