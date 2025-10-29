@@ -6,6 +6,7 @@
 				<type>array</type>
 				<el>
 					<settings.none>
+						<description>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_be.xlf:filters.noConfiguration</description>
 						<config>
 							<type>none</type>
 						</config>

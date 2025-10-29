@@ -59,6 +59,9 @@
 			<trans-unit id="filterMode.or">
 				<source>Match any</source>
 			</trans-unit>
+			<trans-unit id="filters.noConfiguration">
+				<source>No configuration options available for this filter type</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
