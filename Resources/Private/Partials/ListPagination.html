@@ -6,8 +6,8 @@
 		<f:for each="{pagination.allPageNumbers}" as="paginationPage">
 			<li class="page-item">
 				<f:link.action
-					arguments="{page: paginationPage}"
-					class="page-link {f:if(condition:'{page}=={paginationPage}', then:'active')}"
+					arguments="{currentPage: paginationPage}"
+					class="page-link {f:if(condition:'{currentPage}=={paginationPage}', then:'active')}"
 				>
 					{paginationPage}
 				</f:link.action>

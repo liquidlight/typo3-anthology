@@ -151,8 +151,8 @@ class AnthologyController extends ActionController
 	{
 		$repository = $this->getRepository();
 
-		$currentPage = $this->request->hasArgument('page')
-			? (int)$this->request->getArgument('page')
+		$currentPage = $this->request->hasArgument('currentPage')
+			? (int)$this->request->getArgument('currentPage')
 			: 1;
 
 		$records = $this->getRecords($repository);
@@ -177,7 +177,7 @@ class AnthologyController extends ActionController
 		);
 
 		return [
-			'page' => $currentPage,
+			'currentPage' => $currentPage,
 			'pagination' => $pagination,
 			'paginator' => $paginator,
 		];
