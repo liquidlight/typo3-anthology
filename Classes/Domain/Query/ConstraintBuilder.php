@@ -47,6 +47,6 @@ class ConstraintBuilder
 			);
 		}
 
-		return $constraints;
+		return array_filter($constraints);
 	}
 }

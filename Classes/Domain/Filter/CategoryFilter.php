@@ -63,7 +63,9 @@ class CategoryFilter extends AbstractFilter implements FilterInterface
 	public static function getConstraint(
 		Filter $filter,
 		QueryInterface $query
-	): ComparisonInterface {
-		return $query->in('categories.uid', [$filter->getParameter()]);
+	): ?ComparisonInterface {
+		return !empty($filter->getParameter())
+			? $query->in('categories.uid', [$filter->getParameter()])
+			: null;
 	}
 }

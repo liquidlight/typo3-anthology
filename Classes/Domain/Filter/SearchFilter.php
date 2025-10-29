@@ -18,18 +18,20 @@ class SearchFilter extends AbstractFilter implements FilterInterface
 	public static function getConstraint(
 		Filter $filter,
 		QueryInterface $query
-	): ConstraintInterface {
-		return $query->logicalOr(
-			...array_map(
-				fn ($searchField) => $query->like(
-					$searchField,
-					sprintf(
-						'%%%s%%',
-						$filter->getParameter()
-					)
-				),
-				GeneralUtility::trimExplode(',', $filter->getParsedSettings()['searchFields'] ?? '')
+	): ?ConstraintInterface {
+		return !empty($filter->getParameter())
+			? $query->logicalOr(
+				...array_map(
+					fn ($searchField) => $query->like(
+						$searchField,
+						sprintf(
+							'%%%s%%',
+							$filter->getParameter()
+						)
+					),
+					GeneralUtility::trimExplode(',', $filter->getParsedSettings()['searchFields'] ?? '')
+				)
 			)
-		);
+			: null;
 	}
 }

@@ -21,5 +21,5 @@ interface FilterInterface
 	public static function getConstraint(
 		Filter $filter,
 		QueryInterface $queryInterface
-	): ComparisonInterface|ConstraintInterface;
+	): ComparisonInterface|ConstraintInterface|null;
 }

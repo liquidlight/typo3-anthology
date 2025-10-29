@@ -201,9 +201,23 @@ class AnthologyController extends ActionController
 
 		// @todo Switch between `logicalAnd()` and `logicalOr()`
 
+		debug($this->settings['filterMode']);
+
+		$constraintModeMethod = match ($this->settings['filterMode']) {
+			'and' => 'logicalAnd',
+			'or' => 'logicalOr',
+			default => throw new RuntimeException(
+				'Invalid filter mode selected',
+				1761738397
+			),
+		};
+
+		debug($constraintModeMethod);
+		debug($constraints);
+
 		return $query
 			->matching(
-				$query->logicalAnd(
+				$query->{$constraintModeMethod}(
 					...$constraints
 				)
 			)
