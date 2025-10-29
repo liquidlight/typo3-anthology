@@ -300,11 +300,11 @@ imports:
 - [x] ~~Add search functionality~~ ✅ **Completed**
 - [ ] Add date filter implementation ⚠️ **High Priority** - Currently throws NotImplementedMethodException
 - [ ] Add sitemap entries
-- [ ] Add filter combination logic (AND/OR switching)
+- [x] Add filter combination logic (AND/OR switching)
 - [ ] Add custom filter constraint implementations
 - [ ] Move TypoScript to TSConfig
-- [ ] Convert filter `<f:section>`s to partials
-- [ ] Move partials prefixed with `List` into a `List` folder
+- [x] Convert filter `<f:section>`s to partials
+- [x] Move partials prefixed with `List` into a `List` folder
 - [ ] Check and amend rootpath ordering
 - [ ] Add LinkHandler
 - [ ] Set single and list page UIDs somewhere in YAML for use in link handler
