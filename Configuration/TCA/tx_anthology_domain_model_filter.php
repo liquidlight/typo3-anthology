@@ -33,112 +33,94 @@ return [
 			'config' => [
 				'type' => 'select',
 				'renderType' => 'selectSingle',
-				'items' => [
-					[
-						'label' => 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.filter_type.please_select',
-						'value' => 0,
-					],
-					[
-						'label' => 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.filter_type.search',
-						'value' => 'search',
-					],
-					[
-						'label' => 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.filter_type.category',
-						'value' => 'category',
-					],
-					[
-						'label' => 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.filter_type.date',
-						'value' => 'date',
-					],
-				],
+				'itemsProcFunc' => FilterConfigurationHook::class . '->getAvailableFilters',
 				'default' => 0,
 			],
 		],
 		'title' => [
 			'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.title',
+			'displayCond' => 'FIELD:filter_type:!=:0',
 			'config' => [
 				'type' => 'input',
 				'eval' => 'trim',
 				'required' => true,
 			],
 		],
-		'display_mode' => [
-			'label' => 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.display_mode',
-			'displayCond' => 'FIELD:filter_type:!=:search',
+		'settings' => [
+			'label' => 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang_be.xlf:settings',
+			'displayCond' => 'FIELD:filter_type:!=:0',
 			'config' => [
-				'type' => 'select',
-				'renderType' => 'selectSingle',
-				'items' => [
-					[
-						'label' => 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.display_mode.select',
-						'value' => 'select',
-					],
-					[
-						'label' => 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.display_mode.link',
-						'value' => 'link',
-					],
-					[
-						'label' => 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.display_mode.check',
-						'value' => 'check',
-					],
+				'type' => 'flex',
+				/**
+				 * This will break in v14, but the v14 way of implementing this
+				 * feature is not yet available
+				 *
+				 * @see https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.0/Breaking-107047-RemovePointerFieldFunctionalityOfTCAFlex.html#breaking-107047-1751982363
+				 */
+				'ds_pointerField' => 'filter_type',
+				'ds' => [
+					'default' => 'FILE:EXT:ll_anthology/Configuration/FlexForms/Filter/Default.xml',
+					'search' => 'FILE:EXT:ll_anthology/Configuration/FlexForms/Filter/Search.xml',
+					'category' => 'FILE:EXT:ll_anthology/Configuration/FlexForms/Filter/Category.xml',
+					'date' => 'FILE:EXT:ll_anthology/Configuration/FlexForms/Filter/Date.xml',
 				],
 			],
 		],
 
-		// Search
-		'search_fields' => [
-			'label' => 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.search_fields',
-			'description' => 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.search_fields.description',
+		// Access
+		'hidden' => [
+			'exclude' => true,
+			'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.visible',
+			'config' => [
+				'type' => 'check',
+				'renderType' => 'checkboxToggle',
+				'items' => [
+					[
+						'label' => '',
+						'value' => '',
+						'invertStateDisplay' => true,
+					],
+				],
+			],
+		],
+		'starttime' => [
+			'exclude' => true,
+			'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.starttime',
+			'config' => [
+				'type' => 'datetime',
+				'format' => 'datetime',
+				'default' => 0,
+			],
+			'l10n_mode' => 'exclude',
+			'l10n_display' => 'defaultAsReadonly',
+		],
+		'endtime' => [
+			'exclude' => true,
+			'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.endtime',
+			'config' => [
+				'type' => 'datetime',
+				'format' => 'datetime',
+				'default' => 0,
+				'range' => [
+					'upper' => 2145916800,
+				],
+			],
+			'l10n_mode' => 'exclude',
+			'l10n_display' => 'defaultAsReadonly',
+		],
+		'fe_group' => [
+			'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.fe_group',
+			'l10n_mode' => 'exclude',
 			'config' => [
 				'type' => 'select',
 				'renderType' => 'selectMultipleSideBySide',
-				'itemsProcFunc' => FilterConfigurationHook::class . '->getSearchFields',
-				'minitems' => 1,
-			],
-		],
-		'placeholder' => [
-			'label' => 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.placeholder',
-			'config' => [
-				'type' => 'input',
-				'eval' => 'trim',
-			],
-		],
-
-		// Category
-		'category' => [
-			'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:sys_category.category',
-			'description' => 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.category.description',
-			'config' => [
-				'type' => 'category',
-				'minitems' => 1,
-				'maxitems' => 1,
-			],
-		],
-
-		// Date
-		'date_field' => [
-			'label' => 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.date_field',
-			'config' => [
-				'type' => 'select',
-				'renderType' => 'selectSingle',
-				'itemsProcFunc' => FilterConfigurationHook::class . '->getDateFields',
-			],
-		],
-		'date_span' => [
-			'label' => 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.date_span',
-			'config' => [
-				'type' => 'select',
-				'renderType' => 'selectSingle',
+				'exclusiveKeys' => '-1,-2',
 				'items' => [
-					[
-						'label' => 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.date_span.months',
-						'value' => 'months',
-					],
-					[
-						'label' => 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.date_span.years',
-						'value' => 'years',
-					],
+					['label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.hide_at_login', 'value' => -1],
+					['label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.any_login', 'value' => -2],
+					['label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.usergroups', 'value' => '--div--'],
 				],
+				'foreign_table' => 'fe_groups',
 			],
 		],
 	],
@@ -157,56 +139,15 @@ return [
 				--linebreak--,
 				title,
 				--linebreak--,
-				display_mode,
-			',
-		],
-		'date_filter_options' => [
-			'label' => '',
-			'showitem' => '
-				date_field,
-				date_span,
+				settings,
 			',
 		],
 	],
 	'types' => [
-		0 => [ // Search
-			'showitem' => '
-				--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,
-					filter_type,
-				--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,
-					hidden,
-					--palette--;;start_end,
-					fe_group,
-			',
-		],
-		'search' => [ // Search
-			'showitem' => '
-			--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,
-			--palette--;;general,
-			search_fields,
-			placeholder,
-			--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,
-			hidden,
-			--palette--;;start_end,
-			fe_group,
-			',
-		],
-		'category' => [ // Category
+		0 => [
 			'showitem' => '
 				--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,
 					--palette--;;general,
-					category,
-				--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,
-					hidden,
-					--palette--;;start_end,
-					fe_group,
-			',
-		],
-		'date' => [ // Date
-			'showitem' => '
-				--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,
-					--palette--;;general,
-					--palette--;;date_filter_options,
 				--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,
 					hidden,
 					--palette--;;start_end,

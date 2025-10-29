@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace LiquidLight\Anthology\Domain\Query;
 
-use LiquidLight\Anthology\Domain\Query\FilterConstraintInterface;
+use LiquidLight\Anthology\Domain\Filter\FilterInterface;
 use RuntimeException;
 use TYPO3\CMS\Extbase\Persistence\Generic\Exception\NotImplementedException;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
@@ -30,12 +30,12 @@ class ConstraintBuilder
 				);
 			}
 
-			if (!is_subclass_of($filterImplementations[$filter->filterType], FilterConstraintInterface::class)) {
+			if (!is_subclass_of($filterImplementations[$filter->filterType], FilterInterface::class)) {
 				throw new RuntimeException(
 					sprintf(
 						'`%s` is not a valid implementation of `%s`',
 						$filterImplementations[$filter->filterType],
-						FilterConstraintInterface::class
+						FilterInterface::class
 					),
 					1760448468
 				);

@@ -6,7 +6,11 @@ namespace LiquidLight\Anthology\Hook;
 
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Database\Query\Restriction\HiddenRestriction;
 use TYPO3\CMS\Core\Service\FlexFormService;
+use TYPO3\CMS\Core\TypoScript\TypoScriptService;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 
 class FilterConfigurationHook
 {
@@ -23,8 +27,28 @@ class FilterConfigurationHook
 
 	public function __construct(
 		private FlexFormService $flexFormService,
-		private ConnectionPool $connectionPool
+		private ConnectionPool $connectionPool,
+		private ConfigurationManager $configurationManager,
+		private TypoScriptService $typoScriptService
 	) {
+	}
+
+	public function getAvailableFilters(array &$params): void
+	{
+		$params['items'] = [
+			[
+				'label' => 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.filter_type.please_select',
+				'value' => 0,
+			],
+			...array_map(
+				fn ($filterClass, $filterKey) => [
+					'label' => $filterClass::getLabel(),
+					'value' => $filterKey,
+				],
+				$this->getAnthologySettings()['filterImplementations'] ?? [],
+				array_keys($this->getAnthologySettings()['filterImplementations'] ?? [])
+			),
+		];
 	}
 
 	public function getSearchFields(array &$params): void
@@ -41,7 +65,7 @@ class FilterConfigurationHook
 	{
 		global $TCA;
 
-		$anthologyPluginUid = (int)$params['inlineParentUid'] ?? 0;
+		$anthologyPluginUid = $this->getAnthologyPluginUid($params);
 
 		if (!$anthologyPluginUid) {
 			return;
@@ -69,6 +93,36 @@ class FilterConfigurationHook
 			$eligibleColumns,
 			array_keys($eligibleColumns)
 		);
+	}
+
+	private function getAnthologyPluginUid(array $params): int
+	{
+		if ((int)$params['inlineParentUid'] ?? false) {
+			return (int)$params['inlineParentUid'];
+		}
+
+		if ((int)$params['inlineTopMostParentUid'] ?? false) {
+			return (int)$params['inlineTopMostParentUid'];
+		}
+
+		/**
+		 * This isn't an ideal way to get the UID, but in the absence of either
+		 * of the above values, it's the best option available
+		 */
+		$queryBuilder = $this->connectionPool->getQueryBuilderForTable(self::CONTENT_TABLE);
+		$queryBuilder->getRestrictions()->removeByType(HiddenRestriction::class);
+
+		$queryBuilder
+			->select('uid')
+			->from(self::CONTENT_TABLE)
+			->where(
+				$queryBuilder->expr()->eq('list_type', $queryBuilder->createNamedParameter('llanthology_anthologyview')),
+				$queryBuilder->expr()->eq('pid', $queryBuilder->createNamedParameter($params['effectivePid'], Connection::PARAM_INT)),
+				"FIND_IN_SET(" . $queryBuilder->createNamedParameter($params['row']['uid'], Connection::PARAM_INT) . ", EXTRACTVALUE(`pi_flexform`, '//field[@index=\'settings.filters\']/value'))"
+			)
+		;
+
+		return (int)$queryBuilder->executeQuery()->fetchOne();
 	}
 
 	private function getAnthologyPluginTca(int $anthologyPluginUid): ?string
@@ -104,5 +158,14 @@ class FilterConfigurationHook
 		return $this->flexFormService->convertFlexFormContentToArray(
 			$queryBuilder->executeQuery()->fetchOne()
 		);
+	}
+
+	private function getAnthologySettings(): array
+	{
+		$typoScript = $this->typoScriptService->convertTypoScriptArrayToPlainArray(
+			$this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT)
+		);
+
+		return $typoScript['plugin']['tx_llanthology']['settings'] ?? [];
 	}
 }

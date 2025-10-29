@@ -4,11 +4,8 @@ declare(strict_types=1);
 
 namespace LiquidLight\Anthology\Domain\Model;
 
-use TYPO3\CMS\Core\Database\Connection;
-use TYPO3\CMS\Core\Database\ConnectionPool;
-use TYPO3\CMS\Core\Domain\Repository\PageRepository;
+use TYPO3\CMS\Core\Service\FlexFormService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Domain\Model\Category;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 class Filter extends AbstractEntity
@@ -17,89 +14,42 @@ class Filter extends AbstractEntity
 
 	public string $title = '';
 
-	public string $displayMode = '';
+	public string $settings = '';
 
-	public string $placeholder = '';
+	protected mixed $parameter = null;
 
-	public string $dateField = '';
+	protected array $options = [];
 
-	public string $dateSpan = '';
+	protected array $parsedSettings = [];
 
-	public ?Category $category = null;
-
-	protected string $searchFields = '';
-
-	protected mixed $value = null;
-
-	public function getCategories(): array
+	public function getParameter(): mixed
 	{
-		$connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
-		$pageRepository = GeneralUtility::makeInstance(PageRepository::class);
-
-		$queryBuilder = $connectionPool->getQueryBuilderForTable('sys_category');
-
-		$queryBuilder
-			->select('uid')
-			->from('sys_category')
-			->where(
-				$queryBuilder->expr()->eq(
-					'parent',
-					$queryBuilder->createNamedParameter(
-						$this->category->getUid(),
-						Connection::PARAM_INT
-					)
-				)
-			)
-			->orderBy('sorting')
-		;
-
-		$childCategoryUids = array_column(
-			$queryBuilder->executeQuery()->fetchAllAssociative(),
-			'uid'
-		);
-
-		return array_map(
-			fn ($childCategoryUid) => $pageRepository
-				->getLanguageOverlay(
-					'sys_category',
-					$pageRepository->getRawRecord(
-						'sys_category',
-						$childCategoryUid
-					)
-				),
-			$childCategoryUids
-		);
+		return $this->parameter;
 	}
 
-	public function getSearchFields(): array
+	public function setParameter(mixed $parameter): void
 	{
-		if (empty($this->searchFields)) {
-			return [];
+		$this->parameter = $parameter;
+	}
+
+	public function getOptions(): array
+	{
+		return $this->options;
+	}
+
+	public function setOptions(array $options): void
+	{
+		$this->options = $options;
+	}
+
+	public function getParsedSettings(): array
+	{
+		if (empty($this->parsedSettings)) {
+			$this->parsedSettings = GeneralUtility::makeInstance(FlexFormService::class)
+				->convertFlexFormContentToArray($this->settings)
+			;
 		}
 
-		return GeneralUtility::trimExplode(',', $this->searchFields, true);
-	}
-
-	public function setSearchFields(string $searchFields): void
-	{
-		$this->searchFields = $searchFields;
-	}
-
-	public function getValue(): mixed
-	{
-		return $this->value;
-	}
-
-	public function setValue(mixed $value): void
-	{
-		switch ($this->filterType) {
-			case 'category':
-				$this->value = (int)$value;
-				break;
-
-			default:
-				$this->value = $value;
-				break;
-		}
+		return $this->parsedSettings['settings'];
 	}
 }
