@@ -1,0 +1,13 @@
+<html
+	xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+	xmlns:v="http://typo3.org/ns/vhs/ViewHelpers"
+	data-namespace-typo3-fluid="true"
+>
+	<f:form.radio name="filter[{filter.uid}]" id="filter-{filter.uid}-all" value="0" checked="checked" />
+	<label for="filter-{filter.uid}-all">{f:translate(key: 'all')}</label>
+
+	<f:for each="{filter.options}" as="filterOption">
+		<f:form.radio name="filter[{filter.uid}]" id="filter-{filter.uid}-{filterOption.value}" value="{filterOption.value}" checked="{f:if(condition: '{filter.parameter} == {filterOption.value}', then: true, else: false)}" />
+		<label for="filter-{filter.uid}-{filterOption.value}">{filterOption.title}</label>
+	</f:for>
+</html>

@@ -7,6 +7,6 @@
 		<legend>{filter.title}</legend>
 
 		<f:variable name="displayModePartial">{filter.parsedSettings.displayMode -> f:format.case(mode: 'capital')}</f:variable>
-		<f:render partial="Filter/Category/{displayModePartial}" arguments="{filter: filter}" />
+		<f:render partial="Filter/DisplayMode/{displayModePartial}" arguments="{filter: filter}" />
 	</fieldset>
 </html>

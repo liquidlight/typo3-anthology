@@ -47,16 +47,24 @@ class CategoryFilter extends AbstractFilter implements FilterInterface
 			'uid'
 		);
 
-		return array_map(
-			fn ($childCategoryUid) => $pageRepository
-				->getLanguageOverlay(
-					'sys_category',
-					$pageRepository->getRawRecord(
+		return
+
+		array_map(
+			fn ($category) => [
+				'value' => $category['uid'],
+				'title' => $category['title'],
+			],
+			array_map(
+				fn ($childCategoryUid) => $pageRepository
+					->getLanguageOverlay(
 						'sys_category',
-						$childCategoryUid
-					)
-				),
-			$childCategoryUids
+						$pageRepository->getRawRecord(
+							'sys_category',
+							$childCategoryUid
+						)
+					),
+				$childCategoryUids
+			)
 		);
 	}
 

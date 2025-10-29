@@ -51,6 +51,9 @@
 			<trans-unit id="tx_anthology_domain_model_filter.date_span">
 				<source>Date span</source>
 			</trans-unit>
+			<trans-unit id="tx_anthology_domain_model_filter.date_span.relative">
+				<source>Relative</source>
+			</trans-unit>
 			<trans-unit id="tx_anthology_domain_model_filter.date_span.years">
 				<source>Years</source>
 			</trans-unit>

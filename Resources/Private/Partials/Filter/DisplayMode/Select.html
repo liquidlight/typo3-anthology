@@ -3,11 +3,12 @@
 	xmlns:v="http://typo3.org/ns/vhs/ViewHelpers"
 	data-namespace-typo3-fluid="true"
 >
+
 	<f:form.select name="filter[{filter.uid}]">
 		<f:form.select.option value="">{f:translate(key: 'all')}</f:form.select.option>
 
-		<f:for each="{filter.options}" as="category">
-			<f:form.select.option value="{category.uid}" selected="{f:if(condition: '{filter.parameter} == {category.uid}', then: true, else: false)}">{category.title}</f:form.select.option>
+		<f:for each="{filter.options}" as="filterOption">
+			<f:form.select.option value="{filterOption.value}" selected="{f:if(condition: '{filter.parameter} == {filterOption.value}', then: true, else: false)}">{filterOption.title}</f:form.select.option>
 		</f:for>
 	</f:form.select>
 </html>
