@@ -1,0 +1,15 @@
+<html
+	xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+	xmlns:v="http://typo3.org/ns/vhs/ViewHelpers"
+	data-namespace-typo3-fluid="true"
+>
+	<f:variable name="filterArguments" value="{init: true}" />
+	<v:variable.set name="filterArguments.{filter.uid}" value="0" />
+
+	<f:link.action arguments="{filter: filterArguments}">{f:translate(key: 'all')}</f:link.action>
+
+	<f:for each="{filter.options}" as="category">
+		<v:variable.set name="filterArguments.{filter.uid}" value="{category.uid}" />
+		<f:link.action arguments="{filter: filterArguments}" class="{f:if(condition: '{filter.parameter} == {category.uid}', then: 'active')}">{category.title}</f:link.action>
+	</f:for>
+</html>
