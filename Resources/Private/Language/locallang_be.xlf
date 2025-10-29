@@ -50,6 +50,15 @@
 			<trans-unit id="filters">
 				<source>Filters</source>
 			</trans-unit>
+			<trans-unit id="filterMode">
+				<source>Filter mode</source>
+			</trans-unit>
+			<trans-unit id="filterMode.and">
+				<source>Match all</source>
+			</trans-unit>
+			<trans-unit id="filterMode.or">
+				<source>Match any</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
