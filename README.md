@@ -11,19 +11,19 @@ The `ll_anthology` extension creates a flexible plugin system that can display c
 ✅ **Fully Implemented:**
 - List and single view modes with pagination
 - Repository factory and dynamic loading
-- Search filtering with multiple field support and text input template
-- Category filtering with multiple display modes (select, link, radio) and complete template
+- Search filtering with multiple field support and complete template
+- Category filtering with multiple display modes (select, link, check) and complete template
+- Date filtering with relative and bound date options and complete template
 - Template path resolution and custom template support
 - Page title generation
 - FlexForm configuration with all options
-
-⚠️ **Partially Implemented:**
-- Date filtering (TCA configuration and template exist, but constraint throws `NotImplementedMethodException` and template is empty)
+- Filter combination logic (AND/OR switching)
+- Complete template system with partials for all filter types
 
 🔄 **In Development:**
-- Complete date filter implementation
-- Filter combination logic (AND/OR switching)
 - Enhanced error handling
+- Unit test coverage
+- Caching mechanisms
 
 ## Features
 
@@ -51,17 +51,18 @@ The `ll_anthology` extension creates a flexible plugin system that can display c
    composer require liquidlight/typo3-anthology
    ```
 
-2. Include the TypoScript configuration set in your site configuration or manually import the setup:
+2. Include the TypoScript configuration set in your site configuration:
+   ```yaml
+   imports:
+     - { resource: "EXT:ll_anthology/Configuration/Sets/Anthology/" }
+   ```
+
+   Or manually import the setup:
    ```typoscript
    @import 'EXT:ll_anthology/Configuration/TypoScript/setup'
    ```
 
 3. Configure the extension using TypoScript and FlexForm settings as described below.
-   ```yaml
-   imports:
-     -
-
-   ```
 
 ### Implementation Scenarios
 
@@ -89,7 +90,7 @@ For projects using existing domain models from other extensions:
 
 The extension requires TypoScript configuration to define available repositories and filter implementations:
 
-**Note**: The current TypoScript setup in `Configuration/TypoScript/setup.typoscript` includes the complete configuration with filter implementations. You may need to add your specific repository mappings.
+**Note**: The current TypoScript setup in `Configuration/TypoScript/setup.typoscript` includes the complete configuration with all filter implementations (search, category, and date). You only need to add your specific repository mappings.
 
 ```typoscript
 plugin.tx_llanthology {
@@ -141,7 +142,7 @@ Displays individual record details. Features:
 - Template path resolution from repository extension
 
 ## Filtering System
-The extension provides a comprehensive filtering system that allows users to filter records in list view mode.
+The extension provides a comprehensive filtering system that allows users to filter records in list view mode. All filter types are fully implemented and functional.
 
 ### Filter Types
 
@@ -155,21 +156,24 @@ The extension provides a comprehensive filtering system that allows users to fil
 - **Purpose**: Filter records by category relationships
 - **Configuration**: Select a parent category to show its children as filter options
 - **Display Modes**:
-  - **Select**: Dropdown selection
-  - **Link**: Clickable category links
+  - **Select**: Dropdown selection (single category)
+  - **Link**: Clickable category links (single category)
   - **Check**: Checkbox selection (multiple categories)
 - **Implementation**: Uses category UID matching via `categories.uid` field
 
 #### Date Filter
 - **Purpose**: Filter records by date ranges
-- **Status**: ⚠️ **Not yet implemented** - placeholder exists but throws `NotImplementedMethodException`
+- **Status**: ✅ **Fully implemented**
 - **Configuration**:
   - Select which date field to filter on
-  - Choose date span (months or years)
+  - Choose date span (relative, months, or years)
 - **Display Modes**:
   - **Select**: Dropdown with predefined date ranges
   - **Link**: Clickable date range links
-- **Implementation**: Date range queries on specified datetime fields
+  - **Check**: Checkbox selection (multiple date ranges)
+- **Implementation**: 
+  - **Relative**: Filters from a specific date backwards (24 hours, 7 days, 1 month, etc.)
+  - **Bound**: Filters by specific time periods (months/years) with start and end date constraints
 
 ### Filter Configuration
 Filters are configured as inline records in the plugin's Filters tab:
@@ -186,9 +190,10 @@ Filters are configured as inline records in the plugin's Filters tab:
 The filtering system uses a constraint-based architecture:
 
 - **ConstraintBuilder**: Processes active filters and builds query constraints
-- **FilterConstraintInterface**: Interface for filter implementations
-- **SearchConstraint**: Handles search filter logic
-- **CategoryConstraint**: Handles category filter logic
+- **FilterInterface**: Interface for filter implementations
+- **SearchFilter**: Handles search filter logic with LIKE queries across multiple fields
+- **CategoryFilter**: Handles category filter logic with category UID matching
+- **DateFilter**: Handles date filter logic with relative and bound date constraints
 - **FilterRepository**: Manages filter record retrieval
 - **FilterConfigurationHook**: Populates field options based on TCA configuration
 
@@ -294,17 +299,17 @@ imports:
 ### TODO
 
 - [x] ~~Implement filtering functionality~~ ✅ **Completed**
+- [x] ~~Add search functionality~~ ✅ **Completed**
+- [x] ~~Add date filter implementation~~ ✅ **Completed**
+- [x] ~~Add filter combination logic (AND/OR switching)~~ ✅ **Completed**
+- [x] ~~Convert filter `<f:section>`s to partials~~ ✅ **Completed**
+- [x] ~~Move partials prefixed with `List` into a `List` folder~~ ✅ **Completed**
 - [ ] Add caching mechanisms
 - [ ] Enhance error handling
 - [ ] Add unit tests
-- [x] ~~Add search functionality~~ ✅ **Completed**
-- [ ] Add date filter implementation ⚠️ **High Priority** - Currently throws NotImplementedMethodException
 - [ ] Add sitemap entries
-- [x] Add filter combination logic (AND/OR switching)
 - [ ] Add custom filter constraint implementations
 - [ ] Move TypoScript to TSConfig
-- [x] Convert filter `<f:section>`s to partials
-- [x] Move partials prefixed with `List` into a `List` folder
 - [ ] Check and amend rootpath ordering
 - [ ] Add LinkHandler
 - [ ] Set single and list page UIDs somewhere in YAML for use in link handler
