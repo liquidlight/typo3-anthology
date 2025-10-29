@@ -5,38 +5,8 @@
 >
 	<fieldset>
 		<legend>{filter.title}</legend>
-		<f:render section="{filter.parsedSettings.displayMode}" arguments="{filter: filter}" />
+
+		<f:variable name="displayModePartial">{filter.parsedSettings.displayMode -> f:format.case(mode: 'capital')}</f:variable>
+		<f:render partial="Filter/Category/{displayModePartial}" arguments="{filter: filter}" />
 	</fieldset>
-
-	<f:section name="select">
-		<f:form.select name="filter[{filter.uid}]">
-			<f:form.select.option value="">{f:translate(key: 'all')}</f:form.select.option>
-
-			<f:for each="{filter.options}" as="category">
-				<f:form.select.option value="{category.uid}" selected="{f:if(condition: '{filter.parameter} == {category.uid}', then: true, else: false)}">{category.title}</f:form.select.option>
-			</f:for>
-		</f:form.select>
-	</f:section>
-
-	<f:section name="link">
-		<f:variable name="filterArguments" value="{init: true}" />
-		<v:variable.set name="filterArguments.{filter.uid}" value="0" />
-
-		<f:link.action arguments="{filter: filterArguments}">{f:translate(key: 'all')}</f:link.action>
-
-		<f:for each="{filter.options}" as="category">
-			<v:variable.set name="filterArguments.{filter.uid}" value="{category.uid}" />
-			<f:link.action arguments="{filter: filterArguments}" class="{f:if(condition: '{filter.parameter} == {category.uid}', then: 'active')}">{category.title}</f:link.action>
-		</f:for>
-	</f:section>
-
-	<f:section name="check">
-		<f:form.radio name="filter[{filter.uid}]" id="filter-{filter.uid}-all" value="0" checked="checked" />
-		<label for="filter-{filter.uid}-all">{f:translate(key: 'all')}</label>
-
-		<f:for each="{filter.options}" as="category">
-			<f:form.radio name="filter[{filter.uid}]" id="filter-{filter.uid}-{category.uid}" value="{category.uid}" checked="{f:if(condition: '{filter.parameter} == {category.uid}', then: true, else: false)}" />
-			<label for="filter-{filter.uid}-{category.uid}">{category.title}</label>
-		</f:for>
-	</f:section>
 </html>

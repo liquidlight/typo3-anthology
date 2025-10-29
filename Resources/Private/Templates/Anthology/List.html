@@ -4,21 +4,21 @@
 >
 	<div class="ll-anthology">
 		<div class="filters">
-			<f:render partial="ListFilters" arguments="{filters: filters}" />
+			<f:render partial="List/Filters" arguments="{filters: filters}" />
 		</div>
 
 		<div class="records">
 			<f:for each="{paginator.paginatedItems}" as="record">
-				<f:render partial="ListRecord" arguments="{record: record, singleView: settings.singleView}" />
+				<f:render partial="List/Record" arguments="{record: record, singleView: settings.singleView}" />
 			</f:for>
 
 			<f:if condition="!{paginator.paginatedItems}">
-				<f:render partial="ListNoRecords" />
+				<f:render partial="List/NoRecords" />
 			</f:if>
 		</div>
 
 		<f:if condition="{settings.enablePagination} && {paginator.paginatedItems}">
-			<f:render partial="ListPagination" arguments="{pagination: pagination, currentPage: currentPage}" />
+			<f:render partial="List/Pagination" arguments="{pagination: pagination, currentPage: currentPage}" />
 		</f:if>
 	</div>
 </html>
