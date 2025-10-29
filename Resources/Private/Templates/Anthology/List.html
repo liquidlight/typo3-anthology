@@ -17,7 +17,7 @@
 			</f:if>
 		</div>
 
-		<f:if condition="{settings.enablePagination}">
+		<f:if condition="{settings.enablePagination} && {paginator.paginatedItems}">
 			<f:render partial="ListPagination" arguments="{pagination: pagination, page: page}" />
 		</f:if>
 	</div>
