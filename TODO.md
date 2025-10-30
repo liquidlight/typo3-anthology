@@ -5,9 +5,9 @@
 - [ ] Fix page title override
 - [ ] Add caching mechanisms
 - [ ] Enhance error handling
-- [ ] Add unit tests
 - [ ] Move TypoScript to TSConfig
 - [ ] Check and amend rootpath ordering
+- [ ] Set up GitLab CI test pipeline job
 
 ### In Progress ⚒️
 
@@ -26,3 +26,4 @@
 - [x] Add LinkHandler
 - [x] Set single and list page UIDs somewhere in YAML for use in link handler
 - [x] Add a setup command to add configuration (refer to `10. Quick start.md`)
+- [x] Add unit tests
