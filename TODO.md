@@ -8,7 +8,6 @@
 - [ ] Add unit tests
 - [ ] Move TypoScript to TSConfig
 - [ ] Check and amend rootpath ordering
-- [ ] Add a setup command to add configuration (refer to `10. Quick start.md`)
 
 ### In Progress ⚒️
 
@@ -26,3 +25,4 @@
 - [x] Documentation
 - [x] Add LinkHandler
 - [x] Set single and list page UIDs somewhere in YAML for use in link handler
+- [x] Add a setup command to add configuration (refer to `10. Quick start.md`)
