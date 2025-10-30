@@ -21,14 +21,6 @@ use TYPO3\CMS\Extbase\Persistence\Repository;
 )]
 class SetupCommand extends Command
 {
-	private const EXCLUDE_TCA_PREFIXES = [
-		'be',
-		'sys',
-		'backend',
-		'fe',
-		'static',
-	];
-
 	private SymfonyStyle $io;
 
 	private string $sitePackagePath;
@@ -139,7 +131,7 @@ class SetupCommand extends Command
 		// A. Add Anthology Typoscript
 		$processTyposcript = $this->processTyposcript();
 
-		// B. Create single view route enhancer
+		// B. Create route enhancers
 		$routeEnhancers = $this->processRouteEnhancers();
 
 		// C. Add sitemap configuration
@@ -345,7 +337,7 @@ class SetupCommand extends Command
 
 	private function processLinkHandlerTsConfig(): bool
 	{
-		$modelName = $this->getLanguageService()->sL($GLOBALS['TCA'][$tcaName]['ctrl']['title'] ?? '');
+		$modelName = $this->getLanguageService()->sL($GLOBALS['TCA'][$this->tcaName]['ctrl']['title'] ?? '');
 		$tsConfigFilePath = $this->getTypoScriptPath('..') . '/page.tsconfig';
 
 		$tsConfigContents = <<<TSCONFIG
@@ -396,9 +388,9 @@ class SetupCommand extends Command
 		$success = !!file_put_contents($typoScriptFilePath, $typoScriptContents, FILE_APPEND);
 
 		if ($success) {
-			$this->io->success('LinkHandler TSConfig created');
+			$this->io->success('LinkHandler TypoScript created');
 		} else {
-			$this->io->error('There was a problem creating the LinkHandler TSConfig');
+			$this->io->error('There was a problem creating the LinkHandler TypoScript');
 		}
 
 		return $success;
