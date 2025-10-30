@@ -261,8 +261,8 @@ class SetupCommand extends Command
 					'aspects' => [
 						'page' => [
 							'type' => 'StaticRangeMapper',
-							'start' => 2,
-							'end' => 1000,
+							'start' => '2',
+							'end' => '1000',
 						],
 					],
 				],
