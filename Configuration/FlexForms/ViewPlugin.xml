@@ -112,6 +112,7 @@
 					<settings.noResultsText>
 						<label>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_be.xlf:noResultsText</label>
 						<description>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_be.xlf:noResultsText.description</description>
+						<displayCond>FIELD:sDEF.settings.mode:=:list</displayCond>
 						<config>
 							<type>text</type>
 							<enableRichtext>true</enableRichtext>
