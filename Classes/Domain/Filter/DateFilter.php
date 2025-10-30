@@ -40,6 +40,15 @@ class DateFilter extends AbstractFilter implements FilterInterface
 		};
 	}
 
+	public static function getConstraint(
+		Filter $filter,
+		QueryInterface $query
+	): ComparisonInterface|ConstraintInterface|null {
+		return $filter->getParsedSettings()['dateSpan'] === 'relative'
+			? self::getRelativeConstraint($filter, $query)
+			: self::getBoundConstraint($filter, $query);
+	}
+
 	private static function getRelativeOptions(
 		Filter $filter,
 		array $pluginSettings
@@ -102,15 +111,6 @@ class DateFilter extends AbstractFilter implements FilterInterface
 		} while ($dateOption <= new DateTimeImmutable());
 
 		return array_reverse($dateOptions);
-	}
-
-	public static function getConstraint(
-		Filter $filter,
-		QueryInterface $query
-	): ComparisonInterface|ConstraintInterface|null {
-		return $filter->getParsedSettings()['dateSpan'] === 'relative'
-			? self::getRelativeConstraint($filter, $query)
-			: self::getBoundConstraint($filter, $query);
 	}
 
 	private static function getRelativeConstraint(
