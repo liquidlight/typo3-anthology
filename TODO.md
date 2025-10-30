@@ -2,6 +2,7 @@
 
 ### Todo ⚠️
 
+- [ ] Fix page title override
 - [ ] Add caching mechanisms
 - [ ] Enhance error handling
 - [ ] Add unit tests
