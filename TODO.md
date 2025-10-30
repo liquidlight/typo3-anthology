@@ -7,8 +7,7 @@
 - [ ] Add unit tests
 - [ ] Move TypoScript to TSConfig
 - [ ] Check and amend rootpath ordering
-- [ ] Add LinkHandler
-- [ ] Set single and list page UIDs somewhere in YAML for use in link handler
+- [ ] Add a setup command to add configuration (refer to `10. Quick start.md`)
 
 ### In Progress ⚒️
 
@@ -24,3 +23,5 @@
 - [x] Add sitemap entries
 - [x] Add custom filter constraint implementation documentation
 - [x] Documentation
+- [x] Add LinkHandler
+- [x] Set single and list page UIDs somewhere in YAML for use in link handler
