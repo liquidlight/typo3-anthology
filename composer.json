@@ -15,10 +15,10 @@
             "email": "chris@liquidlight.co.uk"
         }
     ],
-    "homepage": "https://github.com/liquidlight/typo3-extension-template",
+    "homepage": "https://github.com/liquidlight/typo3-anthology",
     "support": {
-        "issues": "https://github.com/liquidlight/typo3-extension-template/issues",
-        "source": "https://github.com/liquidlight/typo3-extension-template"
+        "issues": "https://github.com/liquidlight/typo3-anthology/issues",
+        "source": "https://github.com/liquidlight/typo3-anthology"
     },
     "require": {
         "fluidtypo3/vhs": "^7.1",
