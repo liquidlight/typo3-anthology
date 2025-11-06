@@ -3,12 +3,23 @@
     "description": "Anthology",
     "type": "typo3-cms-extension",
     "version": "0.0.0",
+    "readme": "./README.md",
     "authors": [
+        {
+            "name": "Liquid Light",
+            "email": "info@liquidlight.co.uk",
+            "homepage": "https://www.liquidlight.co.uk/"
+        },
         {
             "name": "Chris Tebbit",
             "email": "chris@liquidlight.co.uk"
         }
     ],
+    "homepage": "https://github.com/liquidlight/typo3-extension-template",
+    "support": {
+        "issues": "https://github.com/liquidlight/typo3-extension-template/issues",
+        "source": "https://github.com/liquidlight/typo3-extension-template"
+    },
     "require": {
         "fluidtypo3/vhs": "^7.1",
         "symfony/yaml": "^7.3",
