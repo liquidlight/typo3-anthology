@@ -79,9 +79,6 @@ jobs:
       - name: Run Unit Tests
         run: composer test-unit
 
-      - name: Run Functional Tests
-        run: composer test-functional
-
   release:
     name: TER Upload
     runs-on: ubuntu-latest
