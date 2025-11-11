@@ -1,13 +1,3 @@
-plugin.tx_llanthology {
-	settings {
-		filterImplementations {
-			search = LiquidLight\Anthology\Domain\Filter\SearchFilter
-			category = LiquidLight\Anthology\Domain\Filter\CategoryFilter
-			date = LiquidLight\Anthology\Domain\Filter\DateFilter
-		}
-	}
-}
-
 config {
 	pageTitleProviders {
 		tx_llanthology {

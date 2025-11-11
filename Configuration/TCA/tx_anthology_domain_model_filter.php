@@ -60,9 +60,9 @@ return [
 				'ds_pointerField' => 'filter_type',
 				'ds' => [
 					'default' => 'FILE:EXT:ll_anthology/Configuration/FlexForms/Filter/Default.xml',
-					'search' => 'FILE:EXT:ll_anthology/Configuration/FlexForms/Filter/Search.xml',
-					'category' => 'FILE:EXT:ll_anthology/Configuration/FlexForms/Filter/Category.xml',
-					'date' => 'FILE:EXT:ll_anthology/Configuration/FlexForms/Filter/Date.xml',
+					'llanthology_search' => 'FILE:EXT:ll_anthology/Configuration/FlexForms/Filter/Search.xml',
+					'llanthology_category' => 'FILE:EXT:ll_anthology/Configuration/FlexForms/Filter/Category.xml',
+					'llanthology_date' => 'FILE:EXT:ll_anthology/Configuration/FlexForms/Filter/Date.xml',
 				],
 			],
 		],
