@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace LiquidLight\Anthology\Hook;
 
+use LiquidLight\Anthology\Factory\FilterFactory;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\HiddenRestriction;
 use TYPO3\CMS\Core\Service\FlexFormService;
-use TYPO3\CMS\Core\TypoScript\TypoScriptService;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 
 class FilterConfigurationHook
 {
@@ -26,28 +24,33 @@ class FilterConfigurationHook
 	];
 
 	public function __construct(
+		private FilterFactory $filterFactory,
 		private FlexFormService $flexFormService,
-		private ConnectionPool $connectionPool,
-		private ConfigurationManager $configurationManager,
-		private TypoScriptService $typoScriptService
+		private ConnectionPool $connectionPool
 	) {
 	}
 
 	public function getAvailableFilters(array &$params): void
 	{
+		$filters = $this->filterFactory->getFilters();
+
+		$filterItems = array_map(
+			fn ($filterType, $filterClass) => [
+				'label' => $filterClass::getLabel(),
+				'value' => $filterType,
+			],
+			array_keys($filters),
+			$filters
+		);
+
+		usort($filterItems, fn ($a, $b) => $a['label'] <=> $b['label']);
+
 		$params['items'] = [
 			[
 				'label' => 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.filter_type.please_select',
 				'value' => 0,
 			],
-			...array_map(
-				fn ($filterClass, $filterKey) => [
-					'label' => $filterClass::getLabel(),
-					'value' => $filterKey,
-				],
-				$this->getAnthologySettings()['filterImplementations'] ?? [],
-				array_keys($this->getAnthologySettings()['filterImplementations'] ?? [])
-			),
+			...$filterItems,
 		];
 	}
 
@@ -158,14 +161,5 @@ class FilterConfigurationHook
 		return $this->flexFormService->convertFlexFormContentToArray(
 			$queryBuilder->executeQuery()->fetchOne()
 		);
-	}
-
-	private function getAnthologySettings(): array
-	{
-		$typoScript = $this->typoScriptService->convertTypoScriptArrayToPlainArray(
-			$this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT)
-		);
-
-		return $typoScript['plugin']['tx_llanthology']['settings'] ?? [];
 	}
 }

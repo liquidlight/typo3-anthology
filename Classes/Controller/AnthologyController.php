@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace LiquidLight\Anthology\Controller;
 
-use LiquidLight\Anthology\Domain\Query\ConstraintBuilder;
 use LiquidLight\Anthology\Domain\Repository\FilterRepository;
+use LiquidLight\Anthology\Factory\FilterFactory;
 use LiquidLight\Anthology\Factory\RepositoryFactory;
 use LiquidLight\Anthology\Provider\PageTitleProvider;
 use Psr\Http\Message\ResponseInterface;
@@ -32,8 +32,8 @@ class AnthologyController extends ActionController
 	private const DEFAULT_MAXIMUM_LINKS = 8;
 
 	public function __construct(
-		private ConstraintBuilder $constraintBuilder,
 		private RepositoryFactory $repositoryFactory,
+		private FilterFactory $filterFactory,
 		private FilterRepository $filterRepository,
 		private PageTitleProvider $pageTitleProvider,
 		private PackageManager $packageManager
@@ -193,10 +193,9 @@ class AnthologyController extends ActionController
 
 		$query = $repository->createQuery();
 
-		$constraints = $this->constraintBuilder->getConstraints(
+		$constraints = $this->filterFactory->getConstraints(
 			$filters,
-			$query,
-			$this->settings['filterImplementations']
+			$query
 		);
 
 		$constraintModeMethod = match ($this->settings['filterMode']) {
@@ -254,7 +253,7 @@ class AnthologyController extends ActionController
 		$this->settings['recordStorageUids'] = $filterQuerySettings->getStoragePageIds();
 
 		foreach ($filters as $filter) {
-			$filter->setOptions($this->settings['filterImplementations'][$filter->filterType]::getOptions($filter, $this->settings));
+			$filter->setOptions($this->filterFactory->getFilters()[$filter->filterType]::getOptions($filter, $this->settings));
 			$filter->setParameter($activeFilters[$filter->getUid()] ?? null);
 		}
 

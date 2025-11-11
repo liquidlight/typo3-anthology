@@ -7,6 +7,7 @@ namespace LiquidLight\Anthology\Domain\Filter;
 use DateInterval;
 use DateTime;
 use DateTimeImmutable;
+use LiquidLight\Anthology\Attribute\AsAnthologyFilter;
 use LiquidLight\Anthology\Domain\Filter\AbstractFilter;
 use LiquidLight\Anthology\Domain\Filter\FilterInterface;
 use LiquidLight\Anthology\Domain\Model\Filter;
@@ -17,6 +18,7 @@ use TYPO3\CMS\Extbase\Persistence\Generic\Qom\ComparisonInterface;
 use TYPO3\CMS\Extbase\Persistence\Generic\Qom\ConstraintInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 
+#[AsAnthologyFilter('llanthology_date')]
 class DateFilter extends AbstractFilter implements FilterInterface
 {
 	protected const LABEL = 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.filter_type.date';

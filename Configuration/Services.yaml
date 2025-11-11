@@ -18,6 +18,11 @@ services:
     arguments:
       $cache: '@cache.llanthology_cache'
 
+  LiquidLight\Anthology\Factory\FilterFactory:
+    public: true
+    arguments:
+      $cache: '@cache.llanthology_cache'
+
   LiquidLight\Anthology\Hook\PluginConfigurationHook:
     public: true
 
