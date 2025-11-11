@@ -27,8 +27,6 @@ class SetupCommand extends Command
 
 	private string $tcaName;
 
-	private string $repositoryClass;
-
 	private int $modelPid;
 
 	private int $listPageUid;
@@ -59,7 +57,7 @@ class SetupCommand extends Command
 		// 1. Select TCA
 		$tcaName = $this->io->ask(
 			'Enter the TCA/table name (e.g. `tx_myextension_domain_model_item`)',
-			validator: fn ($answer) => !empty($answer) && array_key_exists($answer, $GLOBALS['TCA']) ? $answer : false
+			validator: $this->validateTca(...)
 		);
 
 		if (!$tcaName) {
@@ -67,18 +65,7 @@ class SetupCommand extends Command
 			return Command::FAILURE;
 		}
 
-		// 2. Select corresponding Repository
-		$repositoryClass = $this->io->ask(
-			'Enter the fully qualified class name for this TCA\'s Repository (e.g. `Vendor\MyExtension\Domain\Repository\ItemRepository`)',
-			validator: $this->validateRepository(...)
-		);
-
-		if (!$repositoryClass) {
-			$this->io->error('Invalid repository entered');
-			return Command::FAILURE;
-		}
-
-		// 3. Enter model PID
+		// 2. Enter model PID
 		$modelPid = $this->io->ask(
 			'Enter the model\'s PID',
 			validator: $this->validatePageUid(...)
@@ -89,7 +76,7 @@ class SetupCommand extends Command
 			return Command::FAILURE;
 		}
 
-		// 4. Enter list page UID
+		// 3. Enter list page UID
 		$listPageUid = $this->io->ask(
 			'Enter the list view page UID',
 			validator: $this->validatePageUid(...)
@@ -100,7 +87,7 @@ class SetupCommand extends Command
 			return Command::FAILURE;
 		}
 
-		// 5. Enter single page UID
+		// 4. Enter single page UID
 		$singlePageUid = $this->io->ask(
 			'Enter the single view page UID',
 			validator: $this->validatePageUid(...)
@@ -111,7 +98,7 @@ class SetupCommand extends Command
 			return Command::FAILURE;
 		}
 
-		// 6. Determine model name
+		// 5. Determine model name
 		$modelName = $this->getModelName($tcaName);
 
 		if (!$modelName) {
@@ -122,26 +109,22 @@ class SetupCommand extends Command
 		// Assign options to properties
 		$this->sitePackagePath = $sitePackagePath;
 		$this->tcaName = $tcaName;
-		$this->repositoryClass = $repositoryClass;
 		$this->modelPid = $modelPid;
 		$this->listPageUid = $listPageUid;
 		$this->singlePageUid = $singlePageUid;
 		$this->modelName = $modelName;
 
-		// A. Add Anthology Typoscript
-		$processTyposcript = $this->processTyposcript();
-
-		// B. Create route enhancers
+		// A. Create route enhancers
 		$routeEnhancers = $this->processRouteEnhancers();
 
-		// C. Add sitemap configuration
+		// B. Add sitemap configuration
 		$sitemapConfiguration = $this->processSitemapConfiguration();
 
-		// D. Add link handler
+		// C. Add link handler
 		$linkHandler = $this->processLinkHandler();
 
 		// Return success/failure
-		return $processTyposcript && $routeEnhancers && $sitemapConfiguration && $linkHandler
+		return $routeEnhancers && $sitemapConfiguration && $linkHandler
 			? Command::SUCCESS
 			: Command::FAILURE;
 	}
@@ -150,14 +133,6 @@ class SetupCommand extends Command
 	{
 		return !empty($tcaName) && array_key_exists($tcaName, $GLOBALS['TCA'])
 			? trim($tcaName)
-			: false;
-	}
-
-	private function validateRepository(string $repositoryClass): string|false
-	{
-		return class_exists($repositoryClass)
-			&& is_subclass_of($repositoryClass, Repository::class)
-			? trim($repositoryClass, '\\\n\r\t\v\x00')
 			: false;
 	}
 
@@ -177,33 +152,6 @@ class SetupCommand extends Command
 		return GeneralUtility::underscoredToUpperCamelCase(
 			str_replace(' ', '_', $this->getLanguageService()->sL($tcaLabel))
 		);
-	}
-
-	private function processTyposcript(): bool
-	{
-		$typoScriptFilePath = $this->getTypoScriptPath('modules') . '/' . GeneralUtility::camelCaseToLowerCaseUnderscored($this->modelName) . '.typoscript';
-
-		$typoScriptContents = <<<TYPOSCRIPT
-
-			plugin.tx_llanthology {
-				settings {
-					repositories {
-						{$this->tcaName} = {$this->repositoryClass}
-					}
-				}
-			}
-
-		TYPOSCRIPT;
-
-		$success = !!file_put_contents($typoScriptFilePath, $typoScriptContents, FILE_APPEND);
-
-		if ($success) {
-			$this->io->success('TypoScript configuration created');
-		} else {
-			$this->io->error('There was a problem creating the TypoScript configuration');
-		}
-
-		return $success;
 	}
 
 	private function processRouteEnhancers(): bool

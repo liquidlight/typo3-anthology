@@ -4,12 +4,50 @@ declare(strict_types=1);
 
 namespace LiquidLight\Anthology\Factory;
 
+use LiquidLight\Anthology\Attribute\AsAnthologyRepository;
+use ReflectionClass;
 use RuntimeException;
+use Spatie\StructureDiscoverer\Discover;
+use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Repository;
 
 class RepositoryFactory
 {
+	public function __construct(
+		private FrontendInterface $cache
+	) {
+	}
+
+	public function getRepositories(): array
+	{
+		if ($this->cache->has(__FUNCTION__)) {
+			return $this->cache->get(__FUNCTION__);
+		}
+
+		$projectPath = Environment::getProjectPath();
+		$repositoryClasses = Discover::in($projectPath)->withAttribute(AsAnthologyRepository::class)->get();
+
+		$repositories = array_combine(
+			array_map(
+				function ($repositoryClass) {
+					$reflectionClass = new ReflectionClass($repositoryClass);
+
+					foreach ($reflectionClass->getAttributes(AsAnthologyRepository::class) as $repositoryAttribute) {
+						return $repositoryAttribute->newInstance()->tableName;
+					}
+				},
+				$repositoryClasses
+			),
+			$repositoryClasses
+		);
+
+		$this->cache->set(__FUNCTION__, $repositories);
+
+		return $repositories;
+	}
+
 	public function getRepository(string $repositoryClass): Repository
 	{
 		$repositoryClass = trim($repositoryClass, '\\');

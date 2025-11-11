@@ -18,4 +18,7 @@ call_user_func(function () {
 			AnthologyController::class => 'view,list',
 		]
 	);
+
+	$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['llanthology_cache']
+		??= [];
 });
