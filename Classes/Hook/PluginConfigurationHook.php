@@ -4,26 +4,18 @@ declare(strict_types=1);
 
 namespace LiquidLight\Anthology\Hook;
 
-use TYPO3\CMS\Core\TypoScript\TypoScriptService;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use LiquidLight\Anthology\Factory\RepositoryFactory;
 
 class PluginConfigurationHook
 {
-	private array $typoScript;
-
 	public function __construct(
-		private ConfigurationManager $configurationManager,
-		private TypoScriptService $typoScriptService
+		private RepositoryFactory $repositoryFactory
 	) {
-		$this->typoScript = $this->typoScriptService->convertTypoScriptArrayToPlainArray(
-			$this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT)
-		);
 	}
 
 	public function getRepositories(array &$params): void
 	{
-		$repositories = $this->typoScript['plugin']['tx_llanthology']['settings']['repositories'] ?? [];
+		$repositories = $this->repositoryFactory->getRepositories();
 
 		$tcaConfigurations = array_filter(
 			$GLOBALS['TCA'],

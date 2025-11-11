@@ -220,7 +220,8 @@ class AnthologyController extends ActionController
 
 	private function getRepository(): Repository
 	{
-		$repositoryClass = $this->settings['repositories'][$this->settings['tca']] ?? null;
+		$repositoryClasses = $this->repositoryFactory->getRepositories();
+		$repositoryClass = $repositoryClasses[$this->settings['tca']] ?? null;
 
 		if (!$repositoryClass) {
 			throw new RuntimeException(
