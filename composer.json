@@ -22,6 +22,7 @@
     },
     "require": {
         "fluidtypo3/vhs": "^7.1",
+        "spatie/php-structure-discoverer": "^2.3",
         "symfony/yaml": "^7.3",
         "typo3/cms-core": "^13.4"
     },
@@ -30,8 +31,7 @@
         "lintkit/editorconfig-config": "^1.0",
         "lintkit/php-coding-standards-config": "^2.0",
         "php-parallel-lint/php-parallel-lint": "^1.4",
-        "phpunit/phpunit": "^10.5",
-        "spatie/php-structure-discoverer": "^2.3"
+        "phpunit/phpunit": "^10.5"
     },
     "autoload": {
         "psr-4": {
