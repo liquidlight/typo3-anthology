@@ -125,12 +125,16 @@ class AnthologyController extends ActionController
 		$templateRootPaths[] = $repositoryExtensionPath . 'Resources/Private/Templates/';
 		$partialRootPaths[] = $repositoryExtensionPath . 'Resources/Private/Partials/';
 
+		$layoutRootPaths = array_merge($layoutRootPaths, $this->settings['view']['layoutRootPaths'] ?? []);
+		$templateRootPaths = array_merge($templateRootPaths, $this->settings['view']['templateRootPaths'] ?? []);
+		$partialRootPaths = array_merge($partialRootPaths, $this->settings['view']['partialRootPaths'] ?? []);
+
 		$templatePaths->setLayoutRootPaths($layoutRootPaths);
 		$templatePaths->setTemplateRootPaths($templateRootPaths);
 		$templatePaths->setPartialRootPaths($partialRootPaths);
 
-		if (!empty($this->settings['templateName'])) {
-			$this->view->getRenderingContext()->setControllerAction($this->settings['templateName']);
+		if (!empty($this->settings['template'])) {
+			$this->view->getRenderingContext()->setControllerAction($this->settings['template']);
 		}
 	}
 
