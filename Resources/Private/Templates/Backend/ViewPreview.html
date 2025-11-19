@@ -1,0 +1,74 @@
+<html
+	xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+	xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
+	xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+	xmlns:v="http://typo3.org/ns/vhs/ViewHelpers"
+	data-namespace-typo3-fluid="true"
+>
+	<table class="table table-condensed table-hover anthology-table">
+		<thead>
+			<tr>
+				<th colspan="2">
+					<strong>
+						Anthology
+
+						<f:switch expression="{settings.mode}">
+							<f:case value="list">({f:translate(key: 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang_be.xlf:mode.list')})</f:case>
+							<f:case value="single">({f:translate(key: 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang_be.xlf:mode.single')})</f:case>
+						</f:switch>
+					</strong>
+				</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			<tr>
+				<th>Model</th>
+				<td>
+					<span class="t3js-icon icon icon-size-small icon-state-default" aria-hidden="true">
+						<span class="icon-markup">
+							<f:image src="{model.icon}" />
+						</span>
+					</span>
+
+					{f:translate(key: model.label)}
+				</td>
+			</tr>
+			<tr>
+				<th>Source</th>
+				<td>
+					<f:for each="{sources}" as="source">
+						<f:be.link route="web_layout" parameters="{id: source.uid}">
+							<core:iconForRecord table="pages" row="{source}" />
+							{source.title}
+						</f:be.link>
+
+						<br />
+					</f:for>
+				</td>
+			</tr>
+			<tr>
+				<f:if condition="{correspondingPage}">
+					<th>
+						<f:switch expression="{settings.mode}">
+							<f:case value="list">{f:translate(key: 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang_be.xlf:singleView')}</f:case>
+							<f:case value="single">{f:translate(key: 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang_be.xlf:listView')}</f:case>
+						</f:switch>
+					</th>
+					<td>
+						<f:be.link route="web_layout" parameters="{id: correspondingPage.uid}">
+							<core:iconForRecord table="pages" row="{correspondingPage}" />
+							{correspondingPage.title}
+						</f:be.link>
+					</td>
+				</f:if>
+			</tr>
+			<tr>
+				<f:if condition="{settings.template}">
+					<th>Template</th>
+					<td><code>{settings.template}</code></td>
+				</f:if>
+			</tr>
+		</tbody>
+	</table>
+</html>
