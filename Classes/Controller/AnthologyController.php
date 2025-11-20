@@ -10,7 +10,7 @@ use LiquidLight\Anthology\Factory\RepositoryFactory;
 use LiquidLight\Anthology\Provider\PageTitleProvider;
 use Psr\Http\Message\ResponseInterface;
 use RuntimeException;
-use TYPO3\CMS\Core\Error\Http\PageNotFoundException;
+use TYPO3\CMS\Core\Http\ImmediateResponseException;
 use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\CMS\Core\Pagination\SlidingWindowPagination;
 use TYPO3\CMS\Core\Registry;
@@ -21,6 +21,8 @@ use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Pagination\QueryResultPaginator;
 use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
 use TYPO3\CMS\Extbase\Persistence\Repository;
+use TYPO3\CMS\Frontend\Controller\ErrorController;
+use TYPO3\CMS\Frontend\Page\PageAccessFailureReasons;
 
 class AnthologyController extends ActionController
 {
@@ -54,10 +56,12 @@ class AnthologyController extends ActionController
 				return new ForwardResponse(self::SINGLE_MODE);
 
 			default:
-				throw new RuntimeException(
-					sprintf(
-						'Invalid mode "%s" selected',
-						$this->settings['mode']
+				throw new ImmediateResponseException(
+					$this->pageNotFoundAction(
+						sprintf(
+							'Invalid mode "%s" selected',
+							$this->settings['mode']
+						),
 					),
 					1759164121
 				);
@@ -83,8 +87,10 @@ class AnthologyController extends ActionController
 			: 0;
 
 		if (!$recordUid) {
-			throw new RuntimeException(
-				'Invalid or no record UID supplied',
+			throw new ImmediateResponseException(
+				$this->pageNotFoundAction(
+					'Invalid or no record UID supplied',
+				),
 				1759233850
 			);
 		}
@@ -92,10 +98,12 @@ class AnthologyController extends ActionController
 		$record = $this->getRepository()->findByUid((int)$recordUid);
 
 		if (!$record) {
-			throw new PageNotFoundException(
-				sprintf(
-					'Record with UID %d not found',
-					$recordUid
+			throw new ImmediateResponseException(
+				$this->pageNotFoundAction(
+					sprintf(
+						'Record with UID %d not found',
+						$recordUid
+					)
 				),
 				1759233928
 			);
@@ -107,6 +115,19 @@ class AnthologyController extends ActionController
 		$this->view->assign('record', $record);
 
 		return $this->htmlResponse();
+	}
+
+	private function pageNotFoundAction(string $reason = ''): ResponseInterface
+	{
+		return GeneralUtility::makeInstance(ErrorController::class)
+			->pageNotFoundAction(
+				$this->request,
+				$reason,
+				[
+					'code' => PageAccessFailureReasons::PAGE_NOT_FOUND,
+				]
+			)
+		;
 	}
 
 	private function addTemplatePaths(): void
