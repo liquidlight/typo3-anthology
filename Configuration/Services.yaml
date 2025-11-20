@@ -23,6 +23,11 @@ services:
     arguments:
       $cache: '@cache.llanthology_cache'
 
+  LiquidLight\Anthology\EventListener\CacheWarmupEventListener:
+    public: true
+    arguments:
+      $cache: '@cache.llanthology_cache'
+
   LiquidLight\Anthology\Hook\PluginConfigurationHook:
     public: true
 
