@@ -13,6 +13,7 @@ use RuntimeException;
 use TYPO3\CMS\Core\Error\Http\PageNotFoundException;
 use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\CMS\Core\Pagination\SlidingWindowPagination;
+use TYPO3\CMS\Core\Registry;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Http\ForwardResponse;
@@ -36,7 +37,8 @@ class AnthologyController extends ActionController
 		private FilterFactory $filterFactory,
 		private FilterRepository $filterRepository,
 		private PageTitleProvider $pageTitleProvider,
-		private PackageManager $packageManager
+		private PackageManager $packageManager,
+		private Registry $registry
 	) {
 	}
 
@@ -97,7 +99,9 @@ class AnthologyController extends ActionController
 				1759233928
 			);
 		}
+
 		$this->pageTitleProvider->setTitle($record, $this->settings['tca']);
+		$this->registry->set('ll_anthology', 'record_page_title', $this->pageTitleProvider->getTitle());
 
 		$this->view->assign('record', $record);
 
