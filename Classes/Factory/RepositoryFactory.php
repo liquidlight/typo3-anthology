@@ -31,13 +31,7 @@ class RepositoryFactory
 
 		$repositories = array_combine(
 			array_map(
-				function ($repositoryClass) {
-					$reflectionClass = new ReflectionClass($repositoryClass);
-
-					foreach ($reflectionClass->getAttributes(AsAnthologyRepository::class) as $repositoryAttribute) {
-						return $repositoryAttribute->newInstance()->tableName;
-					}
-				},
+				$this->getTcaName(...),
 				$repositoryClasses
 			),
 			$repositoryClasses
@@ -65,5 +59,18 @@ class RepositoryFactory
 		}
 
 		return $repository;
+	}
+
+	public function getTcaName(string|Repository $repository): ?string
+	{
+		$repositoryReflection = new ReflectionClass($repository);
+		$repositoryAttributes = $repositoryReflection->getAttributes(
+			AsAnthologyRepository::class
+		);
+
+		return $repositoryAttributes[array_key_first($repositoryAttributes)]
+			?->newInstance()
+			?->tableName
+		;
 	}
 }

@@ -32,6 +32,8 @@ class AnthologyController extends ActionController
 
 	private const DEFAULT_MAXIMUM_LINKS = 8;
 
+	private Repository $repository;
+
 	public function __construct(
 		private RepositoryFactory $repositoryFactory,
 		private FilterFactory $filterFactory,
@@ -87,8 +89,7 @@ class AnthologyController extends ActionController
 			);
 		}
 
-		$repository = $this->getRepository();
-		$record = $repository->findByUid((int)$recordUid);
+		$record = $this->getRepository()->findByUid((int)$recordUid);
 
 		if (!$record) {
 			throw new PageNotFoundException(
@@ -100,7 +101,7 @@ class AnthologyController extends ActionController
 			);
 		}
 
-		$this->pageTitleProvider->setTitle($record, $this->settings['tca']);
+		$this->pageTitleProvider->setTitle($record, $this->repositoryFactory->getTcaName($this->getRepository()));
 		$this->registry->set('ll_anthology', 'record_page_title', $this->pageTitleProvider->getTitle());
 
 		$this->view->assign('record', $record);
@@ -157,13 +158,11 @@ class AnthologyController extends ActionController
 
 	private function getPaginatedItems(): array
 	{
-		$repository = $this->getRepository();
-
 		$currentPage = $this->request->hasArgument('currentPage')
 			? (int)$this->request->getArgument('currentPage')
 			: 1;
 
-		$records = $this->getRecords($repository);
+		$records = $this->getRecords();
 
 		$paginator = new QueryResultPaginator(
 			$records,
@@ -191,15 +190,15 @@ class AnthologyController extends ActionController
 		];
 	}
 
-	private function getRecords(Repository $repository): QueryResult
+	private function getRecords(): QueryResult
 	{
 		$filters = $this->getFilters(true);
 
 		if (count($filters) === 0) {
-			return $repository->findAll();
+			return $this->getRepository()->findAll();
 		}
 
-		$query = $repository->createQuery();
+		$query = $this->getRepository()->createQuery();
 
 		$constraints = $this->filterFactory->getConstraints(
 			$filters,
@@ -227,20 +226,15 @@ class AnthologyController extends ActionController
 
 	private function getRepository(): Repository
 	{
-		$repositoryClasses = $this->repositoryFactory->getRepositories();
-		$repositoryClass = $repositoryClasses[$this->settings['tca']] ?? null;
-
-		if (!$repositoryClass) {
-			throw new RuntimeException(
-				sprintf(
-					'"%s" is not a valid repository selection',
-					$this->settings['tca']
-				),
-				1758814029
-			);
+		if (isset($this->repository)) {
+			return $this->repository;
 		}
 
-		return $this->repositoryFactory->getRepository($repositoryClass);
+		$this->repository = $this->repositoryFactory->getRepository(
+			$this->settings['repository']
+		);
+
+		return $this->repository;
 	}
 
 	private function getFilters(bool $ignoreUnsetFilters = false): QueryResult
@@ -259,6 +253,7 @@ class AnthologyController extends ActionController
 		);
 
 		$this->settings['recordStorageUids'] = $filterQuerySettings->getStoragePageIds();
+		$this->settings['tca'] = $this->repositoryFactory->getTcaName($this->settings['repository']);
 
 		foreach ($filters as $filter) {
 			$filter->setOptions($this->filterFactory->getFilters()[$filter->filterType]::getOptions($filter, $this->settings));

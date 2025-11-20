@@ -14,7 +14,7 @@
 			<trans-unit id="mode.single">
 				<source>Single</source>
 			</trans-unit>
-			<trans-unit id="tca">
+			<trans-unit id="repository">
 				<source>Model name</source>
 			</trans-unit>
 			<trans-unit id="itemsPerPage">

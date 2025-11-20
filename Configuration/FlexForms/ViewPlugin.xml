@@ -25,14 +25,14 @@
 							<default>list</default>
 						</config>
 					</settings.mode>
-					<settings.tca>
-						<label>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_be.xlf:tca</label>
+					<settings.repository>
+						<label>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_be.xlf:repository</label>
 						<config>
 							<type>select</type>
 							<renderType>selectSingle</renderType>
 							<itemsProcFunc>LiquidLight\Anthology\Hook\PluginConfigurationHook->getRepositories</itemsProcFunc>
 						</config>
-					</settings.tca>
+					</settings.repository>
 					<settings.singleView>
 						<label>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_be.xlf:singleView</label>
 						<displayCond>FIELD:settings.mode:=:list</displayCond>

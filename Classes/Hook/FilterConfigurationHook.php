@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LiquidLight\Anthology\Hook;
 
 use LiquidLight\Anthology\Factory\FilterFactory;
+use LiquidLight\Anthology\Factory\RepositoryFactory;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\HiddenRestriction;
@@ -25,6 +26,7 @@ class FilterConfigurationHook
 
 	public function __construct(
 		private FilterFactory $filterFactory,
+		private RepositoryFactory $repositoryFactory,
 		private FlexFormService $flexFormService,
 		private ConnectionPool $connectionPool
 	) {
@@ -136,7 +138,7 @@ class FilterConfigurationHook
 			return null;
 		}
 
-		return $anthologyPluginConfiguration['settings']['tca'] ?? null;
+		return $this->repositoryFactory->getTcaName($anthologyPluginConfiguration['settings']['repository']);
 	}
 
 	private function getAnthologyPluginConfiguration(int $anthologyPluginUid): array

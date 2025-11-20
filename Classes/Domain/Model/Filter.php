@@ -44,6 +44,10 @@ class Filter extends AbstractEntity
 
 	public function getParsedSettings(): array
 	{
+		if (empty($this->settings)) {
+			return [];
+		}
+
 		if (empty($this->parsedSettings)) {
 			$this->parsedSettings = GeneralUtility::makeInstance(FlexFormService::class)
 				->convertFlexFormContentToArray($this->settings)

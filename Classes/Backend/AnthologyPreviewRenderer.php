@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LiquidLight\Anthology\Backend;
 
+use LiquidLight\Anthology\Factory\RepositoryFactory;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Service\FlexFormService;
@@ -12,6 +13,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class AnthologyPreviewRenderer
 {
 	public function __construct(
+		private readonly RepositoryFactory $repositoryFactory,
 		private readonly ConnectionPool $connectionPool,
 		private readonly PageRepository $pageRepository,
 		private readonly FlexFormService $flexFormService
@@ -29,7 +31,8 @@ class AnthologyPreviewRenderer
 	{
 		global $TCA;
 
-		$tcaName = $this->getPluginSettings($record)['tca'];
+		$repository = $this->getPluginSettings($record)['repository'];
+		$tcaName = $this->repositoryFactory->getTcaName($repository);
 
 		return [
 			'value' => $tcaName,
@@ -40,15 +43,21 @@ class AnthologyPreviewRenderer
 
 	public function getSources(array $record): array
 	{
-		return array_map(
-			fn ($sourceUid) => $this->pageRepository->getLanguageOverlay(
-				'pages',
-				$this->pageRepository->getRawRecord(
-					'pages',
-					$sourceUid
-				)
-			),
-			GeneralUtility::intExplode(',', $record['pages'])
+		return array_filter(
+			array_map(
+				function ($sourceUid): ?array {
+					$rawSourceRecord = $this->pageRepository->getRawRecord(
+						'pages',
+						$sourceUid
+					);
+
+					return $rawSourceRecord
+						? $this->pageRepository->getLanguageOverlay('pages', $rawSourceRecord)
+						: null;
+
+				},
+				GeneralUtility::intExplode(',', $record['pages'] ?? '')
+			)
 		);
 	}
 
