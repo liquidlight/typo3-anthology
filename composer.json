@@ -2,7 +2,7 @@
     "name": "liquidlight/typo3-anthology",
     "description": "Anthology",
     "type": "typo3-cms-extension",
-    "version": "0.0.0",
+    "version": "1.0.0",
     "readme": "./README.md",
     "authors": [
         {
