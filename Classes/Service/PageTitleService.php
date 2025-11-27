@@ -17,7 +17,7 @@ class PageTitleService
 
 		return str_replace(
 			self::PAGE_TITLE_PLACEHOLDER,
-			$registry->get('ll_anthology', 'record_page_title'),
+			$registry->get('ll_anthology', 'record_page_title') ?? '',
 			$pageContent
 		);
 	}
