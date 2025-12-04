@@ -1,6 +1,7 @@
 {
     "name": "liquidlight/typo3-anthology",
-    "description": "Anthology",
+    "description": "Plugins and helpers for listing and filtering TYPO3 record based content",
+    "license": "GPL-2.0+",
     "type": "typo3-cms-extension",
     "version": "1.0.1",
     "readme": "./README.md",
