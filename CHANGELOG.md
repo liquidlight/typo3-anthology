@@ -1,3 +1,10 @@
+# 1.1.0 **21st January 2026**
+
+#### Feature
+
+- Provide option to hardcode repository and filter classes
+
+
 # 1.0.1 **27th November 2025**
 
 #### Fix
