@@ -22,10 +22,17 @@ class RepositoryFactory
 
 	public function getRepositories(): array
 	{
+		// Attempt to get cached repositories
 		if ($this->cache->has(__FUNCTION__)) {
 			return $this->cache->get(__FUNCTION__);
 		}
 
+		// Check if the configuration has been hardcoded
+		if (!empty($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['ll_anthology']['repositories'])) {
+			return $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['ll_anthology']['repositories'];
+		}
+
+		// If there is nothing else, autodetect available repositories
 		$projectPath = Environment::getProjectPath();
 		$repositoryClasses = Discover::in($projectPath)->withAttribute(AsAnthologyRepository::class)->get();
 

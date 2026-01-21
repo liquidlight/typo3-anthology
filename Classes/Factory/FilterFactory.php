@@ -24,10 +24,17 @@ class FilterFactory
 
 	public function getFilters(): array
 	{
+		// Attempt to get cached filters
 		if ($this->cache->has(__FUNCTION__)) {
 			return $this->cache->get(__FUNCTION__);
 		}
 
+		// Check if the configuration has been hardcoded
+		if (!empty($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['ll_anthology']['filter'])) {
+			return $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['ll_anthology']['filters'];
+		}
+
+		// If there is nothing else, autodetect available filters
 		$projectPath = Environment::getProjectPath();
 		$filterClasses = Discover::in($projectPath)->withAttribute(AsAnthologyFilter::class)->get();
 
