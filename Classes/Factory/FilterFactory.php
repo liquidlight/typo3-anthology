@@ -30,7 +30,7 @@ class FilterFactory
 		}
 
 		// Check if the configuration has been hardcoded
-		if (!empty($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['ll_anthology']['filter'])) {
+		if (!empty($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['ll_anthology']['filters'])) {
 			return $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['ll_anthology']['filters'];
 		}
 
