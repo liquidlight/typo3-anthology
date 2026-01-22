@@ -1,3 +1,10 @@
+# 1.1.1 **22nd January 2026**
+
+#### Fix
+
+- Fix bug when loading hardcoded filter onfiguration
+
+
 # 1.1.0 **21st January 2026**
 
 #### Feature
