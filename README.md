@@ -34,4 +34,3 @@ For detailed setup and configuration instructions, see the documentation:
 - [Templates](Documentation/40.%20Templates.md) - Customising the output
 - [Custom Filters](Documentation/50.%20Custom%20filters.md) - Creating custom filtering options
 - [Link Handler](Documentation/60.%20Link%20handler.md) - Creating backend link handlers
-- [Troubleshooting](Documentation/70.%20Troubleshooting.md)

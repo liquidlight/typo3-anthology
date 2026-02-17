@@ -6,11 +6,9 @@ namespace LiquidLight\Anthology\Factory;
 
 use LiquidLight\Anthology\Attribute\AsAnthologyFilter;
 use LiquidLight\Anthology\Domain\Filter\FilterInterface;
+use LiquidLight\Anthology\Registry\AnthologyFilterRegistry;
 use ReflectionClass;
 use RuntimeException;
-use Spatie\StructureDiscoverer\Discover;
-use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
-use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Extbase\Persistence\Generic\Exception\NotImplementedException;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
@@ -18,25 +16,20 @@ use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 class FilterFactory
 {
 	public function __construct(
-		private FrontendInterface $cache
+		private readonly AnthologyFilterRegistry $filterRegistry
 	) {
 	}
 
 	public function getFilters(): array
 	{
-		// Attempt to get cached filters
-		if ($this->cache->has(__FUNCTION__)) {
-			return $this->cache->get(__FUNCTION__);
+		if (isset($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['ll_anthology']['filters'])) {
+			trigger_error(
+				'Manually specifying Anthology filters has been removed, this configuration will be ignored',
+				E_USER_DEPRECATED
+			);
 		}
 
-		// Check if the configuration has been hardcoded
-		if (!empty($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['ll_anthology']['filters'])) {
-			return $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['ll_anthology']['filters'];
-		}
-
-		// If there is nothing else, autodetect available filters
-		$projectPath = Environment::getProjectPath();
-		$filterClasses = Discover::in($projectPath)->withAttribute(AsAnthologyFilter::class)->get();
+		$filterClasses = $this->filterRegistry->get();
 
 		$filters = array_combine(
 			array_map(
@@ -51,8 +44,6 @@ class FilterFactory
 			),
 			$filterClasses
 		);
-
-		$this->cache->set(__FUNCTION__, $filters);
 
 		return $filters;
 	}

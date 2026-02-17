@@ -23,7 +23,8 @@
     },
     "require": {
         "fluidtypo3/vhs": "^7.1",
-        "spatie/php-structure-discoverer": "^2.3",
+        "symfony/dependency-injection": "^7.3",
+        "symfony/http-kernel": "^7.3",
         "symfony/yaml": "^7.3",
         "typo3/cms-core": "^13.4"
     },
