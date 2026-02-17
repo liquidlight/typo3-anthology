@@ -5,36 +5,29 @@ declare(strict_types=1);
 namespace LiquidLight\Anthology\Factory;
 
 use LiquidLight\Anthology\Attribute\AsAnthologyRepository;
+use LiquidLight\Anthology\Registry\AnthologyRepositoryRegistry;
 use ReflectionClass;
 use RuntimeException;
-use Spatie\StructureDiscoverer\Discover;
-use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
-use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Repository;
 
 class RepositoryFactory
 {
 	public function __construct(
-		private FrontendInterface $cache
+		private readonly AnthologyRepositoryRegistry $repositoryRegistry
 	) {
 	}
 
 	public function getRepositories(): array
 	{
-		// Attempt to get cached repositories
-		if ($this->cache->has(__FUNCTION__)) {
-			return $this->cache->get(__FUNCTION__);
+		if (isset($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['ll_anthology']['repositories'])) {
+			trigger_error(
+				'Manually specifying Anthology repositories has been removed, this configuration will be ignored',
+				E_USER_DEPRECATED
+			);
 		}
 
-		// Check if the configuration has been hardcoded
-		if (!empty($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['ll_anthology']['repositories'])) {
-			return $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['ll_anthology']['repositories'];
-		}
-
-		// If there is nothing else, autodetect available repositories
-		$projectPath = Environment::getProjectPath();
-		$repositoryClasses = Discover::in($projectPath)->withAttribute(AsAnthologyRepository::class)->get();
+		$repositoryClasses = $this->repositoryRegistry->get();
 
 		$repositories = array_combine(
 			array_map(
@@ -43,8 +36,6 @@ class RepositoryFactory
 			),
 			$repositoryClasses
 		);
-
-		$this->cache->set(__FUNCTION__, $repositories);
 
 		return $repositories;
 	}
