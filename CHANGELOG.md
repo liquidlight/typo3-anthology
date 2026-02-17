@@ -1,3 +1,10 @@
+# 1.2.0 **17th February 2026**
+
+#### Feature
+
+- Replace cached repository and filter storage with list generated at compilation
+
+
 # 1.1.1 **22nd January 2026**
 
 #### Fix
