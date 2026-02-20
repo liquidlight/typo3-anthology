@@ -3,6 +3,7 @@
 #### Feature
 
 - Output warning on default single view when in development mode
+- Add <label> elements to filter inputs
 
 #### Fix
 
