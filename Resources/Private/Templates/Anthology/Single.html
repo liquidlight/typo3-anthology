@@ -1,6 +1,18 @@
 <html
 	xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+	xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
 	data-namespace-typo3-fluid="true"
 >
-	<f:debug inline="true">{_all}</f:debug>
+	<f:if condition="{v:condition.string.contains(haystack: '{v:context.get()}', needle: 'Development')}">
+		<div style="background-color: #ffe6e6; padding: 1rem; border-left: solid 1rem #C00">
+			<span style="float: left; color: #C00">
+				<core:icon identifier="actions-exclamation-triangle" />
+			</span>
+
+			<h2 style="color: #C00">Warning!</h2>
+			<p>This is Anthology's default single view template and should not be used in production. See the <a href="https://github.com/liquidlight/typo3-anthology/blob/main/Documentation/40.%20Templates.md" target="_blank">documentation</a> for how to override this template.</p>
+		</div>
+
+		<f:debug inline="true">{_all}</f:debug>
+	</f:if>
 </html>
