@@ -3,10 +3,6 @@
 	xmlns:v="http://typo3.org/ns/vhs/ViewHelpers"
 	data-namespace-typo3-fluid="true"
 >
-	<fieldset>
-		<legend>{filter.title}</legend>
-
-		<f:variable name="displayModePartial">{filter.parsedSettings.displayMode -> f:format.case(mode: 'capital')}</f:variable>
-		<f:render partial="Filter/DisplayMode/{displayModePartial}" arguments="{filter: filter}" />
-	</fieldset>
+	<f:variable name="displayModePartial">{filter.parsedSettings.displayMode -> f:format.case(mode: 'capital')}</f:variable>
+	<f:render partial="Filter/DisplayMode/{displayModePartial}" arguments="{filter: filter}" />
 </html>

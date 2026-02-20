@@ -3,7 +3,8 @@
 	data-namespace-typo3-fluid="true"
 >
 	<fieldset>
-		<legend>{filter.title}</legend>
-		<f:form.textfield name="filter[{filter.uid}]" placeholder="{filter.parsedSettings.placeholder}" />
+		<f:variable name="filterFieldId">{filter.filterType}-{filter.uid}</f:variable>
+		<label for="{filterFieldId}">{filter.title}!</label>
+		<f:form.textfield id="{filterFieldId}" name="filter[{filter.uid}]" placeholder="{filter.parsedSettings.placeholder}" type="search" />
 	</fieldset>
 </html>
