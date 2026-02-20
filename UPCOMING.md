@@ -9,3 +9,4 @@
 
 - Remove <f:debug> from list view
 - Hide pagination from list view when pagination is not required
+- Fix filter reset link Fluid element
