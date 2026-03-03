@@ -1,0 +1,160 @@
+.. include:: ../Includes.rst.txt
+
+==============
+Custom Filters
+==============
+
+The Anthology extension includes a powerful and extensible filtering system. Whilst it comes with several common filter types out of the box (Search, Category, and Date), you can create your own custom filter types to meet the specific needs of your project.
+
+This guide will walk you through the process of creating, registering, and using a new custom filter.
+
+The Components of a Filter
+==========================
+
+A filter consists of three main parts:
+
+1. **A Filter Class**: The PHP class that contains the filtering logic.
+2. **A FlexForm File**: An XML file that defines the configuration options for the filter (optional).
+3. **A Fluid Template**: An HTML file that renders the filter's frontend interface.
+
+We will create a simple "Tag" filter as an example.
+
+The Filter Class
+================
+
+The filter class is responsible for applying the actual query constraint. It must implement the :php:`FilterInterface` (or extend the provided :php:`AbstractFilter`), and must have the :php:`AsAnthologyFilter` attribute.
+
+Although not required, it is recommended to prefix the name of your filter with the extension in order to avoid clashes with other filters.
+
+**Classes/Domain/Filter/TagFilter.php**
+
+.. code-block:: php
+
+	<?php
+
+	declare(strict_types=1);
+
+	namespace Vendor\MyExtension\Domain\Filter;
+
+	use LiquidLight\Anthology\Attribute\AsAnthologyFilter;
+	use LiquidLight\Anthology\Domain\Filter\AbstractFilter;
+	use LiquidLight\Anthology\Domain\Filter\FilterInterface;
+	use LiquidLight\Anthology\Domain\Model\Filter;
+	use TYPO3\CMS\Extbase\Persistence\Generic\Qom\ComparisonInterface;
+	use TYPO3\CMS\Extbase\Persistence\QueryInterface;
+
+	#[AsAnthologyFilter('myextension_tag')]
+	class TagFilter extends AbstractFilter implements FilterInterface
+	{
+		protected const LABEL = 'My Custom Tag Filter';
+
+		public static function getConstraint(
+			Filter $filter,
+			QueryInterface $query
+		): ?ComparisonInterface {
+			// If no tag is selected in the frontend, don't apply any constraint
+			if (empty($filter->getParameter())) {
+				return null;
+			}
+
+			// 'tags' is the property on our model that we want to filter by.
+			// This comes from the FlexForm setting for this filter.
+			$property = $filter->getParsedSettings()['property'];
+
+			return $query->like($property, '%' . $filter->getParameter() . '%');
+		}
+	}
+
+- **LABEL**: This constant defines the human-readable name of your filter, which will be shown in the backend. Whilst not required, this should refer to an XLIFF file.
+- **getConstraint()**: This is the core method. It receives the :php:`Filter` model (which contains its settings and the current value from the frontend) and the Extbase :php:`Query` object. It should return a :php:`ConstraintInterface` object that will be added to the database query.
+
+The FlexForm Configuration
+==========================
+
+The FlexForm defines the settings that are available for your filter in the backend. This is an XML file.
+
+**Configuration/FlexForms/Filter/Tag.xml**
+
+.. code-block:: xml
+
+	<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+	<T3DataStructure>
+		<sheets>
+			<sDEF>
+				<ROOT>
+					<sheetTitle>Settings</sheetTitle>
+					<type>array</type>
+					<el>
+						<settings.property>
+							<label>Property to filter on</label>
+							<config>
+								<type>input</type>
+								<eval>trim,required</eval>
+							</config>
+						</settings.property>
+					</el>
+				</ROOT>
+			</sDEF>
+		</sheets>
+	</T3DataStructure>
+
+This simple FlexForm adds a single text input field where the editor can specify which property of the model (e.g., :samp:`tags`) this filter should apply to.
+
+The Fluid Template
+===================
+
+This template renders the filter on the website. It's a standard Fluid template.
+
+**Resources/Private/Partials/Filter/Tag.html**
+
+.. code-block:: html
+
+	<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers">
+		<f:form.textfield
+			name="filter[{filter.uid}]"
+			value="{filter.parameter}"
+			class="form-control"
+			placeholder="Enter a tag..."
+		/>
+	</html>
+
+- **filter**: A :samp:`filter` object is available in the template, containing all its properties and settings.
+- **name="filter[{filter.uid}]"**: It is crucial that the :samp:`name` attribute follows this format. This allows the Anthology extension to correctly identify the value for each filter.
+- **value="{filter.parameter}"**: This ensures that when the form is submitted, the selected value is pre-filled.
+
+Configuring the Filter
+======================
+
+Register the FlexForm
+---------------------
+
+To provide customisable options for your filter, you need to create a FlexForm. This is done in the TCA for the filter record. If no further configuration options are required, this is not necessary.
+
+**Configuration/TCA/Overrides/tx_anthology_domain_model_filter.php**
+
+.. code-block:: php
+
+	<?php
+
+	// Add this to your extension's TCA override file
+	$GLOBALS['TCA']['tx_anthology_domain_model_filter']['columns']['settings']['config']['ds']['tag'] =
+		'FILE:EXT:my_extension/Configuration/FlexForms/Filter/Tag.xml';
+
+Register the Template
+---------------------
+
+Finally, ensure the template is found by placing it in your extension's :file:`Resources/Private/Partials/Filter/` directory. As explained in the :doc:`Templates` guide, the Anthology extension will automatically find templates in the extension that provides the model.
+
+Using the Custom Filter
+=======================
+
+After clearing the cache, you can now use your new filter:
+
+1. In the TYPO3 backend, create a new "Anthology Filter" record.
+2. In the **Filter Type** dropdown, you should now see "My Custom Tag Filter".
+3. Select it. The FlexForm you created will appear, asking for the "Property to filter on". Enter the name of the field on your model (e.g., :samp:`tags`).
+4. Give the filter a **Title** (e.g., "Filter by Tag").
+5. Save the filter record.
+6. Edit your Anthology plugin on the content page, go to the **Filters** tab, and add your newly created filter.
+
+Now, your custom tag filter will appear on the frontend, allowing users to filter your records.

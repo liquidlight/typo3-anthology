@@ -1,0 +1,24 @@
+.. ==================================================
+.. FOR YOUR INFORMATION
+.. --------------------------------------------------
+.. -*- coding: utf-8 -*- with BOM.
+
+
+
+.. ==================================================
+.. DEFINE SOME TEXTROLES
+.. --------------------------------------------------
+.. role:: aspect (emphasis)
+.. role:: html(code)
+.. role:: js(code)
+.. role:: php(code)
+.. role:: sep (strong)
+.. role:: sql(code)
+.. role:: typoscript(code)
+.. role:: yaml(code)
+
+.. role:: ts(typoscript)
+   :class: typoscript
+
+.. default-role:: code
+.. highlight:: php
