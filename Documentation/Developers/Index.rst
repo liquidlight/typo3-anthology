@@ -16,3 +16,4 @@ This section contains comprehensive guides for using the Anthology extension, co
 	Templates
 	CustomFilters
 	LinkHandler
+	ExternalRepositories
