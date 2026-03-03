@@ -43,4 +43,5 @@ Anthology
    Introduction/Index
    Installation/Index
    QuickStart/Index
+   Integrators/Index
    Developers/Index
