@@ -1,3 +1,18 @@
+# 1.2.1 **4th March 2026**
+
+#### Feature
+
+- Output warning on default single view when in development mode
+- Add <label> elements to filter inputs
+- Migrate documentation to reStructuredText format
+
+#### Fix
+
+- Remove <f:debug> from list view
+- Hide pagination from list view when pagination is not required
+- Fix filter reset link Fluid element
+
+
 # 1.2.0 **17th February 2026**
 
 #### Feature
