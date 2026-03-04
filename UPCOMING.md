@@ -4,6 +4,7 @@
 
 - Output warning on default single view when in development mode
 - Add <label> elements to filter inputs
+- Migrate documentation to reStructuredText format
 
 #### Fix
 

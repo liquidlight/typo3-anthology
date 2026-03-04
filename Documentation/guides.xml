@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<guides
+	xmlns="https://www.phpdoc.org/guides"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="https://www.phpdoc.org/guides vendor/phpdocumentor/guides-cli/resources/schema/guides.xsd"
+	input-format="rst"
+>
+	<project
+		title="liquidlight/typo3-anthology"
+		copyright="since 2026 Liquid Light &amp; contributors"
+	/>
+	<extension
+		class="\T3Docs\Typo3DocsTheme\DependencyInjection\Typo3DocsThemeExtension"
+		edit-on-github="liquidlight/typo3-anthology"
+		edit-on-github-branch="main"
+		interlink-shortcode="liquidlight/typo3-anthology"
+		project-home="https://github.com/liquidlight/typo3-anthology"
+		project-issues="https://github.com/liquidlight/typo3-anthology/issues"
+		project-repository="https://github.com/liquidlight/typo3-anthology"
+		typo3-core-preferred="13.4"
+	/>
+</guides>

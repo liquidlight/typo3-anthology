@@ -1,0 +1,86 @@
+.. include:: ../Includes.rst.txt
+
+=======
+Routing
+=======
+
+To create user-friendly, human-readable URLs for the detail view of your records, you need to configure routing for the Anthology plugin.
+
+This guide explains how to set up a route enhancer for the Anthology extension's single record view and list view pagination.
+
+YAML Configuration
+===================
+
+Routing is configured in the main :file:`config.yaml` file for your TYPO3 site.
+
+Here is an example of a route enhancer for an Anthology detail page:
+
+.. code-block:: yaml
+
+	routeEnhancers:
+	  # Single view with slug-based URLs
+	  [UniqueIdentifier]:
+	    type: Extbase
+	    limitToPages:
+	      - 123
+	    extension: LlAnthology
+	    plugin: AnthologyView
+	    routes:
+	      # Single record by slug
+	      - routePath: '/{record}'
+	        _controller: 'Anthology::single'
+	    defaultController: 'Anthology::view'
+	    aspects:
+	      record:
+	        type: PersistedAliasMapper
+	        tableName: tx_myextension_domain_model_item
+	        routeFieldName: slug
+
+-  :samp:`[uniqueIdentifier]` must be replaced by a unique value; this can be anything so long as it is unique.
+
+And a more general configuration for list view pagination:
+
+.. code-block:: yaml
+
+	routeEnhancers:
+	  # Anthology list view - handles pagination
+	  AnthologyList:
+	    type: Extbase
+	    limitToPages:
+	      - 123
+	      - 456
+	    extension: LlAnthology
+	    plugin: AnthologyView
+	    routes:
+	      # List view
+	      - routePath: '/'
+	        _controller: 'Anthology::list'
+	      # List view with pagination
+	      - routePath: '/page-{page}'
+	        _controller: 'Anthology::list'
+	        _arguments:
+	          page: 'currentPage'
+	    defaultController: 'Anthology::list'
+	    defaults:
+	      page: '1'
+	    aspects:
+	      page:
+	        type: StaticRangeMapper
+	        start: '2'
+	        end: '1000'
+
+The list view configuration can be reused across all instances of the Anthology list view as it is not dependent upon a model. Add the list view page UIDs to the :samp:`limitToPages` array.
+
+Each single view requires a route configuration per-model as it requires the :samp:`tableName` configuration. Single view page UIDs can be added to the :samp:`limitToPages` array.
+
+Important Considerations
+=========================
+
+**Slugs**
+	For the :samp:`PersistedAliasMapper` to work, your table must have a dedicated field to store the URL slug. You are responsible for generating and saving the unique slugs for your records.
+
+**Site Configuration**
+	The YAML above needs to be placed under the :samp:`routeEnhancers` key within your site's configuration.
+
+**Clearing Caches**
+	After adding or changing routing configuration, you must clear the caches in the TYPO3 backend for the changes to take effect.
