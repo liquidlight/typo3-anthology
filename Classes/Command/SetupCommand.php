@@ -244,7 +244,7 @@ class SetupCommand extends Command
 		$typoScriptContents = <<<TYPOSCRIPT
 
 			plugin.tx_seo.config.xmlSitemap.sitemaps {
-				vacancies {
+				{$this->modelName} {
 					provider = TYPO3\CMS\Seo\XmlSitemap\RecordsXmlSitemapDataProvider
 					config {
 						table = {$this->tcaName}
