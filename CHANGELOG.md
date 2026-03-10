@@ -1,3 +1,15 @@
+# 1.2.2 **10th March 2026**
+
+#### Feature
+
+- Add site configuration to templates and partials
+
+#### Fix
+
+- Replace hardcoded sitemap key with model name in setup command
+- Display record image in list view (if set)
+
+
 # 1.2.1 **4th March 2026**
 
 #### Feature
