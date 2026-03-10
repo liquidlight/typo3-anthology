@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace LiquidLight\Anthology\Controller;
 
 use LiquidLight\Anthology\Domain\Repository\FilterRepository;
+use LiquidLight\Anthology\Events\BeforeAnthologyListViewRenderEvent;
+use LiquidLight\Anthology\Events\BeforeAnthologySingleViewRenderEvent;
 use LiquidLight\Anthology\Factory\FilterFactory;
 use LiquidLight\Anthology\Factory\RepositoryFactory;
 use LiquidLight\Anthology\Provider\PageTitleProvider;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ResponseInterface;
 use RuntimeException;
 use TYPO3\CMS\Core\Http\ImmediateResponseException;
@@ -77,6 +80,13 @@ class AnthologyController extends ActionController
 		$this->view->assign('filters', $this->getFilters());
 		$this->view->assignMultiple($this->getPaginatedItems());
 
+		$this->eventDispatcher->dispatch(
+			new BeforeAnthologyListViewRenderEvent(
+				$this->view,
+				$this->request
+			)
+		);
+
 		return $this->htmlResponse();
 	}
 
@@ -117,6 +127,14 @@ class AnthologyController extends ActionController
 		$this->registry->set('ll_anthology', 'record_page_title', $this->pageTitleProvider->getTitle());
 
 		$this->view->assign('record', $record);
+
+		$this->eventDispatcher->dispatch(
+			new BeforeAnthologySingleViewRenderEvent(
+				$record,
+				$this->view,
+				$this->request
+			)
+		);
 
 		return $this->htmlResponse();
 	}
