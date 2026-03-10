@@ -1,3 +1,11 @@
+# 1.2.3 **10th March 2026**
+
+#### Feature
+
+- Add preview link configuration to `SetupCommand`
+- Dispatch PSR-14 events from `AnthologyController`
+
+
 # 1.2.2 **10th March 2026**
 
 #### Feature
