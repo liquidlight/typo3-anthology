@@ -8,7 +8,7 @@
 			<h2>{record.title}</h2>
 
 			<f:if condition="{record.image}">
-				<!-- @todo Record image -->
+				<f:image src="{record.image.uid}" treatIdAsReference="true" />
 			</f:if>
 
 			<f:if condition="{record.categories}">
