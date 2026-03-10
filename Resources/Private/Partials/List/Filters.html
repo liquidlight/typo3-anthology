@@ -6,7 +6,7 @@
 		<f:for each="{filters}" as="filter">
 			<div class="filter">
 				<f:variable name="filterPartial">{filter.filterType -> f:format.case(mode: 'capital')}</f:variable>
-				<f:render partial="Filter/{filterPartial}" arguments="{filter: filter}" />
+				<f:render partial="Filter/{filterPartial}" arguments="{filter: filter, configuration: configuration}" />
 			</div>
 		</f:for>
 
