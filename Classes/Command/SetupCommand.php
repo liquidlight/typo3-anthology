@@ -303,6 +303,19 @@ class SetupCommand extends Command
 				}
 			}
 
+			TCEMAIN.preview {
+				{$this->tcaName} {
+					previewPageId = {$this->singlePageUid}
+					fieldToParameterMap {
+						uid = tx_llanthology_anthologyview[record]
+					}
+					additionalGetParameters {
+						tx_llanthology_anthologyview.controller = Anthology
+						tx_llanthology_anthologyview.action = single
+					}
+				}
+			}
+
 		TSCONFIG;
 
 		$success = !!file_put_contents($tsConfigFilePath, $tsConfigContents, FILE_APPEND);
