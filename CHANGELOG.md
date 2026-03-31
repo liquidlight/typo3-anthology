@@ -1,3 +1,15 @@
+# 1.2.4 **31st March 2026**
+
+#### Feature
+
+- Add `BeforeGetAllRecordsEvent` and `BeforeGetRecordsWithConstraintsEvent` PSR-14 events
+
+#### Fix
+
+- Remove unexpected exclamation mark from keyword filter partial
+- Replace direct property access in `PageTitleProvider` with `ObjectAccess::getProperty()`
+
+
 # 1.2.3 **10th March 2026**
 
 #### Feature
