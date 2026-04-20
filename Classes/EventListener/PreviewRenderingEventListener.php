@@ -15,11 +15,13 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
 )]
 class PreviewRenderingEventListener
 {
-	private const BACKEND_PREVIEW_PATH = 'EXT:ll_anthology/Resources/Private/Templates/Backend/ViewPreview.html';
+	protected const BACKEND_PREVIEW_PATH = 'EXT:ll_anthology/Resources/Private/Templates/Backend/ViewPreview.html';
+
+	protected const PLUGIN_SIGNATURE = 'llanthology_anthologyview';
 
 	public function __construct(
-		private readonly AnthologyPreviewRenderer $anthologyPreviewRenderer,
-		private readonly StandaloneView $backendPreview
+		protected readonly AnthologyPreviewRenderer $anthologyPreviewRenderer,
+		protected readonly StandaloneView $backendPreview
 	) {
 	}
 
@@ -28,12 +30,12 @@ class PreviewRenderingEventListener
 		if (
 			$event->getTable() !== 'tt_content'
 			|| $event->getRecordType() !== 'list' ||
-			($event->getRecord()['list_type'] ?? false) !== 'llanthology_anthologyview'
+			($event->getRecord()['list_type'] ?? false) !== static::PLUGIN_SIGNATURE
 		) {
 			return;
 		}
 
-		$this->backendPreview->setTemplatePathAndFilename(self::BACKEND_PREVIEW_PATH);
+		$this->backendPreview->setTemplatePathAndFilename(static::BACKEND_PREVIEW_PATH);
 		$this->backendPreview->assignMultiple([
 			'settings' => $this->anthologyPreviewRenderer->getPluginSettings($event->getRecord()),
 			'model' => $this->anthologyPreviewRenderer->getModelData($event->getRecord()),

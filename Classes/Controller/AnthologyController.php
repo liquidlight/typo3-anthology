@@ -12,7 +12,6 @@ use LiquidLight\Anthology\Events\BeforeGetRecordsWithConstraintsEvent;
 use LiquidLight\Anthology\Factory\FilterFactory;
 use LiquidLight\Anthology\Factory\RepositoryFactory;
 use LiquidLight\Anthology\Provider\PageTitleProvider;
-use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ResponseInterface;
 use RuntimeException;
 use TYPO3\CMS\Core\Http\ImmediateResponseException;
@@ -31,34 +30,34 @@ use TYPO3\CMS\Frontend\Page\PageAccessFailureReasons;
 
 class AnthologyController extends ActionController
 {
-	private const LIST_MODE = 'list';
+	protected const LIST_MODE = 'list';
 
-	private const SINGLE_MODE = 'single';
+	protected const SINGLE_MODE = 'single';
 
-	private const DEFAULT_PER_PAGE = 10;
+	protected const DEFAULT_PER_PAGE = 10;
 
-	private const DEFAULT_MAXIMUM_LINKS = 8;
+	protected const DEFAULT_MAXIMUM_LINKS = 8;
 
-	private Repository $repository;
+	protected Repository $repository;
 
 	public function __construct(
-		private RepositoryFactory $repositoryFactory,
-		private FilterFactory $filterFactory,
-		private FilterRepository $filterRepository,
-		private PageTitleProvider $pageTitleProvider,
-		private PackageManager $packageManager,
-		private Registry $registry
+		protected RepositoryFactory $repositoryFactory,
+		protected FilterFactory $filterFactory,
+		protected FilterRepository $filterRepository,
+		protected PageTitleProvider $pageTitleProvider,
+		protected PackageManager $packageManager,
+		protected Registry $registry
 	) {
 	}
 
 	public function viewAction(): ResponseInterface
 	{
 		switch ($this->settings['mode']) {
-			case self::LIST_MODE:
-				return new ForwardResponse(self::LIST_MODE);
+			case static::LIST_MODE:
+				return new ForwardResponse(static::LIST_MODE);
 
-			case self::SINGLE_MODE:
-				return new ForwardResponse(self::SINGLE_MODE);
+			case static::SINGLE_MODE:
+				return new ForwardResponse(static::SINGLE_MODE);
 
 			default:
 				throw new ImmediateResponseException(
@@ -141,7 +140,7 @@ class AnthologyController extends ActionController
 		return $this->htmlResponse();
 	}
 
-	private function pageNotFoundAction(string $reason = ''): ResponseInterface
+	protected function pageNotFoundAction(string $reason = ''): ResponseInterface
 	{
 		return GeneralUtility::makeInstance(ErrorController::class)
 			->pageNotFoundAction(
@@ -154,7 +153,7 @@ class AnthologyController extends ActionController
 		;
 	}
 
-	private function addTemplatePaths(): void
+	protected function addTemplatePaths(): void
 	{
 		$repositoryPackageKey = $this->getRepositoryPackageKey();
 
@@ -188,7 +187,7 @@ class AnthologyController extends ActionController
 		}
 	}
 
-	private function getRepositoryPackageKey(): ?string
+	protected function getRepositoryPackageKey(): ?string
 	{
 		foreach ($this->packageManager->getActivePackages() as $package) {
 			foreach (array_keys((array)($package->getValueFromComposerManifest()?->autoload?->{'psr-4'})) as $namespace) {
@@ -201,7 +200,7 @@ class AnthologyController extends ActionController
 		return null;
 	}
 
-	private function getPaginatedItems(): array
+	protected function getPaginatedItems(): array
 	{
 		$currentPage = $this->request->hasArgument('currentPage')
 			? (int)$this->request->getArgument('currentPage')
@@ -215,7 +214,7 @@ class AnthologyController extends ActionController
 			(int)(
 				$this->settings['itemsPerPage'] ?? false
 				? $this->settings['itemsPerPage']
-				: self::DEFAULT_PER_PAGE
+				: static::DEFAULT_PER_PAGE
 			)
 		);
 
@@ -224,7 +223,7 @@ class AnthologyController extends ActionController
 			(int)(
 				$this->settings['maximumLinks'] ?? false
 				? $this->settings['maximumLinks']
-				: self::DEFAULT_MAXIMUM_LINKS
+				: static::DEFAULT_MAXIMUM_LINKS
 			)
 		);
 
@@ -235,7 +234,7 @@ class AnthologyController extends ActionController
 		];
 	}
 
-	private function getRecords(): QueryResult
+	protected function getRecords(): QueryResult
 	{
 		$repository = $this->getRepository();
 		$filters = $this->getFilters(true);
@@ -289,7 +288,7 @@ class AnthologyController extends ActionController
 		;
 	}
 
-	private function getRepository(): Repository
+	protected function getRepository(): Repository
 	{
 		if (isset($this->repository)) {
 			return $this->repository;
@@ -302,7 +301,7 @@ class AnthologyController extends ActionController
 		return $this->repository;
 	}
 
-	private function getFilters(bool $ignoreUnsetFilters = false): QueryResult
+	protected function getFilters(bool $ignoreUnsetFilters = false): QueryResult
 	{
 		$filterQuerySettings = $this->filterRepository->createQuery()->getQuerySettings();
 		$filterQuerySettings->setRespectStoragePage(false);
@@ -328,7 +327,7 @@ class AnthologyController extends ActionController
 		return $filters;
 	}
 
-	private function getActiveFilters(): ?array
+	protected function getActiveFilters(): ?array
 	{
 		$activeFilters = $this->request->hasArgument('filter')
 			? array_filter($this->request->getArgument('filter'))
