@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LiquidLight\Anthology\Command;
 
+use LiquidLight\Anthology\Exception\InvalidSetupValueException;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -13,7 +14,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Persistence\Repository;
 
 #[AsCommand(
 	name: 'anthology:setup',
@@ -21,19 +21,29 @@ use TYPO3\CMS\Extbase\Persistence\Repository;
 )]
 class SetupCommand extends Command
 {
-	private SymfonyStyle $io;
+	protected const COMMAND_TITLE = 'Anthology setup';
 
-	private string $sitePackagePath;
+	protected const EXTENSION_KEY = 'LlAnthology';
 
-	private string $tcaName;
+	protected const PLUGIN_NAME = 'AnthologyView';
 
-	private int $modelPid;
+	protected const LIST_CONTROLLER = 'Anthology::list';
 
-	private int $listPageUid;
+	protected const SINGLE_CONTROLLER = 'Anthology::single';
 
-	private int $singlePageUid;
+	protected SymfonyStyle $io;
 
-	private string $modelName;
+	protected string $sitePackagePath;
+
+	protected string $tcaName;
+
+	protected int $modelPid;
+
+	protected int $listPageUid;
+
+	protected int $singlePageUid;
+
+	protected string $modelName;
 
 	protected function configure(): void
 	{
@@ -44,75 +54,20 @@ class SetupCommand extends Command
 	{
 		$this->io = new SymfonyStyle($input, $output);
 
-		$this->io->title('Anthology setup');
-
-		// 0. Get site package path
-		$sitePackagePath = realpath($input->getArgument('sitePackagePath'));
-
-		if (!$sitePackagePath) {
-			$this->io->error('Invalid path supplied');
-			return Command::FAILURE;
-		}
-
-		// 1. Select TCA
-		$tcaName = $this->io->ask(
-			'Enter the TCA/table name (e.g. `tx_myextension_domain_model_item`)',
-			validator: $this->validateTca(...)
-		);
-
-		if (!$tcaName) {
-			$this->io->error('Invalid TCA entered');
-			return Command::FAILURE;
-		}
-
-		// 2. Enter model PID
-		$modelPid = $this->io->ask(
-			'Enter the model\'s PID',
-			validator: $this->validatePageUid(...)
-		);
-
-		if (!$modelPid) {
-			$this->io->error('Invalid PID entered');
-			return Command::FAILURE;
-		}
-
-		// 3. Enter list page UID
-		$listPageUid = $this->io->ask(
-			'Enter the list view page UID',
-			validator: $this->validatePageUid(...)
-		);
-
-		if (!$listPageUid) {
-			$this->io->error('Invalid list view page UID entered');
-			return Command::FAILURE;
-		}
-
-		// 4. Enter single page UID
-		$singlePageUid = $this->io->ask(
-			'Enter the single view page UID',
-			validator: $this->validatePageUid(...)
-		);
-
-		if (!$singlePageUid) {
-			$this->io->error('Invalid single view page UID entered');
-			return Command::FAILURE;
-		}
-
-		// 5. Determine model name
-		$modelName = $this->getModelName($tcaName);
-
-		if (!$modelName) {
-			$this->io->error('Could not determine model name');
-			return Command::FAILURE;
-		}
+		$this->io->title(static::COMMAND_TITLE);
 
 		// Assign options to properties
-		$this->sitePackagePath = $sitePackagePath;
-		$this->tcaName = $tcaName;
-		$this->modelPid = $modelPid;
-		$this->listPageUid = $listPageUid;
-		$this->singlePageUid = $singlePageUid;
-		$this->modelName = $modelName;
+		try {
+			$this->sitePackagePath = $this->getSitePackagePath($input);
+			$this->tcaName = $this->getTcaName();
+			$this->modelPid = $this->getModelPid();
+			$this->listPageUid = $this->getListPageUid();
+			$this->singlePageUid = $this->getSinglePageUid();
+			$this->modelName = $this->getModelName($this->tcaName);
+		} catch (InvalidSetupValueException $e) {
+			$this->io->error($e->getMessage());
+			return Command::FAILURE;
+		}
 
 		// A. Create route enhancers
 		$routeEnhancers = $this->processRouteEnhancers();
@@ -129,24 +84,79 @@ class SetupCommand extends Command
 			: Command::FAILURE;
 	}
 
-	private function validateTca(string $tcaName): string|false
+	protected function getSitePackagePath(InputInterface $input): string
 	{
-		return !empty($tcaName) && array_key_exists($tcaName, $GLOBALS['TCA'])
-			? trim($tcaName)
-			: false;
+		$sitePackagePath = realpath($input->getArgument('sitePackagePath'));
+
+		if (!$sitePackagePath) {
+			throw new InvalidSetupValueException('Invalid path supplied');
+		}
+
+		return $sitePackagePath;
 	}
 
-	private function validatePageUid(string $singlePageUid): int
+	protected function getTcaName(): string
 	{
-		return (int)$singlePageUid;
+		$tcaName = $this->io->ask(
+			'Enter the TCA/table name (e.g. `tx_myextension_domain_model_item`)',
+			validator: $this->validateTca(...)
+		);
+
+		if (!$tcaName) {
+			throw new InvalidSetupValueException('Invalid TCA entered');
+		}
+
+		return $tcaName;
 	}
 
-	private function getModelName(string $tcaName): string|false
+	protected function getModelPid(): int
+	{
+		$modelPid = $this->io->ask(
+			'Enter the model\'s PID',
+			validator: $this->validatePageUid(...)
+		);
+
+		if (!$modelPid) {
+			throw new InvalidSetupValueException('Invalid PID entered');
+		}
+
+		return $modelPid;
+	}
+
+	protected function getListPageUid(): int
+	{
+		$listPageUid = $this->io->ask(
+			'Enter the list view page UID',
+			validator: $this->validatePageUid(...)
+		);
+
+		if (!$listPageUid) {
+			throw new InvalidSetupValueException('Invalid list view page UID entered');
+		}
+
+		return $listPageUid;
+	}
+
+	protected function getSinglePageUid(): int
+	{
+		$singlePageUid = $this->io->ask(
+			'Enter the single view page UID',
+			validator: $this->validatePageUid(...)
+		);
+
+		if (!$singlePageUid) {
+			throw new InvalidSetupValueException('Invalid single view page UID entered');
+		}
+
+		return $singlePageUid;
+	}
+
+	protected function getModelName(string $tcaName): string
 	{
 		$tcaLabel = $GLOBALS['TCA'][$tcaName]['ctrl']['title'] ?? false;
 
 		if (!$tcaLabel) {
-			return false;
+			throw new InvalidSetupValueException('Could not determine model name');
 		}
 
 		return GeneralUtility::underscoredToUpperCamelCase(
@@ -154,73 +164,26 @@ class SetupCommand extends Command
 		);
 	}
 
-	private function processRouteEnhancers(): bool
+	protected function validateTca(string $tcaName): string|false
+	{
+		return !empty($tcaName) && array_key_exists($tcaName, $GLOBALS['TCA'])
+			? trim($tcaName)
+			: false;
+	}
+
+	protected function validatePageUid(string $singlePageUid): int
+	{
+		return (int)$singlePageUid;
+	}
+
+	protected function processRouteEnhancers(): bool
 	{
 		$routeEnhancerFilePath = $this->getYamlPath() . '/' . $this->modelName . '.yaml';
-
-		$routeEnhancerConfiguration = [
-			'routeEnhancers' => [
-				"{$this->modelName}Single" => [
-					'type' => 'Extbase',
-					'limitToPages' => [
-						$this->singlePageUid,
-					],
-					'extension' => 'LlAnthology',
-					'plugin' => 'AnthologyView',
-					'routes' => [
-						[
-							'routePath' => '/{record}',
-							'_controller' => 'Anthology::single',
-						],
-					],
-					'defaultController' => 'Anthology::view',
-					'aspects' => [
-						'record' => [
-							'type' => 'PersistedAliasMapper',
-							'tableName' => $this->tcaName,
-							'routeFieldName' => 'slug',
-						],
-					],
-				],
-				"{$this->modelName}List" => [
-					'type' => 'Extbase',
-					'limitToPages' => [
-						$this->listPageUid,
-					],
-					'extension' => 'LlAnthology',
-					'plugin' => 'AnthologyView',
-					'routes' => [
-						[
-							'routePath' => '/',
-							'_controller' => 'Anthology::list',
-						],
-						[
-							'routePath' => '/page-{page}',
-							'_controller' => 'Anthology::list',
-							'_arguments' => [
-								'page' => 'currentPage',
-							],
-						],
-					],
-					'defaultController' => 'Anthology::list',
-					'defaults' => [
-						'page' => 1,
-					],
-					'aspects' => [
-						'page' => [
-							'type' => 'StaticRangeMapper',
-							'start' => '2',
-							'end' => '1000',
-						],
-					],
-				],
-			],
-		];
 
 		$success = !!file_put_contents(
 			$routeEnhancerFilePath,
 			Yaml::dump(
-				$routeEnhancerConfiguration,
+				$this->getRouteEnhancerConfiguration(),
 				99,
 				2,
 				Yaml::DUMP_EMPTY_ARRAY_AS_SEQUENCE | Yaml::DUMP_OBJECT_AS_MAP
@@ -237,11 +200,92 @@ class SetupCommand extends Command
 		return $success;
 	}
 
-	private function processSitemapConfiguration(): bool
+	protected function getRouteEnhancerConfiguration(): array
+	{
+		return [
+			'routeEnhancers' => [
+				"{$this->modelName}Single" => [
+					'type' => 'Extbase',
+					'limitToPages' => [
+						$this->singlePageUid,
+					],
+					'extension' => static::EXTENSION_KEY,
+					'plugin' => static::PLUGIN_NAME,
+					'routes' => [
+						[
+							'routePath' => '/{record}',
+							'_controller' => static::SINGLE_CONTROLLER,
+						],
+					],
+					'defaultController' => static::SINGLE_CONTROLLER,
+					'aspects' => [
+						'record' => [
+							'type' => 'PersistedAliasMapper',
+							'tableName' => $this->tcaName,
+							'routeFieldName' => 'slug',
+						],
+					],
+				],
+				"{$this->modelName}List" => [
+					'type' => 'Extbase',
+					'limitToPages' => [
+						$this->listPageUid,
+					],
+					'extension' => static::EXTENSION_KEY,
+					'plugin' => static::PLUGIN_NAME,
+					'routes' => [
+						[
+							'routePath' => '/',
+							'_controller' => static::LIST_CONTROLLER,
+						],
+						[
+							'routePath' => '/page-{page}',
+							'_controller' => static::LIST_CONTROLLER,
+							'_arguments' => [
+								'page' => 'currentPage',
+							],
+						],
+					],
+					'defaultController' => static::LIST_CONTROLLER,
+					'defaults' => [
+						'page' => 1,
+					],
+					'aspects' => [
+						'page' => [
+							'type' => 'StaticRangeMapper',
+							'start' => '2',
+							'end' => '1000',
+						],
+					],
+				],
+			],
+		];
+	}
+
+	protected function processSitemapConfiguration(): bool
 	{
 		$typoScriptFilePath = $this->getTypoScriptPath('modules') . '/sitemap.typoscript';
 
-		$typoScriptContents = <<<TYPOSCRIPT
+		$success = !!file_put_contents($typoScriptFilePath, $this->getSitemapConfiguration(), FILE_APPEND);
+
+		if ($success) {
+			$this->io->success('Sitemap configuration created');
+		} else {
+			$this->io->error('There was a problem creating the Sitemap configuration');
+		}
+
+		return $success;
+	}
+
+	protected function getSitemapConfiguration(): string
+	{
+		$extensionKey = strtolower(static::EXTENSION_KEY);
+		$pluginName = strtolower(static::PLUGIN_NAME);
+
+		$controller = GeneralUtility::trimExplode('::', static::SINGLE_CONTROLLER)[0] ?? '';
+		$action = GeneralUtility::trimExplode('::', static::SINGLE_CONTROLLER)[1] ?? '';
+
+		return <<<TYPOSCRIPT
 
 			plugin.tx_seo.config.xmlSitemap.sitemaps {
 				{$this->modelName} {
@@ -254,11 +298,11 @@ class SetupCommand extends Command
 						url {
 							pageId = {$this->singlePageUid}
 							fieldToParameterMap {
-								uid = tx_llanthology_anthologyview[record]
+								uid = tx_{$extensionKey}_{$pluginName}[record]
 							}
 							additionalGetParameters {
-								tx_llanthology_anthologyview.action = single
-								tx_llanthology_anthologyview.controller = Anthology
+								tx_{$extensionKey}_{$pluginName}.action = {$action}
+								tx_{$extensionKey}_{$pluginName}.controller = {$controller}
 							}
 						}
 					}
@@ -266,29 +310,38 @@ class SetupCommand extends Command
 			}
 
 		TYPOSCRIPT;
+	}
 
-		$success = !!file_put_contents($typoScriptFilePath, $typoScriptContents, FILE_APPEND);
+	protected function processLinkHandler(): bool
+	{
+		return $this->processLinkHandlerTsConfig() && $this->processLinkHandlerTypoScript();
+	}
+
+	protected function processLinkHandlerTsConfig(): bool
+	{
+		$modelName = $this->getLanguageService()->sL($GLOBALS['TCA'][$this->tcaName]['ctrl']['title'] ?? '');
+		$tsConfigFilePath = $this->getTypoScriptPath('..') . '/page.tsconfig';
+
+		$success = !!file_put_contents($tsConfigFilePath, $this->getLinkHandlerTsConfig($modelName), FILE_APPEND);
 
 		if ($success) {
-			$this->io->success('Sitemap configuration created');
+			$this->io->success('LinkHandler TSConfig created');
 		} else {
-			$this->io->error('There was a problem creating the Sitemap configuration');
+			$this->io->error('There was a problem creating the LinkHandler TSConfig');
 		}
 
 		return $success;
 	}
 
-	private function processLinkHandler(): bool
+	protected function getLinkHandlerTsConfig(string $modelName): string
 	{
-		return $this->processLinkHandlerTsConfig() && $this->processLinkHandlerTypoScript();
-	}
+		$extensionKey = strtolower(static::EXTENSION_KEY);
+		$pluginName = strtolower(static::PLUGIN_NAME);
 
-	private function processLinkHandlerTsConfig(): bool
-	{
-		$modelName = $this->getLanguageService()->sL($GLOBALS['TCA'][$this->tcaName]['ctrl']['title'] ?? '');
-		$tsConfigFilePath = $this->getTypoScriptPath('..') . '/page.tsconfig';
+		$controller = GeneralUtility::trimExplode('::', static::SINGLE_CONTROLLER)[0] ?? '';
+		$action = GeneralUtility::trimExplode('::', static::SINGLE_CONTROLLER)[1] ?? '';
 
-		$tsConfigContents = <<<TSCONFIG
+		return <<<TSCONFIG
 
 			TCEMAIN.linkHandler {
 				{$this->tcaName} {
@@ -307,46 +360,23 @@ class SetupCommand extends Command
 				{$this->tcaName} {
 					previewPageId = {$this->singlePageUid}
 					fieldToParameterMap {
-						uid = tx_llanthology_anthologyview[record]
+						uid = tx_{$extensionKey}_{$pluginName}[record]
 					}
 					additionalGetParameters {
-						tx_llanthology_anthologyview.controller = Anthology
-						tx_llanthology_anthologyview.action = single
+						tx_{$extensionKey}_{$pluginName}.controller = {$controller}
+						tx_{$extensionKey}_{$pluginName}.action = {$action}
 					}
 				}
 			}
 
 		TSCONFIG;
-
-		$success = !!file_put_contents($tsConfigFilePath, $tsConfigContents, FILE_APPEND);
-
-		if ($success) {
-			$this->io->success('LinkHandler TSConfig created');
-		} else {
-			$this->io->error('There was a problem creating the LinkHandler TSConfig');
-		}
-
-		return $success;
 	}
 
-	private function processLinkHandlerTypoScript(): bool
+	protected function processLinkHandlerTypoScript(): bool
 	{
 		$typoScriptFilePath = $this->getTypoScriptPath('modules') . '/' . GeneralUtility::camelCaseToLowerCaseUnderscored($this->modelName) . '.typoscript';
 
-		$typoScriptContents = <<<TYPOSCRIPT
-
-			config.recordLinks.{$this->tcaName} {
-				forceLink = 0
-				typolink {
-					parameter = {$this->singlePageUid}
-					additionalParams.data = field:uid
-					additionalParams.wrap = &tx_llanthology_anthologyview[record]=|&tx_llanthology_anthologyview[controller]=Anthology&tx_llanthology_anthologyview[action]=single
-				}
-			}
-
-		TYPOSCRIPT;
-
-		$success = !!file_put_contents($typoScriptFilePath, $typoScriptContents, FILE_APPEND);
+		$success = !!file_put_contents($typoScriptFilePath, $this->getLinkHandlerTypoScript(), FILE_APPEND);
 
 		if ($success) {
 			$this->io->success('LinkHandler TypoScript created');
@@ -357,7 +387,30 @@ class SetupCommand extends Command
 		return $success;
 	}
 
-	private function getTypoScriptPath(string $subfolder): string
+	protected function getLinkHandlerTypoScript(): string
+	{
+		$extensionKey = strtolower(static::EXTENSION_KEY);
+		$pluginName = strtolower(static::PLUGIN_NAME);
+
+		$controller = GeneralUtility::trimExplode('::', static::SINGLE_CONTROLLER)[0] ?? '';
+		$action = GeneralUtility::trimExplode('::', static::SINGLE_CONTROLLER)[1] ?? '';
+
+		return <<<TYPOSCRIPT
+
+			config.recordLinks.{$this->tcaName} {
+				forceLink = 0
+				typolink {
+					parameter = {$this->singlePageUid}
+					additionalParams.data = field:uid
+					additionalParams.wrap = &tx_{$extensionKey}_{$pluginName}[record]=|&tx_{$extensionKey}_{$pluginName}[controller]={$controller}&tx_{$extensionKey}_{$pluginName}[action]={$action}
+				}
+			}
+
+		TYPOSCRIPT;
+		;
+	}
+
+	protected function getTypoScriptPath(string $subfolder): string
 	{
 		if (is_dir($this->sitePackagePath . '/Configuration/Sets')) {
 			// TypoScript is in a site set
@@ -378,7 +431,7 @@ class SetupCommand extends Command
 		return realpath(rtrim($typoScriptPath, '/'));
 	}
 
-	private function getYamlPath(): string
+	protected function getYamlPath(): string
 	{
 		$yamlPath = $this->sitePackagePath . '/Configuration/Sites';
 
@@ -392,7 +445,7 @@ class SetupCommand extends Command
 		return realpath(rtrim($yamlPath, '/'));
 	}
 
-	private function getLanguageService(): LanguageService
+	protected function getLanguageService(): LanguageService
 	{
 		return $GLOBALS['LANG'];
 	}
