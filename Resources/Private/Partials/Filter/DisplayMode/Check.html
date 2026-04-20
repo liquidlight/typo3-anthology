@@ -7,7 +7,7 @@
 		<legend>{filter.title}</legend>
 
 		<f:form.radio name="filter[{filter.uid}]" id="filter-{filter.uid}-all" value="0" checked="checked" />
-		<label for="filter-{filter.uid}-all">{f:translate(key: 'all')}</label>
+		<label for="filter-{filter.uid}-all">{f:translate(key: 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang.xlf:all')}</label>
 
 		<f:for each="{filter.options}" as="filterOption">
 			<f:form.radio name="filter[{filter.uid}]" id="filter-{filter.uid}-{filterOption.value}" value="{filterOption.value}" checked="{f:if(condition: '{filter.parameter} == {filterOption.value}', then: true, else: false)}" />

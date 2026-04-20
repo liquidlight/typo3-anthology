@@ -8,7 +8,7 @@
 		<label for="{filterFieldId}">{filter.title}</label>
 
 		<f:form.select id="{filterFieldId}" name="filter[{filter.uid}]">
-			<f:form.select.option value="">{f:translate(key: 'all')}</f:form.select.option>
+			<f:form.select.option value="">{f:translate(key: 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang.xlf:all')}</f:form.select.option>
 
 			<f:for each="{filter.options}" as="filterOption">
 				<f:form.select.option value="{filterOption.value}" selected="{f:if(condition: '{filter.parameter} == {filterOption.value}', then: true, else: false)}">{filterOption.title}</f:form.select.option>
