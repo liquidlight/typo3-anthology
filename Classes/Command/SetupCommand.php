@@ -369,6 +369,13 @@ class SetupCommand extends Command
 				}
 			}
 
+			[traverse(page, "uid") == {$this->modelPid}]
+				mod.web_list {
+					allowedNewTables = {$this->tcaName}
+					hideTables := addToList(tt_content)
+				}
+			[global]
+
 		TSCONFIG;
 	}
 
