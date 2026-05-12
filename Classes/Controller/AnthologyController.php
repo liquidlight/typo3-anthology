@@ -17,7 +17,6 @@ use RuntimeException;
 use TYPO3\CMS\Core\Http\ImmediateResponseException;
 use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\CMS\Core\Pagination\SlidingWindowPagination;
-use TYPO3\CMS\Core\Registry;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Http\ForwardResponse;
@@ -45,8 +44,7 @@ class AnthologyController extends ActionController
 		protected FilterFactory $filterFactory,
 		protected FilterRepository $filterRepository,
 		protected PageTitleProvider $pageTitleProvider,
-		protected PackageManager $packageManager,
-		protected Registry $registry
+		protected PackageManager $packageManager
 	) {
 	}
 
@@ -125,7 +123,6 @@ class AnthologyController extends ActionController
 		}
 
 		$this->pageTitleProvider->setTitle($record, $this->repositoryFactory->getTcaName($this->getRepository()));
-		$this->registry->set('ll_anthology', 'record_page_title', $this->pageTitleProvider->getTitle());
 
 		$this->view->assign('record', $record);
 

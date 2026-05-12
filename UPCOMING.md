@@ -1,3 +1,10 @@
+# Patch
+
+#### Fix
+
+- Fix issue with cached page titles displayed on subsequent loads
+
+
 # Minor
 
 #### Feature
