@@ -39,11 +39,13 @@ class PageTitleMiddleware implements MiddlewareInterface
 		return $response->withBody($body);
 	}
 
-	private function getPageTitle(ServerRequestInterface $request): string {
+	private function getPageTitle(ServerRequestInterface $request): string
+	{
 		return $request->getAttribute('frontend.controller')?->config['pageTitleCache'][PageTitleProvider::class] ?? '';
 	}
 
-	private function replacePageTitle($content, $pageTitle): string {
+	private function replacePageTitle($content, $pageTitle): string
+	{
 		return str_replace(
 			static::PAGE_TITLE_PLACEHOLDER,
 			$pageTitle,
