@@ -7,8 +7,7 @@ namespace LiquidLight\Anthology\Controller;
 use LiquidLight\Anthology\Domain\Repository\FilterRepository;
 use LiquidLight\Anthology\Events\BeforeAnthologyListViewRenderEvent;
 use LiquidLight\Anthology\Events\BeforeAnthologySingleViewRenderEvent;
-use LiquidLight\Anthology\Events\BeforeGetAllRecordsEvent;
-use LiquidLight\Anthology\Events\BeforeGetRecordsWithConstraintsEvent;
+use LiquidLight\Anthology\Events\BeforeGetRecordsEvent;
 use LiquidLight\Anthology\Factory\FilterFactory;
 use LiquidLight\Anthology\Factory\RepositoryFactory;
 use LiquidLight\Anthology\Provider\PageTitleProvider;
@@ -236,18 +235,6 @@ class AnthologyController extends ActionController
 		$repository = $this->getRepository();
 		$filters = $this->getFilters(true);
 
-		if (count($filters) === 0) {
-			$this->eventDispatcher->dispatch(
-				new BeforeGetAllRecordsEvent(
-					$repository,
-					$this->view,
-					$this->request
-				)
-			);
-
-			return $repository->findAll();
-		}
-
 		$query = $repository->createQuery();
 
 		$constraints = $this->filterFactory->getConstraints(
@@ -265,7 +252,7 @@ class AnthologyController extends ActionController
 		};
 
 		$this->eventDispatcher->dispatch(
-			new BeforeGetRecordsWithConstraintsEvent(
+			new BeforeGetRecordsEvent(
 				$repository,
 				$query,
 				$constraints,

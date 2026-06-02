@@ -13,3 +13,4 @@
 - Add full path to language strings in Fluid templates to allow extension
 - Decompose `SetupCommand` to enable extending commands
 - Add content type restrictions for storage folder to `page.tsconfig` during setup
+- Consolidate `BeforeGetAllRecordsEvent` and `BeforeGetRecordsWithConstraintsEvent` into `BeforeGetAllRecordsEvent`

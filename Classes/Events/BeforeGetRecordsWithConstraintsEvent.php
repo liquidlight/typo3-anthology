@@ -9,6 +9,9 @@ use TYPO3\CMS\Extbase\Mvc\RequestInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\RepositoryInterface;
 
+/**
+ * @deprecated Use BeforeGetRecordsEvent instead
+ */
 class BeforeGetRecordsWithConstraintsEvent
 {
 	public function __construct(
@@ -19,5 +22,9 @@ class BeforeGetRecordsWithConstraintsEvent
 		public ViewInterface &$view,
 		public RequestInterface &$request
 	) {
+		trigger_error(
+			self::class . ' is deprecated. Use BeforeGetRecordsEvent instead.',
+			E_USER_DEPRECATED
+		);
 	}
 }
