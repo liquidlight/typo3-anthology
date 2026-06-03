@@ -77,8 +77,7 @@ class AnthologyController extends ActionController
 	public function listAction(): ResponseInterface
 	{
 		$this->addTemplatePaths();
-
-		$this->view->assign('configuration', $this->request->getAttribute('site')->getConfiguration());
+		$this->assignDefaults();
 
 		$this->view->assign('filters', $this->getFilters());
 		$this->view->assignMultiple($this->getPaginatedItems());
@@ -96,8 +95,7 @@ class AnthologyController extends ActionController
 	public function singleAction(): ResponseInterface
 	{
 		$this->addTemplatePaths();
-
-		$this->view->assign('configuration', $this->request->getAttribute('site')->getConfiguration());
+		$this->assignDefaults();
 
 		$recordUid = $this->request->hasArgument('record')
 			? $this->request->getArgument('record')
@@ -156,6 +154,12 @@ class AnthologyController extends ActionController
 				]
 			)
 		;
+	}
+
+	// Shared variables
+	protected function assignDefaults(): void
+	{
+		$this->view->assign('configuration', $this->request->getAttribute('site')->getConfiguration());
 	}
 
 	protected function addTemplatePaths(): void
