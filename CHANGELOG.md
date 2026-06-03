@@ -1,3 +1,26 @@
+# 1.3.0
+
+**3rd June 2026**
+
+#### Feature
+
+- Make AnthologyController `private` visibility `protected` to allow extending controller
+- Add full path to language strings in Fluid templates to allow extension
+- Decompose `SetupCommand` to enable extending commands
+- Add content type restrictions for storage folder to `page.tsconfig` during setup
+- Consolidate `BeforeGetAllRecordsEvent` and `BeforeGetRecordsWithConstraintsEvent` into `BeforeGetAllRecordsEvent`
+
+#### Fix
+
+- Fix issue with cached page titles displayed on subsequent loads
+- Fix issue where no fields were available for filters in Anthology extensions
+
+#### Refactor
+
+- Add `@extensionScannerIgnoreLine` to any false positives thrown up from the extension file scanner (#26)
+- Replace `StandaloneView` with `ViewFactoryInterface` (#26)
+- Remove deprecated constants (#26)
+
 # 1.2.4 
 
 **31st March 2026**
