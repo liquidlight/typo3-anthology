@@ -1,3 +1,12 @@
+# 2.0.0
+
+**3rd June 2026**
+
+#### Feature
+
+- Remove deprecated `BeforeGetRecordsWithConstraintsEvent` and `BeforeGetAllRecordsEvent` events
+- [BREAKING] Migrate plugin from list_type to CType (#27)
+
 # 1.3.0
 
 **3rd June 2026**
