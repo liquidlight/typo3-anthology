@@ -13,6 +13,7 @@ use LiquidLight\Anthology\Factory\RepositoryFactory;
 use LiquidLight\Anthology\Provider\PageTitleProvider;
 use Psr\Http\Message\ResponseInterface;
 use RuntimeException;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Http\ImmediateResponseException;
 use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\CMS\Core\Pagination\SlidingWindowPagination;
@@ -159,7 +160,17 @@ class AnthologyController extends ActionController
 	// Shared variables
 	protected function assignDefaults(): void
 	{
-		$this->view->assign('configuration', $this->request->getAttribute('site')->getConfiguration());
+		$context = Environment::getContext();
+		$environment = match (true) {
+			$context->isDevelopment() => 'Development',
+			$context->isProduction() => 'Production',
+			default => (string)$context,
+		};
+
+		$this->view->assignMultiple([
+			'environment' => $environment,
+			'configuration' => $this->request->getAttribute('site')->getConfiguration(),
+		]);
 	}
 
 	protected function addTemplatePaths(): void
