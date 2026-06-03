@@ -16,6 +16,7 @@ call_user_func(function () {
 		],
 		[
 			AnthologyController::class => 'view,list',
-		]
+		],
+		ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
 	);
 });

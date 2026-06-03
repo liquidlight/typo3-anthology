@@ -18,15 +18,24 @@ call_user_func(function () {
 		'LLL:EXT:ll_anthology/Resources/Private/Language/locallang.xlf:description'
 	);
 
-	// Add FlexForm to the plugin
 	$pluginSignature = 'llanthology_anthologyview';
 
-	// Add pi_flexform to the plugin
-	$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform';
+	// Add pi_flexform & other fields to the plugin
+	ExtensionManagementUtility::addToAllTCAtypes(
+		'tt_content',
+		'--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.plugin,
+			pi_flexform,
+			pages,
+			recursive,
+		',
+		$pluginSignature,
+		'after:header',
+	);
 
 	// Add the FlexForm configuration
 	ExtensionManagementUtility::addPiFlexFormValue(
+		'*',
+		'FILE:EXT:ll_anthology/Configuration/FlexForms/ViewPlugin.xml',
 		$pluginSignature,
-		'FILE:EXT:ll_anthology/Configuration/FlexForms/ViewPlugin.xml'
 	);
 });
