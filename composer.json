@@ -25,7 +25,11 @@
         "symfony/dependency-injection": "^7.3",
         "symfony/http-kernel": "^7.3",
         "symfony/yaml": "^7.3",
-        "typo3/cms-core": "^13.4"
+        "typo3/cms-backend": "^13.4",
+        "typo3/cms-core": "^13.4",
+        "typo3/cms-extbase": "^13.4",
+        "typo3/cms-fluid": "^13.4",
+        "typo3/cms-frontend": "^13.4"
     },
     "require-dev": {
         "ergebnis/composer-normalize": "^2.48",
