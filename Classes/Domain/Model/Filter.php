@@ -43,7 +43,7 @@ class Filter extends AbstractEntity
 			function (array $option): array {
 				$option['filterArguments'] = [
 					'init' => true,
-					$this->uid => $option['value'],
+					(string)($this->uid ?? '') => $option['value'],
 				];
 
 				return $option;

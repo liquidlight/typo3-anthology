@@ -86,8 +86,12 @@ class FilterTest extends TestCase
 		// @extensionScannerIgnoreLine
 		$this->subject->setOptions($options);
 
+		$expected = [
+			['value' => '1', 'title' => 'Option 1', 'filterArguments' => ['init' => true, '' => '1']],
+			['value' => '2', 'title' => 'Option 2', 'filterArguments' => ['init' => true, '' => '2']],
+		];
 		// @extensionScannerIgnoreLine
-		self::assertSame($options, $this->subject->getOptions());
+		self::assertSame($expected, $this->subject->getOptions());
 	}
 
 	public function testHasPublicFilterTypeProperty(): void
