@@ -304,6 +304,7 @@ class AnthologyController extends ActionController
 		$this->settings['tca'] = $this->repositoryFactory->getTcaName($this->settings['repository']);
 
 		foreach ($filters as $filter) {
+			// @extensionScannerIgnoreLine
 			$filter->setOptions($this->filterFactory->getFilters()[$filter->filterType]::getOptions($filter, $this->settings));
 			$filter->setParameter($activeFilters[$filter->getUid()] ?? null);
 		}
@@ -317,6 +318,7 @@ class AnthologyController extends ActionController
 			? array_filter($this->request->getArgument('filter'))
 			: [];
 
+		// @extensionScannerIgnoreLine
 		unset($activeFilters['init']);
 
 		return count($activeFilters) ? $activeFilters : null;

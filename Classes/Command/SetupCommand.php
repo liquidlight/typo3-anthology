@@ -65,6 +65,7 @@ class SetupCommand extends Command
 			$this->singlePageUid = $this->getSinglePageUid();
 			$this->modelName = $this->getModelName($this->tcaName);
 		} catch (InvalidSetupValueException $e) {
+			// @extensionScannerIgnoreLine
 			$this->io->error($e->getMessage());
 			return Command::FAILURE;
 		}
@@ -194,6 +195,7 @@ class SetupCommand extends Command
 		if ($success) {
 			$this->io->success('RouteEnhancer configuration created');
 		} else {
+			// @extensionScannerIgnoreLine
 			$this->io->error('There was a problem creating the RouteEnhancer configuration');
 		}
 
@@ -271,6 +273,7 @@ class SetupCommand extends Command
 		if ($success) {
 			$this->io->success('Sitemap configuration created');
 		} else {
+			// @extensionScannerIgnoreLine
 			$this->io->error('There was a problem creating the Sitemap configuration');
 		}
 
@@ -327,6 +330,7 @@ class SetupCommand extends Command
 		if ($success) {
 			$this->io->success('LinkHandler TSConfig created');
 		} else {
+			// @extensionScannerIgnoreLine
 			$this->io->error('There was a problem creating the LinkHandler TSConfig');
 		}
 
@@ -388,6 +392,7 @@ class SetupCommand extends Command
 		if ($success) {
 			$this->io->success('LinkHandler TypoScript created');
 		} else {
+			// @extensionScannerIgnoreLine
 			$this->io->error('There was a problem creating the LinkHandler TypoScript');
 		}
 
