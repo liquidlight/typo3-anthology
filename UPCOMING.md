@@ -3,6 +3,7 @@
 #### Fix
 
 - Fix issue with cached page titles displayed on subsequent loads
+- Fix issue where no fields were available for filters in Anthology extensions
 
 
 # Minor
