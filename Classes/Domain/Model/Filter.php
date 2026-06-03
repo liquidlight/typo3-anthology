@@ -39,7 +39,25 @@ class Filter extends AbstractEntity
 
 	public function setOptions(array $options): void
 	{
-		$this->options = $options;
+		$this->options = array_map(
+			function (array $option): array {
+				$option['filterArguments'] = [
+					'init' => true,
+					$this->uid => $option['value'],
+				];
+
+				return $option;
+			},
+			$options
+		);
+	}
+
+	public function getResetArguments(): array
+	{
+		return [
+			'init' => true,
+			$this->uid => 0,
+		];
 	}
 
 	public function getParsedSettings(): array

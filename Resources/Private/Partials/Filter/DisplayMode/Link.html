@@ -1,18 +1,17 @@
 <html
 	xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-	xmlns:v="http://typo3.org/ns/vhs/ViewHelpers"
 	data-namespace-typo3-fluid="true"
 >
 	<fieldset>
 		<legend>{filter.title}</legend>
-		<f:variable name="filterArguments" value="{init: true}" />
-		<v:variable.set name="filterArguments.{filter.uid}" value="0" />
 
-		<f:link.action arguments="{filter: filterArguments}">{f:translate(key: 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang.xlf:all')}</f:link.action>
+		<f:link.action arguments="{filter: filter.resetArguments}">{f:translate(key: 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang.xlf:all')}</f:link.action>
 
 		<f:for each="{filter.options}" as="filterOption">
-			<v:variable.set name="filterArguments.{filter.uid}" value="{filterOption.value}" />
-			<f:link.action arguments="{filter: filterArguments}" class="{f:if(condition: '{filter.parameter} == {filterOption.value}', then: 'active')}">{filterOption.title}</f:link.action>
+			<f:link.action
+				arguments="{filter: filterOption.filterArguments}"
+				class="{f:if(condition: '{filter.parameter} == {filterOption.value}', then: 'active')}"
+			>{filterOption.title}</f:link.action>
 		</f:for>
 	</fieldset>
 </html>
