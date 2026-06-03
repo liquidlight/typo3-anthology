@@ -30,8 +30,7 @@ class PreviewRenderingEventListener
 	{
 		if (
 			$event->getTable() !== 'tt_content'
-			|| $event->getRecordType() !== 'list' ||
-			($event->getRecord()['list_type'] ?? false) !== static::PLUGIN_SIGNATURE
+			|| $event->getRecordType() !== static::PLUGIN_SIGNATURE
 		) {
 			return;
 		}

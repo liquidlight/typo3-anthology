@@ -128,7 +128,7 @@ class FilterConfigurationHook
 				 * use a compatible naming format for the plugin or this will not
 				 * display any available filter fields
 				 */
-				$queryBuilder->expr()->like('list_type', $queryBuilder->createNamedParameter('llanthology%_%view')),
+				$queryBuilder->expr()->like('CType', $queryBuilder->createNamedParameter('llanthology%_%view')),
 				$queryBuilder->expr()->eq('pid', $queryBuilder->createNamedParameter($params['effectivePid'], Connection::PARAM_INT)),
 				"FIND_IN_SET(" . $queryBuilder->createNamedParameter($params['row']['uid'], Connection::PARAM_INT) . ", EXTRACTVALUE(`pi_flexform`, '//field[@index=\'settings.filters\']/value'))"
 			)
