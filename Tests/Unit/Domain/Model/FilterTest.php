@@ -69,6 +69,7 @@ class FilterTest extends TestCase
 	 */
 	public function testGetOptionsReturnsInitialValueForOptions(): void
 	{
+		// @extensionScannerIgnoreLine
 		self::assertSame([], $this->subject->getOptions());
 	}
 
@@ -82,8 +83,10 @@ class FilterTest extends TestCase
 			['value' => '1', 'title' => 'Option 1'],
 			['value' => '2', 'title' => 'Option 2'],
 		];
+		// @extensionScannerIgnoreLine
 		$this->subject->setOptions($options);
 
+		// @extensionScannerIgnoreLine
 		self::assertSame($options, $this->subject->getOptions());
 	}
 
@@ -95,7 +98,10 @@ class FilterTest extends TestCase
 
 	public function testHasPublicTitleProperty(): void
 	{
+		// @extensionScannerIgnoreLine
 		$this->subject->title = 'Test Filter';
+
+		// @extensionScannerIgnoreLine
 		self::assertSame('Test Filter', $this->subject->title);
 	}
 

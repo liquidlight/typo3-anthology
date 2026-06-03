@@ -7,7 +7,8 @@ namespace LiquidLight\Anthology\EventListener;
 use LiquidLight\Anthology\Backend\AnthologyPreviewRenderer;
 use TYPO3\CMS\Backend\View\Event\PageContentPreviewRenderingEvent;
 use TYPO3\CMS\Core\Attribute\AsEventListener;
-use TYPO3\CMS\Fluid\View\StandaloneView;
+use TYPO3\CMS\Core\View\ViewFactoryData;
+use TYPO3\CMS\Core\View\ViewFactoryInterface;
 
 #[AsEventListener(
 	identifier: 'llanthology/after-tca-compilation-event-listener',
@@ -21,7 +22,7 @@ class PreviewRenderingEventListener
 
 	public function __construct(
 		protected readonly AnthologyPreviewRenderer $anthologyPreviewRenderer,
-		protected readonly StandaloneView $backendPreview
+		protected readonly ViewFactoryInterface $viewFactory
 	) {
 	}
 
@@ -35,14 +36,19 @@ class PreviewRenderingEventListener
 			return;
 		}
 
-		$this->backendPreview->setTemplatePathAndFilename(static::BACKEND_PREVIEW_PATH);
-		$this->backendPreview->assignMultiple([
+		$viewFactoryData = new ViewFactoryData(
+			templatePathAndFilename: static::BACKEND_PREVIEW_PATH,
+			request: $event->getPageLayoutContext()->getCurrentRequest(),
+		);
+
+		$view = $this->viewFactory->create($viewFactoryData);
+		$view->assignMultiple([
 			'settings' => $this->anthologyPreviewRenderer->getPluginSettings($event->getRecord()),
 			'model' => $this->anthologyPreviewRenderer->getModelData($event->getRecord()),
 			'sources' => $this->anthologyPreviewRenderer->getSources($event->getRecord()),
 			'correspondingPage' => $this->anthologyPreviewRenderer->getCorrespondingPage($event->getRecord()),
 		]);
 
-		$event->setPreviewContent($this->backendPreview->render());
+		$event->setPreviewContent($view->render());
 	}
 }

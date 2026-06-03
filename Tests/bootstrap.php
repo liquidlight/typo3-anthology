@@ -4,11 +4,6 @@ declare(strict_types=1);
 
 // Bootstrap file for ll_anthology PHPUnit tests
 
-// Define TYPO3 constants for testing
-if (!defined('TYPO3_MODE')) {
-	define('TYPO3_MODE', 'BE');
-}
-
 if (!defined('TYPO3')) {
 	define('TYPO3', true);
 }
@@ -26,16 +21,6 @@ if (file_exists($autoloadFile)) {
 }
 
 
-// Set up minimal TYPO3 environment for testing
-if (!defined('PATH_site')) {
-	define('PATH_site', __DIR__ . '/../.Build/public/');
-}
-
-if (!defined('TYPO3_PATH_WEB')) {
-	define('TYPO3_PATH_WEB', PATH_site);
-}
-
-// Skip TYPO3 Environment initialization for now - too complex for unit tests
 
 // Set up minimal TCA configuration for testing
 global $TCA;
