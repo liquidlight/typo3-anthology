@@ -1,4 +1,6 @@
-# 1.2.4 **31st March 2026**
+# 1.2.4 
+
+**31st March 2026**
 
 #### Feature
 
@@ -10,7 +12,9 @@
 - Replace direct property access in `PageTitleProvider` with `ObjectAccess::getProperty()`
 
 
-# 1.2.3 **10th March 2026**
+# 1.2.3 
+
+**10th March 2026**
 
 #### Feature
 
@@ -18,7 +22,9 @@
 - Dispatch PSR-14 events from `AnthologyController`
 
 
-# 1.2.2 **10th March 2026**
+# 1.2.2 
+
+**10th March 2026**
 
 #### Feature
 
@@ -30,7 +36,9 @@
 - Display record image in list view (if set)
 
 
-# 1.2.1 **4th March 2026**
+# 1.2.1 
+
+**4th March 2026**
 
 #### Feature
 
@@ -45,35 +53,45 @@
 - Fix filter reset link Fluid element
 
 
-# 1.2.0 **17th February 2026**
+# 1.2.0
+
+**17th February 2026**
 
 #### Feature
 
 - Replace cached repository and filter storage with list generated at compilation
 
 
-# 1.1.1 **22nd January 2026**
+# 1.1.1 
+
+**22nd January 2026**
 
 #### Fix
 
 - Fix bug when loading hardcoded filter onfiguration
 
 
-# 1.1.0 **21st January 2026**
+# 1.1.0 
+
+**21st January 2026**
 
 #### Feature
 
 - Provide option to hardcode repository and filter classes
 
 
-# 1.0.1 **27th November 2025**
+# 1.0.1 
+
+**27th November 2025**
 
 #### Fix
 
 - Fixes bug in PageTitleService when page title is not set
 
 
-# 1.0.0 **25th November 2025**
+# 1.0.0 
+
+**25th November 2025**
 
 #### Feature
 
