@@ -18,6 +18,7 @@ use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\CMS\Core\Pagination\SlidingWindowPagination;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Http\ForwardResponse;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Pagination\QueryResultPaginator;
@@ -37,6 +38,10 @@ class AnthologyController extends ActionController
 	protected const DEFAULT_MAXIMUM_LINKS = 8;
 
 	protected Repository $repository;
+
+	protected int $recordUid;
+
+	protected AbstractEntity $record;
 
 	public function __construct(
 		protected RepositoryFactory $repositoryFactory,
@@ -107,6 +112,8 @@ class AnthologyController extends ActionController
 			);
 		}
 
+		$this->recordUid = (int)$recordUid;
+
 		$record = $this->getRepository()->findByUid((int)$recordUid);
 
 		if (!$record) {
@@ -120,6 +127,8 @@ class AnthologyController extends ActionController
 				1759233928
 			);
 		}
+
+		$this->record = $record;
 
 		$this->pageTitleProvider->setTitle($record, $this->repositoryFactory->getTcaName($this->getRepository()));
 
