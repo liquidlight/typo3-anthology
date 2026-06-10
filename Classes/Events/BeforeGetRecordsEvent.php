@@ -17,7 +17,8 @@ class BeforeGetRecordsEvent
 		public array &$constraints,
 		public readonly string $constraintModeMethod,
 		public ViewInterface &$view,
-		public RequestInterface &$request
+		public RequestInterface &$request,
+		public readonly array $settings
 	) {
 	}
 }

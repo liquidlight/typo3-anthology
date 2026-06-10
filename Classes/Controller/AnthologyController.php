@@ -258,7 +258,8 @@ class AnthologyController extends ActionController
 				$constraints,
 				$constraintModeMethod,
 				$this->view,
-				$this->request
+				$this->request,
+				$this->settings
 			)
 		);
 
