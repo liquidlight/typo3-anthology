@@ -3,7 +3,7 @@
 	xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
 	data-namespace-typo3-fluid="true"
 >
-	<f:if condition="{v:condition.string.contains(haystack: '{v:context.get()}', needle: 'Development')}">
+	<f:if condition="{environment} === 'Development'">
 		<div style="background-color: #ffe6e6; padding: 1rem; border-left: solid 1rem #C00">
 			<span style="float: left; color: #C00">
 				<core:icon identifier="actions-exclamation-triangle" />
