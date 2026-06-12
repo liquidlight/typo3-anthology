@@ -5,45 +5,42 @@
 	xmlns:a="http://typo3.org/ns/LiquidLight/Anthology/ViewHelpers"
 	data-namespace-typo3-fluid="true"
 >
-	<f:if condition="{pi_flexform_transformed}">
-		<f:then>
-			<f:variable name="settingsMode" value="{pi_flexform_transformed.settings.mode}" />
-		</f:then>
-		<f:else>
-			<f:variable name="settingsMode" value="{record.pi_flexform.sheets.sDEF.settings.mode}" />
-		</f:else>
-	</f:if>
+	<f:variable name="settingsMode" value="{a:getConfiguration(
+		configurationPath: 'sDEF.settings.mode',
+		flexformTransformed: pi_flexform_transformed,
+		flexform: record.pi_flexform,
+	)}" />
 
-	<f:if condition="{pi_flexform_transformed}">
-		<f:then>
-			<f:variable name="repository" value="{pi_flexform_transformed.settings.repository}" />
-		</f:then>
-		<f:else>
-			<f:variable name="repository" value="{record.pi_flexform.sheets.sDEF.settings.repository}" />
-		</f:else>
-	</f:if>
+	<f:variable name="repository" value="{a:getConfiguration(
+		configurationPath: 'sDEF.settings.repository',
+		flexformTransformed: pi_flexform_transformed,
+		flexform: record.pi_flexform,
+	)}" />
 
 	<f:variable name="model" value="{a:getModel(repository: repository)}" />
 
-	<f:if condition="!{pi_flexform_transformed}">
-		<f:switch expression="{settingsMode}">
-			<f:case value="list">
-				<f:variable name="correspondingPage" value="{record.pi_flexform.sheets.sDEF.settings.singleView.0}" />
-			</f:case>
-			<f:case value="single">
-				<f:variable name="correspondingPage" value="{record.pi_flexform.sheets.sDEF.settings.listView.0}" />
-			</f:case>
-		</f:switch>
-	</f:if>
+	<f:variable name="settingsTemplate" value="{a:getConfiguration(
+		configurationPath: 'sDisplay.settings.template',
+		flexformTransformed: pi_flexform_transformed,
+		flexform: record.pi_flexform,
+	)}" />
 
-	<f:if condition="{pi_flexform_transformed}">
-		<f:then>
-			<f:variable name="settingsTemplate" value="{pi_flexform_transformed.settings.template}" />
-		</f:then>
-		<f:else>
-			<f:variable name="settingsTemplate" value="{record.pi_flexform.sheets.sDisplay.settings.template}" />
-		</f:else>
-	</f:if>
+	<f:switch expression="{settingsMode}">
+		<f:case value="list">
+			<f:variable name="correspondingPage" value="{a:getConfiguration(
+				configurationPath: 'sDEF.settings.singleView.0',
+				flexformTransformed: pi_flexform_transformed,
+				flexform: record.pi_flexform,
+			)}" />
+		</f:case>
+		<f:case value="single">
+			<f:variable name="correspondingPage" value="{a:getConfiguration(
+				configurationPath: 'sDEF.settings.listView.0',
+				flexformTransformed: pi_flexform_transformed,
+				flexform: record.pi_flexform,
+			)}" />
+		</f:case>
+	</f:switch>
 
 	<table class="table table-condensed table-hover anthology-table">
 		<thead>
