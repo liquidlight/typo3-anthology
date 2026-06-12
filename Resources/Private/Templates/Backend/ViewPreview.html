@@ -2,8 +2,46 @@
 	xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
 	xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
 	xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+	xmlns:a="http://typo3.org/ns/LiquidLight/Anthology/ViewHelpers"
 	data-namespace-typo3-fluid="true"
 >
+	<f:variable name="settingsMode" value="{a:getConfiguration(
+		configurationPath: 'sDEF.settings.mode',
+		flexformTransformed: pi_flexform_transformed,
+		flexform: record.pi_flexform,
+	)}" />
+
+	<f:variable name="repository" value="{a:getConfiguration(
+		configurationPath: 'sDEF.settings.repository',
+		flexformTransformed: pi_flexform_transformed,
+		flexform: record.pi_flexform,
+	)}" />
+
+	<f:variable name="model" value="{a:getModel(repository: repository)}" />
+
+	<f:variable name="settingsTemplate" value="{a:getConfiguration(
+		configurationPath: 'sDisplay.settings.template',
+		flexformTransformed: pi_flexform_transformed,
+		flexform: record.pi_flexform,
+	)}" />
+
+	<f:switch expression="{settingsMode}">
+		<f:case value="list">
+			<f:variable name="correspondingPage" value="{a:getConfiguration(
+				configurationPath: 'sDEF.settings.singleView.0',
+				flexformTransformed: pi_flexform_transformed,
+				flexform: record.pi_flexform,
+			)}" />
+		</f:case>
+		<f:case value="single">
+			<f:variable name="correspondingPage" value="{a:getConfiguration(
+				configurationPath: 'sDEF.settings.listView.0',
+				flexformTransformed: pi_flexform_transformed,
+				flexform: record.pi_flexform,
+			)}" />
+		</f:case>
+	</f:switch>
+
 	<table class="table table-condensed table-hover anthology-table">
 		<thead>
 			<tr>
@@ -11,7 +49,7 @@
 					<strong>
 						Anthology
 
-						<f:switch expression="{settings.mode}">
+						<f:switch expression="{settingsMode}">
 							<f:case value="list">({f:translate(key: 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang_be.xlf:mode.list')})</f:case>
 							<f:case value="single">({f:translate(key: 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang_be.xlf:mode.single')})</f:case>
 						</f:switch>
@@ -36,9 +74,9 @@
 			<tr>
 				<th>Source</th>
 				<td>
-					<f:for each="{sources}" as="source">
+					<f:for each="{record.pages}" as="source">
 						<f:be.link route="web_layout" parameters="{id: source.uid}">
-							<core:iconForRecord table="pages" row="{source}" />
+							<core:iconForRecord table="pages" row="{a:recordToArray(record: source)}" />
 							{source.title}
 						</f:be.link>
 
@@ -49,23 +87,23 @@
 			<tr>
 				<f:if condition="{correspondingPage}">
 					<th>
-						<f:switch expression="{settings.mode}">
+						<f:switch expression="{settingsMode}">
 							<f:case value="list">{f:translate(key: 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang_be.xlf:singleView')}</f:case>
 							<f:case value="single">{f:translate(key: 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang_be.xlf:listView')}</f:case>
 						</f:switch>
 					</th>
 					<td>
 						<f:be.link route="web_layout" parameters="{id: correspondingPage.uid}">
-							<core:iconForRecord table="pages" row="{correspondingPage}" />
+							<core:iconForRecord table="pages" row="{a:recordToArray(record: correspondingPage)}" />
 							{correspondingPage.title}
 						</f:be.link>
 					</td>
 				</f:if>
 			</tr>
 			<tr>
-				<f:if condition="{settings.template}">
+				<f:if condition="{settingsTemplate}">
 					<th>Template</th>
-					<td><code>{settings.template}</code></td>
+					<td><code>{settingsTemplate}</code></td>
 				</f:if>
 			</tr>
 		</tbody>
