@@ -159,6 +159,9 @@
 						<config>
 							<type>inline</type>
 							<foreign_table>tx_anthology_domain_model_filter</foreign_table>
+							<appearance>
+								<collapseAll>0</collapseAll>
+							</appearance>
 						</config>
 					</settings.filters>
 				</el>

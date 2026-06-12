@@ -2,6 +2,15 @@
 
 use LiquidLight\Anthology\Hook\FilterConfigurationHook;
 
+$defaultTypeShowItem = '
+	--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,
+		--palette--;;general,
+	--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,
+		hidden,
+		--palette--;;start_end,
+		fe_group,
+';
+
 return [
 	'ctrl' => [
 		'title' => 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter',
@@ -51,19 +60,7 @@ return [
 			'displayCond' => 'FIELD:filter_type:!=:0',
 			'config' => [
 				'type' => 'flex',
-				/**
-				 * This will break in v14, but the v14 way of implementing this
-				 * feature is not yet available
-				 *
-				 * @see https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.0/Breaking-107047-RemovePointerFieldFunctionalityOfTCAFlex.html#breaking-107047-1751982363
-				 */
-				'ds_pointerField' => 'filter_type',
-				'ds' => [
-					'default' => 'FILE:EXT:ll_anthology/Configuration/FlexForms/Filter/Default.xml',
-					'llanthology_search' => 'FILE:EXT:ll_anthology/Configuration/FlexForms/Filter/Search.xml',
-					'llanthology_category' => 'FILE:EXT:ll_anthology/Configuration/FlexForms/Filter/Category.xml',
-					'llanthology_date' => 'FILE:EXT:ll_anthology/Configuration/FlexForms/Filter/Date.xml',
-				],
+				'ds' => 'FILE:EXT:ll_anthology/Configuration/FlexForms/Filter/Default.xml',
 			],
 		],
 
@@ -145,14 +142,37 @@ return [
 	],
 	'types' => [
 		0 => [
-			'showitem' => '
-				--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,
-					--palette--;;general,
-				--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,
-					hidden,
-					--palette--;;start_end,
-					fe_group,
-			',
+			'showitem' => $defaultTypeShowItem,
+		],
+		'llanthology_search' => [
+			'showitem' => $defaultTypeShowItem,
+			'columnsOverrides' => [
+				'settings' => [
+					'config' => [
+						'ds' => 'FILE:EXT:ll_anthology/Configuration/FlexForms/Filter/Search.xml',
+					],
+				],
+			],
+		],
+		'llanthology_category' => [
+			'showitem' => $defaultTypeShowItem,
+			'columnsOverrides' => [
+				'settings' => [
+					'config' => [
+						'ds' => 'FILE:EXT:ll_anthology/Configuration/FlexForms/Filter/Category.xml',
+					],
+				],
+			],
+		],
+		'llanthology_date' => [
+			'showitem' => $defaultTypeShowItem,
+			'columnsOverrides' => [
+				'settings' => [
+					'config' => [
+						'ds' => 'FILE:EXT:ll_anthology/Configuration/FlexForms/Filter/Date.xml',
+					],
+				],
+			],
 		],
 	],
 ];
