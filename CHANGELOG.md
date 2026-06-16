@@ -2,13 +2,13 @@
 
 **11th June 2026**
 
-#### Feature
+#### Feature
 
 - [POTENTIALLY BREAKING] Remove `fluidtypo3/vhs` dependency - check local templates for `v:` fluid helpers (#31)
 - Add plugin settings to `BeforeGetRecordsEvent`
 - Set `recordUid` and `record` properties on `AnthologyClass` for reuse by extending classes
 
-#### Refactor
+#### Refactor
 
 - Create method for shared variables
 - Replace vhs `string.contains` with direct environment check (#31)
