@@ -5,11 +5,11 @@
 	<fieldset>
 		<legend>{filter.title}</legend>
 
-		<f:link.action arguments="{filter: filter.resetArguments}">{f:translate(key: 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang.xlf:all')}</f:link.action>
+		<f:link.action arguments="{page: 0, filter: filter.resetArguments}">{f:translate(key: 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang.xlf:all')}</f:link.action>
 
 		<f:for each="{filter.options}" as="filterOption">
 			<f:link.action
-				arguments="{filter: filterOption.filterArguments}"
+				arguments="{page: 0, filter: filterOption.filterArguments}"
 				class="{f:if(condition: '{filter.parameter} == {filterOption.value}', then: 'active')}"
 			>{filterOption.title}</f:link.action>
 		</f:for>

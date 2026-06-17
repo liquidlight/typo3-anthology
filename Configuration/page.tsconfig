@@ -1,0 +1,7 @@
+mod.web_layout {
+	tt_content {
+		preview {
+			llanthology_anthologyview = EXT:ll_anthology/Resources/Private/Templates/Backend/ViewPreview.html
+		}
+	}
+}
