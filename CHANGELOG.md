@@ -1,3 +1,19 @@
+# 2.3.0
+
+**17th June 2026**
+
+#### Feature
+
+- Add `Category` model and repository
+- Add `Content` model and repository
+- Add `ExtensionInstalledHelper`
+- Add `SlugPrefixHook`
+- Add `SimplePageTitleProvider`
+
+#### Fix
+
+- Fix issue in v13 sites where `GetConfigurationViewHelper` would attempt to access v14 flexform methods if key is unset
+
 # 2.2.0
 
 **17th June 2026**
