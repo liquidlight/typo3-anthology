@@ -1,3 +1,10 @@
+lib.renderContentElement = RECORDS
+lib.renderContentElement {
+	tables = tt_content
+	source.current = 1
+	dontCheckPid = 1
+}
+
 config {
 	pageTitleProviders {
 		tx_llanthology {
