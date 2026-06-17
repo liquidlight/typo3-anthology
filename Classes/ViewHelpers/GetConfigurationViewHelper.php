@@ -32,9 +32,9 @@ class GetConfigurationViewHelper extends AbstractViewHelper
 
 		$configurationPath = GeneralUtility::trimExplode('.', $this->arguments['configurationPath'], true);
 
-		return $this->arguments['flexformTransformed'][end($configurationPath)]
-			?? $this->getConfigurationFromFlexform($configurationPath)
-			?? null
+		return isset($this->arguments['flexformTransformed'])
+			? $this->arguments['flexformTransformed'][end($configurationPath)] ?? $this->arguments['flexformTransformed']['settings'][end($configurationPath)] ?? null
+			: $this->getConfigurationFromFlexform($configurationPath) ?? null
 		;
 	}
 
@@ -47,7 +47,7 @@ class GetConfigurationViewHelper extends AbstractViewHelper
 			return null;
 		}
 
-		$configuration = $this->arguments['flexform']->getSheets();
+		$configuration = $this->arguments['flexform']?->getSheets() ?? [];
 
 		foreach ($configurationPath as $configurationPathKey) {
 			$configuration = $configuration[$configurationPathKey] ?? null;
