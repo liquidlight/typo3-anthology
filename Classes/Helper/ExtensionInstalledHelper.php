@@ -9,7 +9,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class ExtensionInstalledHelper
 {
-	public function isInstalled(array $params): bool {
+	public function isInstalled(array $params): bool
+	{
 		if (empty($params['conditionParameters'][0])) {
 			return false;
 		}
