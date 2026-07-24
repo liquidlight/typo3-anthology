@@ -34,8 +34,7 @@ class GetConfigurationViewHelper extends AbstractViewHelper
 
 		return isset($this->arguments['flexformTransformed'])
 			? $this->arguments['flexformTransformed'][end($configurationPath)] ?? $this->arguments['flexformTransformed']['settings'][end($configurationPath)] ?? null
-			: $this->getConfigurationFromFlexform($configurationPath) ?? null
-		;
+			: $this->getConfigurationFromFlexform($configurationPath) ?? null;
 	}
 
 	private function getConfigurationFromFlexform(array $configurationPath): mixed
