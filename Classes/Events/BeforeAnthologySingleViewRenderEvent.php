@@ -12,9 +12,9 @@ use TYPO3\CMS\Extbase\Mvc\RequestInterface;
 class BeforeAnthologySingleViewRenderEvent implements BeforeAnthologyViewRenderEventInterface
 {
 	public function __construct(
-		public AbstractEntity &$record,
-		public ViewInterface &$view,
-		public RequestInterface &$request
+		public AbstractEntity $record,
+		public ViewInterface $view,
+		public RequestInterface $request
 	) {
 	}
 }
