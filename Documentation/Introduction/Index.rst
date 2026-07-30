@@ -28,7 +28,6 @@ Features
 Requirements
 ------------
 
-- TYPO3 CMS ^13.4
+- TYPO3 CMS ^13.4 || ^14.3
 - PHP 8.2+
 - Composer
-- FluidTYPO3 VHS ^7.1
