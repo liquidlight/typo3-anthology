@@ -6,7 +6,7 @@ use LiquidLight\Anthology\Middleware\PageTitleMiddleware;
 
 return [
 	'frontend' => [
-		'anthology-page-title' => [
+		'liquidlight/anthology/page-title' => [
 			'target' => PageTitleMiddleware::class,
 			'after' => [
 				'typo3/cms-frontend/page-resolver',
