@@ -11,6 +11,9 @@ return [
 			'after' => [
 				'typo3/cms-frontend/page-resolver',
 			],
+			'before' => [
+				'typo3/cms-frontend/content-length-headers',
+			],
 		],
 	],
 ];

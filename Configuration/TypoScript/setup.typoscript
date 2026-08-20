@@ -13,12 +13,3 @@ config {
 		}
 	}
 }
-
-[request && traverse(request.getQueryParams(), 'tx_llanthology_anthologyview/record') > 0]
-
-	lib.site.title {
-		data >
-		value = ####ANTHOLOGY_RECORD_TITLE_PLACEHOLDER####
-	}
-
-[end]
