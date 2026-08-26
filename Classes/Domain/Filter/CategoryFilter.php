@@ -74,8 +74,13 @@ class CategoryFilter extends AbstractFilter implements FilterInterface
 		Filter $filter,
 		QueryInterface $query
 	): ?ComparisonInterface {
-		return !empty($filter->getParameter())
-			? $query->in('categories.uid', [$filter->getParameter()])
-			: null;
+		if (empty($filter->getParameter()) || !is_scalar($filter->getParameter())) {
+			return null;
+		}
+
+		return $query->in(
+			'categories.uid',
+			GeneralUtility::intExplode(',', (string)$filter->getParameter(), true)
+		);
 	}
 }

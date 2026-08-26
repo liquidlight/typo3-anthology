@@ -115,4 +115,22 @@ class CategoryFilterTest extends TestCase
 
 		self::assertSame($comparisonMock, $result);
 	}
+
+	/**
+	 * @covers \LiquidLight\Anthology\Domain\Filter\CategoryFilter::getConstraint
+	 * @uses \LiquidLight\Anthology\Domain\Model\Filter::getParameter
+	 * @uses \LiquidLight\Anthology\Domain\Model\Filter::setParameter
+	 */
+	public function testGetConstraintReturnsNullWhenParameterIsAnArray(): void
+	{
+		$filter = new Filter();
+		$filter->setParameter(['1', '2']);
+
+		$queryMock = $this->createMock(QueryInterface::class);
+		$queryMock->expects(self::never())->method('in');
+
+		$result = CategoryFilter::getConstraint($filter, $queryMock);
+
+		self::assertNull($result);
+	}
 }
