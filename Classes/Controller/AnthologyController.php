@@ -23,6 +23,7 @@ use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Http\ForwardResponse;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Pagination\QueryResultPaginator;
+use TYPO3\CMS\Extbase\Persistence\Generic\Qom\ConstraintInterface;
 use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\Repository;
@@ -259,6 +260,7 @@ class AnthologyController extends ActionController
 	{
 		$repository = $this->getRepository();
 		$filters = $this->getFilters(true);
+		$preFilters = $this->getPreFilters();
 
 		$query = $repository->createQuery();
 
@@ -268,19 +270,11 @@ class AnthologyController extends ActionController
 			]);
 		}
 
-		$constraints = $this->filterFactory->getConstraints(
-			$filters,
-			$query
-		);
+		$constraints = $this->filterFactory->getConstraints($filters, $query);
+		$preFilterConstraints = $this->filterFactory->getConstraints($preFilters, $query);
 
-		$constraintModeMethod = match ($this->settings['filterMode']) {
-			'and' => 'logicalAnd',
-			'or' => 'logicalOr',
-			default => throw new RuntimeException(
-				'Invalid filter mode selected',
-				1761738397
-			),
-		};
+		$constraintModeMethod = $this->getConstraintModeMethod($this->settings['filterMode']);
+		$preFilterConstraintModeMethod = $this->getConstraintModeMethod($this->settings['preFilterMode'] ?? 'and');
 
 		$this->eventDispatcher->dispatch(
 			new BeforeGetRecordsEvent(
@@ -288,20 +282,58 @@ class AnthologyController extends ActionController
 				$query,
 				$constraints,
 				$constraintModeMethod,
+				$preFilterConstraints,
+				$preFilterConstraintModeMethod,
 				$this->view,
 				$this->request,
 				$this->settings
 			)
 		);
 
+		/**
+		 * Each group is combined by its own mode, then ANDed together, so
+		 * pre-filters always constrain the result regardless of `filterMode`.
+		 * An empty group is treated as "no constraint" rather than calling
+		 * `logicalOr()` with zero arguments, which TYPO3 resolves to an
+		 * always-false constraint (unlike `logicalAnd()`, which is always-true).
+		 */
+		$topLevelConstraints = array_filter([
+			$this->combineConstraints($query, $constraints, $constraintModeMethod),
+			$this->combineConstraints($query, $preFilterConstraints, $preFilterConstraintModeMethod),
+		]);
+
 		return $query
 			->matching(
-				$query->{$constraintModeMethod}(
-					...$constraints
-				)
+				empty($topLevelConstraints)
+					? $query->logicalAnd()
+					: $query->logicalAnd(...$topLevelConstraints)
 			)
 			->execute()
 		;
+	}
+
+	protected function getConstraintModeMethod(string $mode): string
+	{
+		return match ($mode) {
+			'and' => 'logicalAnd',
+			'or' => 'logicalOr',
+			default => throw new RuntimeException(
+				'Invalid filter mode selected',
+				1761738397
+			),
+		};
+	}
+
+	protected function combineConstraints(
+		QueryInterface $query,
+		array $constraints,
+		string $constraintModeMethod
+	): ?ConstraintInterface {
+		if (empty($constraints)) {
+			return null;
+		}
+
+		return $query->{$constraintModeMethod}(...$constraints);
 	}
 
 	protected function getRepository(): Repository
@@ -339,6 +371,23 @@ class AnthologyController extends ActionController
 			// @extensionScannerIgnoreLine
 			$filter->setOptions($this->filterFactory->getFilters()[$filter->filterType]::getOptions($filter, $this->settings));
 			$filter->setParameter($activeFilters[$filter->getUid()] ?? null);
+		}
+
+		return $filters;
+	}
+
+	protected function getPreFilters(): QueryResult
+	{
+		$filterQuerySettings = $this->filterRepository->createQuery()->getQuerySettings();
+		$filterQuerySettings->setRespectStoragePage(false);
+		$this->filterRepository->setDefaultQuerySettings($filterQuerySettings);
+
+		$filterUids = GeneralUtility::intExplode(',', $this->settings['preFilters'] ?? '', true);
+
+		$filters = $this->filterRepository->findByUids($filterUids);
+
+		foreach ($filters as $filter) {
+			$filter->setParameter($filter->getParsedSettings()['preFilterValue'] ?? null);
 		}
 
 		return $filters;

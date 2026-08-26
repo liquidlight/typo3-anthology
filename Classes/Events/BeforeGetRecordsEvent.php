@@ -16,6 +16,8 @@ class BeforeGetRecordsEvent
 		public QueryInterface $query,
 		public array &$constraints,
 		public readonly string $constraintModeMethod,
+		public array &$preFilterConstraints,
+		public readonly string $preFilterConstraintModeMethod,
 		public ViewInterface $view,
 		public RequestInterface $request,
 		public readonly array $settings

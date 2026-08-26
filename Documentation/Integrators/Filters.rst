@@ -37,6 +37,17 @@ Most filters have multiple options for display modes (with the obvious exception
 **Link**
 	Renders a link, this will retain previously selected filters, but it will not retain values which have been entered since the page loaded
 
+Pre-filters
+===========
+
+Pre-filters permanently restrict a list view to matching records, independently of any filters the user selects, they are configured on the plugin's "Source" tab in the same way as regular filters. Pre-filters always apply, regardless of the plugin's filter mode.
+
+.. note::
+	Only Keyword search and Category filters can currently be used as pre-filters; Date filters aren't yet supported for pre-filtering.
+
+.. note::
+	A filter's pre-filter value is only shown while editing it from within the plugin's "Source" tab. If the same filter record is opened directly (for example from the page's record list), that value won't be shown or saved. Always edit pre-filters from within the plugin they're configured on.
+
 Available filters
 =================
 
