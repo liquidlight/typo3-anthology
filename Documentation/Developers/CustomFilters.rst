@@ -24,6 +24,8 @@ The Filter Class
 
 The filter class is responsible for applying the actual query constraint. It must implement the :php:`FilterInterface` (or extend the provided :php:`AbstractFilter`), and must have the :php:`AsAnthologyFilter` attribute.
 
+If your filter should also be selectable as a pre-filter (see :doc:`../Integrators/Filters`), add the :php:`AsAnthologyPreFilter` attribute as well. See :ref:`custom-filters-pre-filters` below.
+
 Although not required, it is recommended to prefix the name of your filter with the extension in order to avoid clashes with other filters.
 
 **Classes/Domain/Filter/TagFilter.php**
@@ -121,6 +123,50 @@ This template renders the filter on the website. It's a standard Fluid template.
 - **filter**: A :samp:`filter` object is available in the template, containing all its properties and settings.
 - **name="filter[{filter.uid}]"**: It is crucial that the :samp:`name` attribute follows this format. This allows the Anthology extension to correctly identify the value for each filter.
 - **value="{filter.parameter}"**: This ensures that when the form is submitted, the selected value is pre-filled.
+
+.. _custom-filters-pre-filters:
+
+Supporting Pre-filters
+=======================
+
+Pre-filters (see :doc:`../Integrators/Filters`) let an integrator permanently restrict a list view to matching records, with a value they configure directly on the pre-filter itself rather than one submitted by a site visitor. To make your filter selectable as a pre-filter, add the :php:`AsAnthologyPreFilter` attribute alongside :php:`AsAnthologyFilter`:
+
+.. code-block:: php
+
+	use LiquidLight\Anthology\Attribute\AsAnthologyFilter;
+	use LiquidLight\Anthology\Attribute\AsAnthologyPreFilter;
+
+	#[AsAnthologyFilter('myextension_tag')]
+	#[AsAnthologyPreFilter]
+	class TagFilter extends AbstractFilter implements FilterInterface
+	{
+		// ...
+	}
+
+No change is required to :php:`getConstraint()` — pre-filter values still arrive via :php:`$filter->getParameter()`, exactly as they would for a filter driven by frontend input.
+
+Since a pre-filter's value is configured by the integrator rather than read from the request, add a dedicated :samp:`settings.preFilterValue` field to your FlexForm, shown only in the pre-filter context, and hide your normal input field(s) in that same context:
+
+.. code-block:: xml
+
+	<settings.property>
+		<label>Property to filter on</label>
+		<config>
+			<type>input</type>
+			<eval>trim,required</eval>
+			<hideWhenInlineParentField>settings.preFilters</hideWhenInlineParentField>
+		</config>
+	</settings.property>
+	<settings.preFilterValue>
+		<label>Value</label>
+		<config>
+			<type>input</type>
+			<eval>trim</eval>
+			<showWhenInlineParentField>settings.preFilters</showWhenInlineParentField>
+		</config>
+	</settings.preFilterValue>
+
+See :file:`Configuration/FlexForms/Filter/Category.xml` or :file:`Configuration/FlexForms/Filter/Search.xml` for complete reference examples.
 
 Configuring the Filter
 ======================

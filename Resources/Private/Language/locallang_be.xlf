@@ -65,6 +65,7 @@
 			<trans-unit id="source">
 				<source>Source</source>
 			</trans-unit>
+<<<<<<< HEAD
 			<trans-unit id="source.sortBy">
 				<source>Sort by</source>
 			</trans-unit>
@@ -80,6 +81,8 @@
 			<trans-unit id="source.sortByDirection.descending">
 				<source>Descending</source>
 			</trans-unit>
+=======
+>>>>>>> 6cd71a1 (feat: Add pre-filters to Anthology extension flexform options)
 		</body>
 	</file>
 </xliff>

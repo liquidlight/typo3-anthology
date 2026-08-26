@@ -11,7 +11,7 @@
 						<config>
 							<type>category</type>
 							<minitems>1</minitems>
-							<!-- <maxitems>1</maxitems> -->
+							<hideWhenInlineParentField>settings.preFilters</hideWhenInlineParentField>
 						</config>
 					</settings.category>
 					<settings.displayMode>
@@ -33,8 +33,17 @@
 									<value>check</value>
 								</numIndex>
 							</items>
+							<hideWhenInlineParentField>settings.preFilters</hideWhenInlineParentField>
 						</config>
 					</settings.displayMode>
+					<settings.preFilterValue>
+						<label>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.preFilter</label>
+						<config>
+							<type>category</type>
+							<minitems>1</minitems>
+							<showWhenInlineParentField>settings.preFilters</showWhenInlineParentField>
+						</config>
+					</settings.preFilterValue>
 				</el>
 			</ROOT>
 		</sDEF>

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace LiquidLight\Anthology\Hook;
 
+use LiquidLight\Anthology\Attribute\AsAnthologyPreFilter;
 use LiquidLight\Anthology\Hook\AbstractConfigurationHook;
+use ReflectionClass;
 
 class FilterConfigurationHook extends AbstractConfigurationHook
 {
@@ -17,9 +19,18 @@ class FilterConfigurationHook extends AbstractConfigurationHook
 		'datetime',
 	];
 
+	private const PRE_FILTERS_FIELD_NAME = 'settings.preFilters';
+
 	public function getAvailableFilters(array &$params): void
 	{
 		$filters = $this->filterFactory->getFilters();
+
+		if (($params['inlineParentFieldName'] ?? null) === self::PRE_FILTERS_FIELD_NAME) {
+			$filters = array_filter(
+				$filters,
+				fn (string $filterClass) => (new ReflectionClass($filterClass))->getAttributes(AsAnthologyPreFilter::class) != []
+			);
+		}
 
 		$filterItems = array_map(
 			fn ($filterType, $filterClass) => [

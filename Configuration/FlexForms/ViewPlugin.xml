@@ -84,7 +84,6 @@
 					</settings.sortBy>
 					<settings.sortByDirection>
 						<label>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_be.xlf:source.sortByDirection</label>
-						<displayCond>FIELD:sDEF.settings.mode:=:list</displayCond>
 						<config>
 							<type>select</type>
 							<renderType>selectSingle</renderType>
@@ -104,6 +103,36 @@
 							</items>
 						</config>
 					</settings.sortByDirection>
+					<settings.preFilterMode>
+						<label>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_be.xlf:filterMode</label>
+						<displayCond>FIELD:sDEF.settings.mode:=:list</displayCond>
+						<config>
+							<type>select</type>
+							<renderType>selectSingle</renderType>
+							<items>
+								<numIndex index="0">
+									<label>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_be.xlf:filterMode.and</label>
+									<value>and</value>
+								</numIndex>
+								<numIndex index="1">
+									<label>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_be.xlf:filterMode.or</label>
+									<value>or</value>
+								</numIndex>
+							</items>
+							<default>and</default>
+						</config>
+					</settings.preFilterMode>
+					<settings.preFilters>
+						<label>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_be.xlf:filters</label>
+						<displayCond>FIELD:sDEF.settings.mode:=:list</displayCond>
+						<config>
+							<type>inline</type>
+							<foreign_table>tx_anthology_domain_model_filter</foreign_table>
+							<appearance>
+								<collapseAll>0</collapseAll>
+							</appearance>
+						</config>
+					</settings.preFilters>
 				</el>
 			</ROOT>
 		</sSource>
