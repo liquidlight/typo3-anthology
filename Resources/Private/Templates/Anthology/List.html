@@ -3,6 +3,14 @@
 	data-namespace-typo3-fluid="true"
 >
 	<div class="ll-anthology">
+		<f:if condition="{settings.listView} && {pageUid} !== {settings.listView}">
+			<div class="viewMore">
+				<f:link.typolink parameter="{settings.listView}">
+					{f:translate(key: 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang.xlf:viewAll')}
+				</f:link.typolink>
+			</div>
+		</f:if>
+
 		<div class="filters">
 			<f:render partial="List/Filters" arguments="{filters: filters, configuration: configuration}" />
 		</div>

@@ -51,7 +51,7 @@
 					</settings.singleView>
 					<settings.listView>
 						<label>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_be.xlf:listView</label>
-						<displayCond>FIELD:settings.mode:=:single</displayCond>
+						<description>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_be.xlf:listView.description</description>
 						<config>
 							<type>group</type>
 							<allowed>pages</allowed>

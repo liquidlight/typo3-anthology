@@ -32,6 +32,9 @@
 			<trans-unit id="listView">
 				<source>List page</source>
 			</trans-unit>
+			<trans-unit id="listView.description">
+				<source>If this plugin is not on the default list page, link to it here to enable a "view all" link, otherwise, leave blank</source>
+			</trans-unit>
 			<trans-unit id="singleView">
 				<source>Single page</source>
 			</trans-unit>
@@ -65,7 +68,6 @@
 			<trans-unit id="source">
 				<source>Source</source>
 			</trans-unit>
-<<<<<<< HEAD
 			<trans-unit id="source.sortBy">
 				<source>Sort by</source>
 			</trans-unit>
@@ -81,8 +83,6 @@
 			<trans-unit id="source.sortByDirection.descending">
 				<source>Descending</source>
 			</trans-unit>
-=======
->>>>>>> 6cd71a1 (feat: Add pre-filters to Anthology extension flexform options)
 		</body>
 	</file>
 </xliff>
