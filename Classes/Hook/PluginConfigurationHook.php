@@ -55,4 +55,17 @@ class PluginConfigurationHook extends AbstractConfigurationHook
 			$tcaConfigurations
 		);
 	}
+
+	public function getSortFields(array &$params): void
+	{
+		$this->getFields($params, [static::ALL_TYPES], $params['row']['uid']);
+
+		$params['items'] = [
+			[
+				'label' => 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang_be.xlf:source.sortBy.default',
+				'value' => null,
+			],
+			...$params['items'],
+		];
+	}
 }

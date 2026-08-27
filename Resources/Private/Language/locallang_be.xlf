@@ -62,6 +62,24 @@
 			<trans-unit id="filters.noConfiguration">
 				<source>No configuration options available for this filter type</source>
 			</trans-unit>
+			<trans-unit id="source">
+				<source>Source</source>
+			</trans-unit>
+			<trans-unit id="source.sortBy">
+				<source>Sort by</source>
+			</trans-unit>
+			<trans-unit id="source.sortBy.default">
+				<source>Default</source>
+			</trans-unit>
+			<trans-unit id="source.sortByDirection">
+				<source>Sort by direction</source>
+			</trans-unit>
+			<trans-unit id="source.sortByDirection.ascending">
+				<source>Ascending</source>
+			</trans-unit>
+			<trans-unit id="source.sortByDirection.descending">
+				<source>Descending</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

@@ -13,6 +13,8 @@ use TYPO3\CMS\Core\Service\FlexFormService;
 
 abstract class AbstractConfigurationHook
 {
+	public const ALL_TYPES = '*';
+
 	protected const CONTENT_TABLE = 'tt_content';
 
 	public function __construct(
@@ -23,11 +25,11 @@ abstract class AbstractConfigurationHook
 	) {
 	}
 
-	public function getFields(array &$params, array $allowedTypes): void
+	public function getFields(array &$params, array $allowedTypes, ?int $anthologyPluginUid = null): void
 	{
 		global $TCA;
 
-		$anthologyPluginUid = $this->getAnthologyPluginUid($params);
+		$anthologyPluginUid = $anthologyPluginUid ?? $this->getAnthologyPluginUid($params);
 
 		if (!$anthologyPluginUid) {
 			return;
@@ -42,9 +44,11 @@ abstract class AbstractConfigurationHook
 			return;
 		}
 
+		$allowAllTypes = count($allowedTypes) === 1 && reset($allowedTypes) === static::ALL_TYPES;
+
 		$eligibleColumns = array_filter(
 			$TCA[$anthologyPluginTca]['columns'],
-			fn ($column) => in_array($column['config']['type'], $allowedTypes)
+			static fn ($column) => in_array($column['config']['type'], $allowedTypes) || $allowAllTypes
 		);
 
 		$params['items'] = array_map(
