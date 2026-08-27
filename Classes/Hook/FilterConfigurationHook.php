@@ -4,17 +4,10 @@ declare(strict_types=1);
 
 namespace LiquidLight\Anthology\Hook;
 
-use LiquidLight\Anthology\Factory\FilterFactory;
-use LiquidLight\Anthology\Factory\RepositoryFactory;
-use TYPO3\CMS\Core\Database\Connection;
-use TYPO3\CMS\Core\Database\ConnectionPool;
-use TYPO3\CMS\Core\Database\Query\Restriction\HiddenRestriction;
-use TYPO3\CMS\Core\Service\FlexFormService;
+use LiquidLight\Anthology\Hook\AbstractConfigurationHook;
 
-class FilterConfigurationHook
+class FilterConfigurationHook extends AbstractConfigurationHook
 {
-	private const CONTENT_TABLE = 'tt_content';
-
 	private const SEARCH_FIELD_TYPES = [
 		'input',
 		'text',
@@ -23,14 +16,6 @@ class FilterConfigurationHook
 	private const DATE_FIELD_TYPES = [
 		'datetime',
 	];
-
-	public function __construct(
-		private FilterFactory $filterFactory,
-		private RepositoryFactory $repositoryFactory,
-		private FlexFormService $flexFormService,
-		private ConnectionPool $connectionPool
-	) {
-	}
 
 	public function getAvailableFilters(array &$params): void
 	{
@@ -64,111 +49,5 @@ class FilterConfigurationHook
 	public function getDateFields(array &$params): void
 	{
 		$this->getFields($params, self::DATE_FIELD_TYPES);
-	}
-
-	public function getFields(array &$params, array $allowedTypes): void
-	{
-		global $TCA;
-
-		$anthologyPluginUid = $this->getAnthologyPluginUid($params);
-
-		if (!$anthologyPluginUid) {
-			return;
-		}
-
-		$anthologyPluginTca = $this->getAnthologyPluginTca($anthologyPluginUid);
-
-		if (
-			!$anthologyPluginTca
-			|| !($TCA[$anthologyPluginTca] ?? false)
-		) {
-			return;
-		}
-
-		$eligibleColumns = array_filter(
-			$TCA[$anthologyPluginTca]['columns'],
-			fn ($column) => in_array($column['config']['type'], $allowedTypes)
-		);
-
-		$params['items'] = array_map(
-			fn ($column, $columnKey) => [
-				'label' => $column['label'] ?? $columnKey,
-				'value' => $columnKey,
-			],
-			$eligibleColumns,
-			array_keys($eligibleColumns)
-		);
-	}
-
-	private function getAnthologyPluginUid(array $params): int
-	{
-		if ((int)$params['inlineParentUid'] ?? false) {
-			return (int)$params['inlineParentUid'];
-		}
-
-		if ((int)$params['inlineTopMostParentUid'] ?? false) {
-			return (int)$params['inlineTopMostParentUid'];
-		}
-
-		/**
-		 * This isn't an ideal way to get the UID, but in the absence of either
-		 * of the above values, it's the best option available
-		 */
-		$queryBuilder = $this->connectionPool->getQueryBuilderForTable(self::CONTENT_TABLE);
-		$queryBuilder->getRestrictions()->removeByType(HiddenRestriction::class);
-
-		$queryBuilder
-			->select('uid')
-			->from(self::CONTENT_TABLE)
-			->where(
-				/**
-				 * Like I said, this __really__ isn't ideal, especially this `LIKE`.
-				 * We need to test whether this breaks if there is more than one
-				 * plugin on the page, and also ensure that any Anthology extensions
-				 * use a compatible naming format for the plugin or this will not
-				 * display any available filter fields
-				 */
-				$queryBuilder->expr()->like('CType', $queryBuilder->createNamedParameter('llanthology%_%view')),
-				$queryBuilder->expr()->eq('pid', $queryBuilder->createNamedParameter($params['effectivePid'], Connection::PARAM_INT)),
-				"FIND_IN_SET(" . $queryBuilder->createNamedParameter($params['row']['uid'], Connection::PARAM_INT) . ", EXTRACTVALUE(`pi_flexform`, '//field[@index=\'settings.filters\']/value'))"
-			)
-		;
-
-		return (int)$queryBuilder->executeQuery()->fetchOne();
-	}
-
-	private function getAnthologyPluginTca(int $anthologyPluginUid): ?string
-	{
-		$anthologyPluginConfiguration = $this->getAnthologyPluginConfiguration($anthologyPluginUid);
-
-		if (!$anthologyPluginConfiguration) {
-			return null;
-		}
-
-		return $this->repositoryFactory->getTcaName($anthologyPluginConfiguration['settings']['repository']);
-	}
-
-	private function getAnthologyPluginConfiguration(int $anthologyPluginUid): array
-	{
-		$queryBuilder = $this->connectionPool->getQueryBuilderForTable(self::CONTENT_TABLE);
-
-		$queryBuilder
-			->select('pi_flexform')
-			->from(self::CONTENT_TABLE)
-			->where(
-				$queryBuilder->expr()->eq(
-					'uid',
-					$queryBuilder->createNamedParameter(
-						$anthologyPluginUid,
-						Connection::PARAM_INT
-					)
-				)
-			)
-			->setMaxResults(1)
-		;
-
-		return $this->flexFormService->convertFlexFormContentToArray(
-			$queryBuilder->executeQuery()->fetchOne()
-		);
 	}
 }
