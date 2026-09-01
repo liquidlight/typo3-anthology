@@ -174,6 +174,7 @@ class AnthologyController extends ActionController
 			'environment' => $environment,
 			'configuration' => $this->request->getAttribute('site')->getConfiguration(),
 			'pageUid' => (string)$this->request->getAttribute('routing')?->getPageId(),
+			'modelName' => $this->getModelName(),
 		]);
 	}
 
