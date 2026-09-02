@@ -30,6 +30,10 @@
 					</ul>
 				]]></source>
 			</trans-unit>
+
+			<trans-unit id="viewAll">
+				<source>View all</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

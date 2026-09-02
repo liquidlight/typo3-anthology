@@ -91,7 +91,10 @@ abstract class AbstractConfigurationHook
 				 */
 				$queryBuilder->expr()->like('CType', $queryBuilder->createNamedParameter('llanthology%_%view')),
 				$queryBuilder->expr()->eq('pid', $queryBuilder->createNamedParameter($params['effectivePid'], Connection::PARAM_INT)),
-				"FIND_IN_SET(" . $queryBuilder->createNamedParameter($params['row']['uid'], Connection::PARAM_INT) . ", EXTRACTVALUE(`pi_flexform`, '//field[@index=\'settings.filters\']/value'))"
+				$queryBuilder->expr()->or(
+					"FIND_IN_SET(" . $queryBuilder->createNamedParameter($params['row']['uid'], Connection::PARAM_INT) . ", EXTRACTVALUE(`pi_flexform`, '//field[@index=\'settings.filters\']/value'))",
+					"FIND_IN_SET(" . $queryBuilder->createNamedParameter($params['row']['uid'], Connection::PARAM_INT) . ", EXTRACTVALUE(`pi_flexform`, '//field[@index=\'settings.preFilters\']/value'))"
+				)
 			)
 		;
 

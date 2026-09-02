@@ -20,8 +20,17 @@
 						<config>
 							<type>input</type>
 							<eval>trim</eval>
+							<hideWhenInlineParentField>settings.preFilters</hideWhenInlineParentField>
 						</config>
 					</settings.placeholder>
+					<settings.preFilterValue>
+						<label>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.preFilter</label>
+						<config>
+							<type>input</type>
+							<eval>trim</eval>
+							<showWhenInlineParentField>settings.preFilters</showWhenInlineParentField>
+						</config>
+					</settings.preFilterValue>
 				</el>
 			</ROOT>
 		</sDEF>

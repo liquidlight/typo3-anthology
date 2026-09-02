@@ -39,7 +39,7 @@
 				<source>Search fields</source>
 			</trans-unit>
 			<trans-unit id="tx_anthology_domain_model_filter.search_fields.description">
-				<source>@todo</source>
+				<source>Fields on which to search for keywords</source>
 			</trans-unit>
 			<trans-unit id="tx_anthology_domain_model_filter.placeholder">
 				<source>Placeholder</source>
@@ -59,6 +59,10 @@
 			</trans-unit>
 			<trans-unit id="tx_anthology_domain_model_filter.date_span.months">
 				<source>Months</source>
+			</trans-unit>
+
+			<trans-unit id="tx_anthology_domain_model_filter.preFilter">
+				<source>Pre-filtered value</source>
 			</trans-unit>
 		</body>
 	</file>

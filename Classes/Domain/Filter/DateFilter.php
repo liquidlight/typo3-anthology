@@ -134,6 +134,10 @@ class DateFilter extends AbstractFilter implements FilterInterface
 	): ?ConstraintInterface {
 		// @todo Handle future dates
 
+		if (empty($filter->getParameter())) {
+			return null;
+		}
+
 		$constraintStartDate = DateTime::createFromFormat('U', $filter->getParameter());
 
 		if (!$constraintStartDate) {

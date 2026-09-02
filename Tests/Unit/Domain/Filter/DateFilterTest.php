@@ -50,6 +50,28 @@ class DateFilterTest extends TestCase
 	}
 
 	/**
+	 * @covers \LiquidLight\Anthology\Domain\Filter\DateFilter::getConstraint
+	 * @uses \LiquidLight\Anthology\Domain\Model\Filter::getParameter
+	 * @uses \LiquidLight\Anthology\Domain\Model\Filter::setParameter
+	 * @uses \LiquidLight\Anthology\Domain\Model\Filter::getParsedSettings
+	 */
+	public function testGetConstraintReturnsNullForBoundDateSpanWithEmptyParameter(): void
+	{
+		$filter = new Filter();
+		$filter->setParameter(null);
+		$filter->settings = '<T3FlexForms>placeholder</T3FlexForms>';
+
+		$parsedSettingsProperty = new \ReflectionProperty(Filter::class, 'parsedSettings');
+		$parsedSettingsProperty->setValue($filter, ['settings' => ['dateSpan' => 'months']]);
+
+		$queryMock = $this->createMock(QueryInterface::class);
+
+		$result = DateFilter::getConstraint($filter, $queryMock);
+
+		self::assertNull($result);
+	}
+
+	/**
 	 * @covers \LiquidLight\Anthology\Domain\Filter\DateFilter::getOptions
 	 * @uses \LiquidLight\Anthology\Domain\Model\Filter
 	 */

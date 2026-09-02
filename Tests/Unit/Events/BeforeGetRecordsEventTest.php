@@ -16,11 +16,14 @@ class BeforeGetRecordsEventTest extends TestCase
 	public function testConstraintsMutationsPropagateBackToTheOriginalArray(): void
 	{
 		$constraints = ['existing'];
+		$preFilterConstraints = ['existing-pre-filter'];
 
 		$event = new BeforeGetRecordsEvent(
 			$this->createMock(RepositoryInterface::class),
 			$this->createMock(QueryInterface::class),
 			$constraints,
+			'logicalAnd',
+			$preFilterConstraints,
 			'logicalAnd',
 			$this->createMock(ViewInterface::class),
 			$this->createMock(RequestInterface::class),
