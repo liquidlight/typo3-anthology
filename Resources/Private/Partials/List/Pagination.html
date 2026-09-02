@@ -2,16 +2,20 @@
 	xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
 	data-namespace-typo3-fluid="true"
 >
-	<ul class="pagination">
-		<f:for each="{pagination.allPageNumbers}" as="paginationPage">
-			<li class="page-item">
-				<f:link.action
-					arguments="{currentPage: paginationPage}"
-					class="page-link {f:if(condition:'{currentPage}=={paginationPage}', then:'active')}"
-				>
-					{paginationPage}
-				</f:link.action>
-			</li>
-		</f:for>
-	</ul>
+	<nav class="pagination" aria-label="{f:translate(key: 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang.xlf:pagination')}">
+		<ul>
+			<f:for each="{pagination.allPageNumbers}" as="paginationPage">
+				<li class="page-item">
+					<f:link.action
+						arguments="{currentPage: paginationPage}"
+						class="page-link {f:if(condition:'{currentPage}=={paginationPage}', then:'active')}"
+						aria-current="{f:if(condition:'{currentPage}=={paginationPage}', then:'page')}"
+						aria-label="{f:translate(key: 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang.xlf:page', arguments: '{0: paginationPage}')}"
+					>
+						{paginationPage}
+					</f:link.action>
+				</li>
+			</f:for>
+		</ul>
+	</nav>
 </html>
