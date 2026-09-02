@@ -12,12 +12,12 @@ use TYPO3\CMS\Extbase\Persistence\RepositoryInterface;
 class BeforeGetRecordsEvent
 {
 	public function __construct(
-		public RepositoryInterface &$repository,
-		public QueryInterface &$query,
+		public RepositoryInterface $repository,
+		public QueryInterface $query,
 		public array &$constraints,
 		public readonly string $constraintModeMethod,
-		public ViewInterface &$view,
-		public RequestInterface &$request,
+		public ViewInterface $view,
+		public RequestInterface $request,
 		public readonly array $settings
 	) {
 	}

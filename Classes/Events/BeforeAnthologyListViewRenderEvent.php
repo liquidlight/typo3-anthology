@@ -11,8 +11,8 @@ use TYPO3\CMS\Extbase\Mvc\RequestInterface;
 class BeforeAnthologyListViewRenderEvent implements BeforeAnthologyViewRenderEventInterface
 {
 	public function __construct(
-		public ViewInterface &$view,
-		public RequestInterface &$request
+		public ViewInterface $view,
+		public RequestInterface $request
 	) {
 	}
 }

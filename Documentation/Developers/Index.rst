@@ -17,3 +17,4 @@ This section contains comprehensive guides for using the Anthology extension, co
 	CustomFilters
 	LinkHandler
 	ExternalRepositories
+	Events
