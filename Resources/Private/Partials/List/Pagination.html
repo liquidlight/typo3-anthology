@@ -9,7 +9,7 @@
 					<f:link.action
 						arguments="{currentPage: paginationPage}"
 						class="page-link {f:if(condition:'{currentPage}=={paginationPage}', then:'active')}"
-						aria-current="{f:if(condition:'{currentPage}=={paginationPage}', then:'page')}"
+						aria-current="{f:if(condition:'{currentPage}=={paginationPage}', then:'page', else:'false')}"
 						aria-label="{f:translate(key: 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang.xlf:page', arguments: '{0: paginationPage}')}"
 					>
 						{paginationPage}
