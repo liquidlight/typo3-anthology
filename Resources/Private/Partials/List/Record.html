@@ -8,7 +8,7 @@
 		</f:link.action>
 
 		<f:if condition="{record.image}">
-			<f:image src="{record.image.uid}" treatIdAsReference="true" alt="" />
+			<f:image src="{record.image.uid}" treatIdAsReference="true" alt="{f:if(condition: record.image.alternative, then: record.image.alternative, else: record.title)}" />
 		</f:if>
 
 		<f:if condition="{record.categories}">
