@@ -38,6 +38,9 @@
         "php-parallel-lint/php-parallel-lint": "^1.4",
         "phpunit/phpunit": "^10.5"
     },
+    "conflict": {
+        "liquidlight/foundation": "<3.8.0"
+    },
     "autoload": {
         "psr-4": {
             "LiquidLight\\Anthology\\": "Classes/"
