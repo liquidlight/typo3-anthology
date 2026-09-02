@@ -12,6 +12,7 @@ use LiquidLight\Anthology\Factory\FilterFactory;
 use LiquidLight\Anthology\Factory\RepositoryFactory;
 use LiquidLight\Anthology\Provider\PageTitleProvider;
 use Psr\Http\Message\ResponseInterface;
+use ReflectionClass;
 use RuntimeException;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Http\ImmediateResponseException;
@@ -173,6 +174,7 @@ class AnthologyController extends ActionController
 			'environment' => $environment,
 			'configuration' => $this->request->getAttribute('site')->getConfiguration(),
 			'pageUid' => (string)$this->request->getAttribute('routing')?->getPageId(),
+			'modelName' => $this->getModelName(),
 		]);
 	}
 
@@ -186,25 +188,37 @@ class AnthologyController extends ActionController
 
 		$repositoryExtensionPath = ExtensionManagementUtility::extPath($repositoryPackageKey);
 
+		$modelName = $this->getModelName();
+
 		$renderingContext = $this->view->getRenderingContext();
 		$templatePaths = $renderingContext->getTemplatePaths();
 
+		// Get current paths
 		$layoutRootPaths = $templatePaths->getLayoutRootPaths();
 		$templateRootPaths = $templatePaths->getTemplateRootPaths();
 		$partialRootPaths = $templatePaths->getPartialRootPaths();
 
+		// Compile paths in current extension
 		$layoutRootPaths[] = $repositoryExtensionPath . 'Resources/Private/Layouts/';
 		$templateRootPaths[] = $repositoryExtensionPath . 'Resources/Private/Templates/';
 		$partialRootPaths[] = $repositoryExtensionPath . 'Resources/Private/Partials/';
 
+		// Compile global Anthology paths configured in Typoscript
 		$layoutRootPaths = array_merge($layoutRootPaths, $this->settings['view']['layoutRootPaths'] ?? []);
 		$templateRootPaths = array_merge($templateRootPaths, $this->settings['view']['templateRootPaths'] ?? []);
 		$partialRootPaths = array_merge($partialRootPaths, $this->settings['view']['partialRootPaths'] ?? []);
 
+		// Compile model specific paths configured in Typoscript
+		$layoutRootPaths = array_merge($layoutRootPaths, $this->settings['view']['layoutRootPaths'][strtolower($modelName)] ?? []);
+		$templateRootPaths = array_merge($templateRootPaths, $this->settings['view']['templateRootPaths'][strtolower($modelName)] ?? []);
+		$partialRootPaths = array_merge($partialRootPaths, $this->settings['view']['partialRootPaths'][strtolower($modelName)] ?? []);
+
+		// Set compiled paths
 		$templatePaths->setLayoutRootPaths($layoutRootPaths);
 		$templatePaths->setTemplateRootPaths($templateRootPaths);
 		$templatePaths->setPartialRootPaths($partialRootPaths);
 
+		// If the template has been set in the plugin settings, add it here
 		if (!empty($this->settings['template'])) {
 			$this->view->getRenderingContext()->setControllerAction($this->settings['template']);
 		}
@@ -221,6 +235,14 @@ class AnthologyController extends ActionController
 		}
 
 		return null;
+	}
+
+	protected function getModelName(): ?string
+	{
+		$modelClass = $this->repository->createQuery()->getType();
+		$modelReflection = new ReflectionClass($modelClass);
+
+		return $modelReflection?->getShortName();
 	}
 
 	protected function getPaginatedItems(): array
