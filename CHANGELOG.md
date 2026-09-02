@@ -39,7 +39,7 @@
 
 #### Feature
 
-- Add TYPO3 v13 compatibility (#30)
+- Add TYPO3 v14 compatibility (#30)
 - Abstract getting values from flexform in backend preview to dedicated view helper (#30)
 
 #### Fix
