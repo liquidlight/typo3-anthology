@@ -5,8 +5,8 @@ A TYPO3 extension that provides a generic content display system for listing and
 | | URL |
 |-|-----|
 | **Repository:** | https://github.com/liquidlight/typo3-anthology |
-| **Read online:** | https://docs.typo3.org/p/liquidlight/typo3-anthology/main/en-gb/ |
-| **TER:** | https://extensions.typo3.org/package/liquidlight/typo3-anthology |
+| **Read online:** | https://docs.typo3.org/p/liquidlight/typo3-anthology/main/en-us/ |
+| **TER:** | https://extensions.typo3.org/extension/ll_anthology |
 
 ## Preconfigured modules
 

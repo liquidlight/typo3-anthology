@@ -88,7 +88,7 @@ Add and Configure the Plugin
 
 	**General Tab**
 		- **Mode**: Choose :samp:`List` for the main view or :samp:`Single` for a detail page.
-		- **Model name**: Select your model (e.g., "My Extension Items"). This list is populated based on your TypoScript configuration.
+		- **Model name**: Select your model (e.g., "My Extension Items"). This list is populated based on repositories with the `AsAnthologyRepository` attribute, and their corresponding TCA's `title`.
 		- **Single View Page**: For a :samp:`List` plugin, link to the page where the :samp:`Single` view is located.
 
 	**Display Tab**
