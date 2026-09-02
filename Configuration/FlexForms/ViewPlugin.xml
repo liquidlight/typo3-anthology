@@ -68,6 +68,45 @@
 				</el>
 			</ROOT>
 		</sDEF>
+		<sSource>
+			<ROOT>
+				<sheetTitle>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_be.xlf:source</sheetTitle>
+				<type>array</type>
+				<el>
+					<settings.sortBy>
+						<label>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_be.xlf:source.sortBy</label>
+						<displayCond>FIELD:sDEF.settings.mode:=:list</displayCond>
+						<config>
+							<type>select</type>
+							<renderType>selectSingle</renderType>
+							<itemsProcFunc>LiquidLight\Anthology\Hook\PluginConfigurationHook->getSortFields</itemsProcFunc>
+						</config>
+					</settings.sortBy>
+					<settings.sortByDirection>
+						<label>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_be.xlf:source.sortByDirection</label>
+						<displayCond>FIELD:sDEF.settings.mode:=:list</displayCond>
+						<config>
+							<type>select</type>
+							<renderType>selectSingle</renderType>
+							<items>
+								<numIndex index="0">
+									<label>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_be.xlf:source.sortBy.default</label>
+									<value></value>
+								</numIndex>
+								<numIndex index="1">
+									<label>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_be.xlf:source.sortByDirection.ascending</label>
+									<value>ASC</value>
+								</numIndex>
+								<numIndex index="2">
+									<label>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_be.xlf:source.sortByDirection.descending</label>
+									<value>DESC</value>
+								</numIndex>
+							</items>
+						</config>
+					</settings.sortByDirection>
+				</el>
+			</ROOT>
+		</sSource>
 		<sDisplay>
 			<ROOT>
 				<sheetTitle>LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:appearance</sheetTitle>

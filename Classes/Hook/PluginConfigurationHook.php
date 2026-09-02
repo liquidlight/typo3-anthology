@@ -4,15 +4,10 @@ declare(strict_types=1);
 
 namespace LiquidLight\Anthology\Hook;
 
-use LiquidLight\Anthology\Factory\RepositoryFactory;
+use LiquidLight\Anthology\Hook\AbstractConfigurationHook;
 
-class PluginConfigurationHook
+class PluginConfigurationHook extends AbstractConfigurationHook
 {
-	public function __construct(
-		private RepositoryFactory $repositoryFactory
-	) {
-	}
-
 	public function getTcas(array &$params): void
 	{
 		$repositories = $this->repositoryFactory->getRepositories();
@@ -59,5 +54,18 @@ class PluginConfigurationHook
 			array_keys($tcaConfigurations),
 			$tcaConfigurations
 		);
+	}
+
+	public function getSortFields(array &$params): void
+	{
+		$this->getFields($params, [static::ALL_TYPES], $params['row']['uid']);
+
+		$params['items'] = [
+			[
+				'label' => 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang_be.xlf:source.sortBy.default',
+				'value' => null,
+			],
+			...$params['items'],
+		];
 	}
 }

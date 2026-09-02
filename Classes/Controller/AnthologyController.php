@@ -24,6 +24,7 @@ use TYPO3\CMS\Extbase\Http\ForwardResponse;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Pagination\QueryResultPaginator;
 use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
+use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\Repository;
 use TYPO3\CMS\Frontend\Controller\ErrorController;
 use TYPO3\CMS\Frontend\Page\PageAccessFailureReasons;
@@ -260,6 +261,12 @@ class AnthologyController extends ActionController
 		$filters = $this->getFilters(true);
 
 		$query = $repository->createQuery();
+
+		if (!empty($this->settings['sortBy'])) {
+			$query->setOrderings([
+				$this->settings['sortBy'] => !empty($this->settings['sortByDirection']) ? $this->settings['sortByDirection'] : QueryInterface::ORDER_ASCENDING,
+			]);
+		}
 
 		$constraints = $this->filterFactory->getConstraints(
 			$filters,
