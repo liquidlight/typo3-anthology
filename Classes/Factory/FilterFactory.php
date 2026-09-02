@@ -15,6 +15,8 @@ use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 class FilterFactory
 {
+	private array $filters = [];
+
 	public function __construct(
 		private readonly AnthologyFilterRegistry $filterRegistry
 	) {
@@ -29,9 +31,13 @@ class FilterFactory
 			);
 		}
 
+		if ($this->filters !== []) {
+			return $this->filters;
+		}
+
 		$filterClasses = $this->filterRegistry->get();
 
-		$filters = array_combine(
+		$this->filters = array_combine(
 			array_map(
 				function ($filterClass) {
 					$reflectionClass = new ReflectionClass($filterClass);
@@ -45,7 +51,7 @@ class FilterFactory
 			$filterClasses
 		);
 
-		return $filters;
+		return $this->filters;
 	}
 
 	public function getConstraints(
