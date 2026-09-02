@@ -1,3 +1,22 @@
+# 2.3.1
+
+**2nd September 2026**
+
+#### Fix
+
+- Remove passing objects to event listeners by reference
+
+#### Documentation
+
+- Add documentation for PSR-14 events
+- Update Models developer documentation
+- Update links in `README.md`
+- Update requirements in documentation
+
+#### Style
+
+- Lint PHP
+
 # 2.3.0
 
 **17th June 2026**
