@@ -1,3 +1,27 @@
+# 2.4.0
+
+**2nd September 2026**
+
+#### Feature
+
+- Add AnthologyModelTrait class
+- Add sorting to ContentRepository
+- Enable multiple categories on category filter (internally)
+- Add pre-filters to Anthology extension flexform options
+- Perform pre-filtering in list view
+- Allow a 'view all' link on non-comprehensive list views
+- Store discovered filter classes in FilterFactory for reuse
+- Add dynamic sorting options to Anthology plugin flexform
+- Implement custom sorting in `AnthologyController::getRecords()`
+
+#### Fix
+
+- Prevent DateFilter from throwing an exception when no parameter is supplied
+
+#### Refactor
+
+- Abstract shared configuration hook functionality into base abstract class
+
 # 2.3.1
 
 **2nd September 2026**
