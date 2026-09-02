@@ -4,25 +4,23 @@
 >
 	<div class="record">
 		<f:link.action pageUid="{singleView}" action="single" arguments="{record: record.uid}">
-
 			<h2>{record.title}</h2>
-
-			<f:if condition="{record.image}">
-				<f:image src="{record.image.uid}" treatIdAsReference="true" />
-			</f:if>
-
-			<f:if condition="{record.categories}">
-				<ul>
-					<f:for each="{record.categories}" as="category">
-						<li>{category.title}</li>
-					</f:for>
-				</ul>
-			</f:if>
-
-			<f:if condition="{record.abstract}">
-				<p>{record.abstract}</p>
-			</f:if>
-
 		</f:link.action>
+
+		<f:if condition="{record.image}">
+			<f:image src="{record.image.uid}" treatIdAsReference="true" alt="" />
+		</f:if>
+
+		<f:if condition="{record.categories}">
+			<ul>
+				<f:for each="{record.categories}" as="category">
+					<li>{category.title}</li>
+				</f:for>
+			</ul>
+		</f:if>
+
+		<f:if condition="{record.abstract}">
+			<p>{record.abstract}</p>
+		</f:if>
 	</div>
 </html>
