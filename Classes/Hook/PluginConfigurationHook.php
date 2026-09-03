@@ -58,7 +58,9 @@ class PluginConfigurationHook extends AbstractConfigurationHook
 
 	public function getSortFields(array &$params): void
 	{
-		$this->getFields($params, [static::ALL_TYPES], $params['row']['uid']);
+		$rowUid = ((int)$params['row']['uid'] ?: 0) ?: null;
+
+		$this->getFields($params, [static::ALL_TYPES], $rowUid);
 
 		$params['items'] = [
 			[
