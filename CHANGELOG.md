@@ -1,3 +1,11 @@
+# 3.0.1
+
+**3rd September 2026**
+
+#### Fix
+
+- Resolve exception in PluginConfigurationHook when row UID is unset
+
 # 3.0.0
 
 **3rd September 2026**
