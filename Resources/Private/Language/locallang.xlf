@@ -20,6 +20,13 @@
 				<source>Reset</source>
 			</trans-unit>
 
+			<trans-unit id="pagination">
+				<source>Pagination</source>
+			</trans-unit>
+			<trans-unit id="page">
+				<source>Page %d</source>
+			</trans-unit>
+
 			<trans-unit id="noResults">
 				<source><![CDATA[
 					<h2>Unfortunately your search did not return any results</h2>
