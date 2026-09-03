@@ -1,3 +1,19 @@
+# 3.0.0
+
+**3rd September 2026**
+
+#### Feature
+
+- [BREAKING] Update template resolution logic
+- Add model name to list view template and view properties
+- Remove LL specific page title TypoScript
+- Update middleware identifier
+- Replace icons
+
+#### Build
+
+- Ensure minimum `liquidlight/foundation` version is installed if required
+
 # 2.4.0
 
 **2nd September 2026**
