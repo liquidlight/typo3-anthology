@@ -83,12 +83,12 @@ trait AnthologyModelTrait
 
 	public function getTstamp(): DateTime
 	{
-		return $this->tStamp;
+		return $this->tstamp;
 	}
 
-	public function setTstamp(DateTime $tStamp): void
+	public function setTstamp(DateTime $tstamp): void
 	{
-		$this->tStamp = $tStamp;
+		$this->tstamp = $tstamp;
 	}
 
 	public function getAbstract(): ?string
