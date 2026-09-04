@@ -20,7 +20,7 @@ trait AnthologyModelTrait
 
 	protected ?DateTimeInterface $crdate = null;
 
-	protected ?DateTimeInterface $tStamp = null;
+	protected ?DateTimeInterface $tstamp = null;
 
 	protected ?string $abstract = null;
 
