@@ -81,12 +81,12 @@ trait AnthologyModelTrait
 		$this->crdate = $crdate;
 	}
 
-	public function getTstamp(): DateTime
+	public function getTstamp(): ?DateTime
 	{
 		return $this->tstamp;
 	}
 
-	public function setTstamp(DateTime $tstamp): void
+	public function setTstamp(?DateTime $tstamp): void
 	{
 		$this->tstamp = $tstamp;
 	}
