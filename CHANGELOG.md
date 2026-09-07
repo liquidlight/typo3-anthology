@@ -1,5 +1,13 @@
 # 3.0.1
 
+**7th September 2026**
+
+#### Fix
+
+- Correct property name on AnthologyModelTrait from tStamp to tstramp (#63)
+
+# 3.0.1
+
 **3rd September 2026**
 
 #### Fix
