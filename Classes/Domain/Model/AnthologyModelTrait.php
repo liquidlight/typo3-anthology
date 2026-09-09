@@ -116,7 +116,7 @@ trait AnthologyModelTrait
 		return $this->link;
 	}
 
-	public function setLink(?string $link): void
+	public function setLink(string $link): void
 	{
 		$this->link = $link;
 	}
