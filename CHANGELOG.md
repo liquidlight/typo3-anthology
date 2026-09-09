@@ -1,3 +1,13 @@
+# 2.4.1
+
+**9th September 2026**
+
+#### Fix
+
+- Resolve exception in PluginConfigurationHook when row UID is unset
+- Correct property name on AnthologyModelTrait from tStamp to tstamp (#63)
+- Allow nullable `$tstamp` in `AnthologyModelTrait`
+
 # 2.4.0
 
 **2nd September 2026**
