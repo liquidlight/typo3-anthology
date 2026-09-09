@@ -1,4 +1,14 @@
-# 3.0.1
+# 3.0.3
+
+**9th September 2026**
+
+#### Fix
+
+- Allow nullable `$tstamp` in `AnthologyModelTrait`
+- Set nullable return types on trait getters
+- Do not allow setting link property to be null in trait setter
+
+# 3.0.2
 
 **7th September 2026**
 
