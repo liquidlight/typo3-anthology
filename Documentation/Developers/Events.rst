@@ -40,6 +40,7 @@ This event is the first to be dispatched by the list view, and is the most power
 Arguments
 ^^^^^^^^^
 
+- `array $settings`
 - `ViewInterface $view`
 - `RequestInterface $request`
 
@@ -53,6 +54,7 @@ Arguments
 ^^^^^^^^^
 
 - `AbstractEntity $record`
+- `array $settings`
 - `ViewInterface $view`
 - `RequestInterface $request`
 

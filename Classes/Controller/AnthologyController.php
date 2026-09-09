@@ -88,6 +88,7 @@ class AnthologyController extends ActionController
 
 		$this->eventDispatcher->dispatch(
 			new BeforeAnthologyListViewRenderEvent(
+				$this->settings,
 				$this->view,
 				$this->request
 			)
@@ -139,6 +140,7 @@ class AnthologyController extends ActionController
 		$this->eventDispatcher->dispatch(
 			new BeforeAnthologySingleViewRenderEvent(
 				$record,
+				$this->settings,
 				$this->view,
 				$this->request
 			)

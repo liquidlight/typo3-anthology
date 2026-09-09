@@ -13,6 +13,7 @@ class BeforeAnthologySingleViewRenderEvent implements BeforeAnthologyViewRenderE
 {
 	public function __construct(
 		public AbstractEntity $record,
+		public readonly array $settings,
 		public ViewInterface $view,
 		public RequestInterface $request
 	) {
