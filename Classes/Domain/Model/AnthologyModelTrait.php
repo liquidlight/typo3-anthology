@@ -71,7 +71,7 @@ trait AnthologyModelTrait
 		$this->slug = $slug;
 	}
 
-	public function getCrdate(): DateTime
+	public function getCrdate(): ?DateTime
 	{
 		return $this->crdate;
 	}
@@ -116,7 +116,7 @@ trait AnthologyModelTrait
 		return $this->link;
 	}
 
-	public function setLink(?string $link): void
+	public function setLink(string $link): void
 	{
 		$this->link = $link;
 	}
@@ -157,7 +157,7 @@ trait AnthologyModelTrait
 		$this->relatedPages = $relatedPages;
 	}
 
-	public function getFiles(): ObjectStorage
+	public function getFiles(): ?ObjectStorage
 	{
 		return $this->files;
 	}
@@ -187,7 +187,7 @@ trait AnthologyModelTrait
 		$this->seoDescription = $seoDescription;
 	}
 
-	public function getCategories(): ObjectStorage
+	public function getCategories(): ?ObjectStorage
 	{
 		return $this->categories;
 	}
