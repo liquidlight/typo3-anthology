@@ -1,3 +1,11 @@
+# 3.1.0
+
+**9th September 2026**
+
+#### Feature
+
+- Add plugin settings to events implementing `BeforeAnthologyViewRenderEventInterface`
+
 # 3.0.3
 
 **9th September 2026**
