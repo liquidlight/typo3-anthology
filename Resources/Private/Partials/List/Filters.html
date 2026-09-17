@@ -1,18 +1,14 @@
-<html
-	xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-	data-namespace-typo3-fluid="true"
->
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
 	<f:form class="anthology-filters" action="list" method="get" arguments="{currentPage: 1}" addQueryString="false">
 		<f:for each="{filters}" as="filter">
-			<div class="filter">
-				<f:variable name="filterPartial">{filter.filterType -> f:format.case(mode: 'capital')}</f:variable>
-				<f:render partial="Filter/{filterPartial}" arguments="{filter: filter, configuration: configuration}" />
+			<div class="filter {filter.filterType -> f:replace(search: 'llanthology_', replace: 'filterType-')} filterDisplay-{filter.parsedSettings.displayMode}">
+				<f:render partial="Filter/{filter.filterType -> f:format.case(mode: 'capital')}" arguments="{filter: filter, configuration: configuration}" />
 			</div>
 		</f:for>
 
-		<f:form.button type="submit">{f:translate(key: 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang.xlf:filterResults')}</f:form.button>
-
-		<f:link.page class="reset button">{f:translate(key: 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang.xlf:resetFilter')}</f:link.page>
-
+		<div class="actions">
+			<f:form.button type="submit">{f:translate(key: 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang.xlf:filterResults')}</f:form.button>
+			<f:link.page class="reset button">{f:translate(key: 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang.xlf:resetFilter')}</f:link.page>
+		</div>
 	</f:form>
 </html>
