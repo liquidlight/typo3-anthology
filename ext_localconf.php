@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use LiquidLight\Anthology\Controller\AnthologyController;
 use LiquidLight\Anthology\Form\Container\FlexFormElementContainer;
+use LiquidLight\Anthology\Form\Container\InlineControlContainer;
 use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
 defined('TYPO3') or die();
@@ -25,5 +26,11 @@ call_user_func(function () {
 		'nodeName' => 'flexFormElementContainer',
 		'priority' => 40,
 		'class' => FlexFormElementContainer::class,
+	];
+
+	$GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1787755842] = [
+		'nodeName' => 'inline',
+		'priority' => 40,
+		'class' => InlineControlContainer::class,
 	];
 });
