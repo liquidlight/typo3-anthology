@@ -11,7 +11,6 @@ use ReflectionClass;
 use RuntimeException;
 use TYPO3\CMS\Extbase\Persistence\Generic\Exception\NotImplementedException;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
-use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 class FilterFactory
 {
@@ -55,7 +54,7 @@ class FilterFactory
 	}
 
 	public function getConstraints(
-		QueryResultInterface $filters,
+		iterable $filters,
 		QueryInterface $query
 	): array {
 		$filterImplementations = $this->getFilters();

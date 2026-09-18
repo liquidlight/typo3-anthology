@@ -374,7 +374,7 @@ class AnthologyController extends ActionController
 		return $this->repository;
 	}
 
-	protected function getFilters(bool $ignoreUnsetFilters = false): QueryResult
+	protected function getFilters(bool $ignoreUnsetFilters = false): array
 	{
 		$filterQuerySettings = $this->filterRepository->createQuery()->getQuerySettings();
 		$filterQuerySettings->setRespectStoragePage(false);
@@ -382,11 +382,13 @@ class AnthologyController extends ActionController
 
 		$activeFilters = $this->getActiveFilters();
 		$filterUids = GeneralUtility::intExplode(',', $this->settings['filters'], true);
+		$requestedUids = $ignoreUnsetFilters
+			? array_intersect($filterUids, array_keys($activeFilters ?? []))
+			: $filterUids;
 
-		$filters = $this->filterRepository->findByUids(
-			$ignoreUnsetFilters
-				? array_intersect($filterUids, array_keys($activeFilters ?? []))
-				: $filterUids
+		$filters = $this->orderFiltersByUids(
+			$this->filterRepository->findByUids($requestedUids),
+			$requestedUids
 		);
 
 		$this->settings['recordStorageUids'] = $filterQuerySettings->getStoragePageIds();
@@ -401,7 +403,7 @@ class AnthologyController extends ActionController
 		return $filters;
 	}
 
-	protected function getPreFilters(): QueryResult
+	protected function getPreFilters(): array
 	{
 		$filterQuerySettings = $this->filterRepository->createQuery()->getQuerySettings();
 		$filterQuerySettings->setRespectStoragePage(false);
@@ -409,13 +411,33 @@ class AnthologyController extends ActionController
 
 		$filterUids = GeneralUtility::intExplode(',', $this->settings['preFilters'] ?? '', true);
 
-		$filters = $this->filterRepository->findByUids($filterUids);
+		$filters = $this->orderFiltersByUids(
+			$this->filterRepository->findByUids($filterUids),
+			$filterUids
+		);
 
 		foreach ($filters as $filter) {
 			$filter->setParameter($filter->getParsedSettings()['preFilterValue'] ?? null);
 		}
 
 		return $filters;
+	}
+
+	protected function orderFiltersByUids(iterable $filters, array $uids): array
+	{
+		$filtersByUid = [];
+		foreach ($filters as $filter) {
+			$filtersByUid[$filter->getUid()] = $filter;
+		}
+
+		$orderedFilters = [];
+		foreach ($uids as $uid) {
+			if (isset($filtersByUid[$uid])) {
+				$orderedFilters[] = $filtersByUid[$uid];
+			}
+		}
+
+		return $orderedFilters;
 	}
 
 	protected function getActiveFilters(): ?array
