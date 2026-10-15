@@ -10,7 +10,8 @@ use Attribute;
 class AsAnthologyRepository
 {
 	public function __construct(
-		public readonly string $tableName
+		public readonly string $tableName,
+		public readonly ?string $displayName = null
 	) {
 	}
 }
