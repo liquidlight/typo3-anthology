@@ -21,6 +21,89 @@ use TYPO3\CMS\Core\Service\FlexFormService;
  */
 class PluginConfigurationHookTest extends TestCase
 {
+	protected function tearDown(): void
+	{
+		unset(
+			$GLOBALS['TCA']['tx_test_one'],
+			$GLOBALS['TCA']['tx_test_two']
+		);
+
+		parent::tearDown();
+	}
+
+	/**
+	 * @covers \LiquidLight\Anthology\Hook\PluginConfigurationHook::getRepositories
+	 */
+	public function testGetRepositoriesBuildsItemsFromTcaAndDisplayName(): void
+	{
+		$GLOBALS['TCA']['tx_test_one']['ctrl'] = ['title' => 'One title', 'iconfile' => 'one.svg'];
+		$GLOBALS['TCA']['tx_test_two']['ctrl'] = ['title' => 'Two title'];
+
+		$subject = $this->createSubject(
+			$recordedCalls,
+			['Repo\\One' => 'tx_test_one', 'Repo\\Two' => 'tx_test_two'],
+			['Repo\\One' => 'Custom name']
+		);
+
+		$params = [];
+		$subject->getRepositories($params);
+
+		self::assertSame(
+			[
+				['value' => 'Repo\\One', 'label' => 'Custom name', 'icon' => 'one.svg'],
+				['value' => 'Repo\\Two', 'label' => 'Two title', 'icon' => ''],
+			],
+			$params['items']
+		);
+	}
+
+	/**
+	 * @covers \LiquidLight\Anthology\Hook\PluginConfigurationHook::getRepositories
+	 */
+	public function testGetRepositoriesSkipsRepositoriesWithoutTca(): void
+	{
+		$GLOBALS['TCA']['tx_test_one']['ctrl'] = ['title' => 'One title'];
+
+		$subject = $this->createSubject(
+			$recordedCalls,
+			['Repo\\One' => 'tx_test_one', 'Repo\\Missing' => 'tx_test_missing'],
+			['Repo\\Missing' => 'Has a name but no TCA']
+		);
+
+		$params = [];
+		$subject->getRepositories($params);
+
+		self::assertSame(
+			[['value' => 'Repo\\One', 'label' => 'One title', 'icon' => '']],
+			$params['items']
+		);
+	}
+
+	/**
+	 * @covers \LiquidLight\Anthology\Hook\PluginConfigurationHook::getRepositories
+	 */
+	public function testGetRepositoriesListsRepositoriesSharingATable(): void
+	{
+		$GLOBALS['TCA']['tx_test_one']['ctrl'] = ['title' => 'Shared title'];
+
+		$subject = $this->createSubject(
+			$recordedCalls,
+			['Repo\\A' => 'tx_test_one', 'Repo\\B' => 'tx_test_one'],
+			['Repo\\B' => 'Second']
+		);
+
+		$params = [];
+		$subject->getRepositories($params);
+
+		self::assertSame(
+			[
+				['value' => 'Repo\\A', 'label' => 'Shared title', 'icon' => ''],
+				['value' => 'Repo\\B', 'label' => 'Second', 'icon' => ''],
+			],
+			$params['items']
+		);
+	}
+
 	/**
 	 * @covers \LiquidLight\Anthology\Hook\PluginConfigurationHook::getSortFields
 	 */
@@ -85,11 +168,22 @@ class PluginConfigurationHookTest extends TestCase
 		);
 	}
 
-	private function createSubject(array &$recordedCalls): PluginConfigurationHook
-	{
+	private function createSubject(
+		?array &$recordedCalls,
+		array $repositories = [],
+		array $labels = []
+	): PluginConfigurationHook {
+		$recordedCalls ??= [];
+
+		$repositoryFactory = $this->createMock(RepositoryFactory::class);
+		$repositoryFactory->method('getRepositories')->willReturn($repositories);
+		$repositoryFactory->method('getRepositoryLabel')->willReturnCallback(
+			static fn (string $repository): ?string => $labels[$repository] ?? null
+		);
+
 		return new class (
 			$this->createMock(FilterFactory::class),
-			$this->createMock(RepositoryFactory::class),
+			$repositoryFactory,
 			$this->createFlexFormService(),
 			$this->createMock(ConnectionPool::class),
 			$recordedCalls

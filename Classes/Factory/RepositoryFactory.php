@@ -29,15 +29,13 @@ class RepositoryFactory
 
 		$repositoryClasses = $this->repositoryRegistry->get();
 
-		$repositories = array_combine(
+		return array_combine(
+			$repositoryClasses,
 			array_map(
 				$this->getTcaName(...),
 				$repositoryClasses
 			),
-			$repositoryClasses
 		);
-
-		return $repositories;
 	}
 
 	public function getRepository(string $repositoryClass): Repository
@@ -61,14 +59,36 @@ class RepositoryFactory
 
 	public function getTcaName(string|Repository $repository): ?string
 	{
+		return $this->getRepositoryProperty(
+			repository: $repository,
+			propertyName: 'tableName'
+		);
+	}
+
+	public function getRepositoryLabel(string|Repository $repository): ?string
+	{
+		return $this->getRepositoryProperty(
+			repository: $repository,
+			propertyName: 'displayName'
+		);
+	}
+
+	private function getRepositoryProperty(
+		string|Repository $repository,
+		string $propertyName
+	): ?string {
 		$repositoryReflection = new ReflectionClass($repository);
 		$repositoryAttributes = $repositoryReflection->getAttributes(
 			AsAnthologyRepository::class
 		);
 
+		if (count($repositoryAttributes) === 0) {
+			return null;
+		}
+
 		return $repositoryAttributes[array_key_first($repositoryAttributes)]
-			?->newInstance()
-			?->tableName
+			->newInstance()
+			?->{$propertyName} ?? null
 		;
 	}
 }
