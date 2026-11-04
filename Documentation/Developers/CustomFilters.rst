@@ -174,7 +174,11 @@ Configuring the Filter
 Register the FlexForm
 ---------------------
 
-To provide customisable options for your filter, you need to create a FlexForm. This is done in the TCA for the filter record. If no further configuration options are required, this is not necessary.
+To provide customisable options for your filter, you need to register its FlexForm in the TCA for the filter record. If no further configuration options are required, this is not necessary.
+
+The way a FlexForm is registered changed in TYPO3 v14. The pointer field functionality of :php:`flex` TCA fields was removed (see the TYPO3 changelog entry *Breaking-107047*), so the :php:`ds` value can no longer be an array keyed by :php:`filter_type` and must be a single file reference instead. Register your FlexForm per filter type as shown below.
+
+**TYPO3 v14 and above** — add a :php:`types` entry keyed by your filter identifier whose :php:`columnsOverrides` point the :php:`settings` field at your FlexForm:
 
 **Configuration/TCA/Overrides/tx_anthology_domain_model_filter.php**
 
@@ -183,7 +187,25 @@ To provide customisable options for your filter, you need to create a FlexForm. 
 	<?php
 
 	// Add this to your extension's TCA override file
-	$GLOBALS['TCA']['tx_anthology_domain_model_filter']['columns']['settings']['config']['ds']['tag'] =
+	$GLOBALS['TCA']['tx_anthology_domain_model_filter']['types']['myextension_tag'] = [
+		'showitem' => $GLOBALS['TCA']['tx_anthology_domain_model_filter']['types'][0]['showitem'],
+		'columnsOverrides' => [
+			'settings' => [
+				'config' => [
+					'ds' => 'FILE:EXT:my_extension/Configuration/FlexForms/Filter/Tag.xml',
+				],
+			],
+		],
+	];
+
+**TYPO3 v13 and below** — add the FlexForm to the :php:`ds` array under your filter identifier:
+
+.. code-block:: php
+
+	<?php
+
+	// Add this to your extension's TCA override file
+	$GLOBALS['TCA']['tx_anthology_domain_model_filter']['columns']['settings']['config']['ds']['myextension_tag'] =
 		'FILE:EXT:my_extension/Configuration/FlexForms/Filter/Tag.xml';
 
 Register the Template
