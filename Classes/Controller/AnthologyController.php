@@ -15,7 +15,9 @@ use Psr\Http\Message\ResponseInterface;
 use ReflectionClass;
 use RuntimeException;
 use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Http\ImmediateResponseException;
+use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\CMS\Core\Pagination\SlidingWindowPagination;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
@@ -28,6 +30,7 @@ use TYPO3\CMS\Extbase\Persistence\Generic\Qom\ConstraintInterface;
 use TYPO3\CMS\Extbase\Persistence\Generic\QueryResult;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\Repository;
+use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 use TYPO3\CMS\Frontend\Controller\ErrorController;
 use TYPO3\CMS\Frontend\Page\PageAccessFailureReasons;
 
@@ -93,6 +96,33 @@ class AnthologyController extends ActionController
 				$this->request
 			)
 		);
+
+		$outputFormat = $this->request->hasArgument('output')
+			? $this->request->getArgument('output')
+			: null;
+
+		switch ($outputFormat) {
+			case 'html':
+				throw new ImmediateResponseException(
+					new HtmlResponse(
+						$this->view->render()
+					)
+				);
+
+				break;
+
+			case 'json':
+				throw new ImmediateResponseException(
+					new JsonResponse(
+						array_map(
+							ObjectAccess::getGettableProperties(...),
+							$this->getPaginatedItems()['paginator']?->getPaginatedItems()->toArray()
+						)
+					)
+				);
+
+				break;
+		}
 
 		return $this->htmlResponse();
 	}
