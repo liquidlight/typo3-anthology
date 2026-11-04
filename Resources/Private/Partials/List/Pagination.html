@@ -6,14 +6,28 @@
 		<ul>
 			<f:for each="{pagination.allPageNumbers}" as="paginationPage">
 				<li class="page-item">
-					<f:link.action
-						arguments="{currentPage: paginationPage}"
-						class="page-link {f:if(condition:'{currentPage}=={paginationPage}', then:'active')}"
-						aria-current="{f:if(condition:'{currentPage}=={paginationPage}', then:'page', else:'false')}"
-						aria-label="{f:translate(key: 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang.xlf:page', arguments: '{0: paginationPage}')}"
-					>
-						{paginationPage}
-					</f:link.action>
+					<f:if condition="{paginationPage} > 1">
+						<f:then>
+							<f:link.action
+								arguments="{currentPage: paginationPage}"
+								class="page-link {f:if(condition:'{currentPage}=={paginationPage}', then:'active')}"
+								aria-current="{f:if(condition:'{currentPage}=={paginationPage}', then:'page', else:'false')}"
+								aria-label="{f:translate(key: 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang.xlf:page', arguments: '{0: paginationPage}')}"
+							>
+								{paginationPage}
+							</f:link.action>
+						</f:then>
+						<f:else>
+							<f:comment>The first page is the default, so it links to the plain list URL</f:comment>
+							<f:link.action
+								class="page-link {f:if(condition:'{currentPage}=={paginationPage}', then:'active')}"
+								aria-current="{f:if(condition:'{currentPage}=={paginationPage}', then:'page', else:'false')}"
+								aria-label="{f:translate(key: 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang.xlf:page', arguments: '{0: paginationPage}')}"
+							>
+								{paginationPage}
+							</f:link.action>
+						</f:else>
+					</f:if>
 				</li>
 			</f:for>
 		</ul>

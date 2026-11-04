@@ -249,8 +249,9 @@ class AnthologyController extends ActionController
 
 	protected function getPaginatedItems(): array
 	{
+		// Pages are 1-based; anything lower (0, negative, non-numeric) is the first page
 		$currentPage = $this->request->hasArgument('currentPage')
-			? (int)$this->request->getArgument('currentPage')
+			? max(1, (int)$this->request->getArgument('currentPage'))
 			: 1;
 
 		$records = $this->getRecords();

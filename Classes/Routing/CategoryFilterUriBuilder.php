@@ -31,7 +31,6 @@ class CategoryFilterUriBuilder extends UriBuilder
 			->setTargetPageUid($pageUid)
 			->setArguments([
 				$pluginNamespace => [
-					'page' => 0,
 					'filter' => [
 						(int)$categoryFilter->getUid() => (int)$category->getUid(),
 					],
