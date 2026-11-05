@@ -17,8 +17,10 @@ use TYPO3\CMS\Extbase\Service\ExtensionService;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
 
-final class CategoryLinkViewHelper extends AbstractTagBasedViewHelper
+class CategoryLinkViewHelper extends AbstractTagBasedViewHelper
 {
+	protected const ACTIVE_CLASS = 'active';
+
 	protected $tagName = 'a';
 
 	public function __construct(
@@ -82,6 +84,7 @@ final class CategoryLinkViewHelper extends AbstractTagBasedViewHelper
 		}
 
 		$this->tag->addAttribute('href', $filterUrl);
+		$this->setActiveState($categoryFilter, $category);
 		$this->tag->setContent((string)$this->renderChildren());
 
 		return $this->tag->render();
@@ -142,5 +145,19 @@ final class CategoryLinkViewHelper extends AbstractTagBasedViewHelper
 		return $request instanceof RequestInterface
 			? $request
 			: new Request($request);
+	}
+
+	private function setActiveState(
+		Filter $categoryFilter,
+		Category $category
+	): void {
+		$arguments = $this->getExtbaseRequest()?->getAttribute('extbase')?->getArguments() ?? [];
+
+		if ((int)($arguments['filter'][$categoryFilter->getUid()] ?? 0) !== $category->getUid()) {
+			return;
+		}
+
+		$classes = ($this->tag->getAttribute('class') ?? '') . ' ' . static::ACTIVE_CLASS;
+		$this->tag->addAttribute('class', trim($classes));
 	}
 }
