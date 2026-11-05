@@ -10,6 +10,8 @@ use LiquidLight\Anthology\Events\BeforeAnthologySingleViewRenderEvent;
 use LiquidLight\Anthology\Events\BeforeGetRecordsEvent;
 use LiquidLight\Anthology\Factory\FilterFactory;
 use LiquidLight\Anthology\Factory\RepositoryFactory;
+use LiquidLight\Anthology\Pagination\PaginationOwnerRegistry;
+use LiquidLight\Anthology\Pagination\PaginationState;
 use LiquidLight\Anthology\Provider\PageTitleProvider;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionClass;
@@ -52,7 +54,8 @@ class AnthologyController extends ActionController
 		protected FilterFactory $filterFactory,
 		protected FilterRepository $filterRepository,
 		protected PageTitleProvider $pageTitleProvider,
-		protected PackageManager $packageManager
+		protected PackageManager $packageManager,
+		protected PaginationOwnerRegistry $paginationOwnerRegistry
 	) {
 	}
 
@@ -249,15 +252,27 @@ class AnthologyController extends ActionController
 
 	protected function getPaginatedItems(): array
 	{
-		$currentPage = $this->request->hasArgument('currentPage')
-			? (int)$this->request->getArgument('currentPage')
-			: 1;
+		$contentUid = $this->getContentUid();
+
+		// Only the first paginated plugin on the page uses `currentPage` (`/page-X`), the rest use `pages[<uid>]`
+		$isOwner = !empty($this->settings['enablePagination'])
+			&& $this->paginationOwnerRegistry->claim($contentUid);
+
+		// Pages are 1-based; anything lower (0, negative, non-numeric) is the first page
+		$state = PaginationState::fromArguments(
+			$this->request->hasArgument(PaginationState::OWNER_ARGUMENT)
+				? $this->request->getArgument(PaginationState::OWNER_ARGUMENT)
+				: null,
+			$this->request->hasArgument(PaginationState::OTHERS_ARGUMENT)
+				? $this->request->getArgument(PaginationState::OTHERS_ARGUMENT)
+				: null,
+		);
 
 		$records = $this->getRecords();
 
 		$paginator = new QueryResultPaginator(
 			$records,
-			$currentPage,
+			$state->getPage($contentUid, $isOwner),
 			(int)(
 				$this->settings['itemsPerPage'] ?? false
 				? $this->settings['itemsPerPage']
@@ -268,17 +283,23 @@ class AnthologyController extends ActionController
 		$pagination = new SlidingWindowPagination(
 			$paginator,
 			(int)(
-				$this->settings['maximumLinks'] ?? false
-				? $this->settings['maximumLinks']
+				$this->settings['maximumPaginationLinks'] ?? false
+				? $this->settings['maximumPaginationLinks']
 				: static::DEFAULT_MAXIMUM_LINKS
 			)
 		);
 
 		return [
-			'currentPage' => $currentPage,
+			// The paginator clamps pages beyond the last one
+			'currentPage' => $paginator->getCurrentPageNumber(),
 			'pagination' => $pagination,
 			'paginator' => $paginator,
 		];
+	}
+
+	protected function getContentUid(): int
+	{
+		return (int)($this->request->getAttribute('currentContentObject')?->data['uid'] ?? 0);
 	}
 
 	protected function getRecords(): QueryResult
