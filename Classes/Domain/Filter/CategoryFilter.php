@@ -13,7 +13,7 @@ use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Persistence\Generic\Qom\ComparisonInterface;
+use TYPO3\CMS\Extbase\Persistence\Generic\Qom\ConstraintInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 
 #[AsAnthologyFilter('llanthology_category')]
@@ -75,7 +75,7 @@ class CategoryFilter extends AbstractFilter implements FilterInterface
 	public static function getConstraint(
 		Filter $filter,
 		QueryInterface $query
-	): ?ComparisonInterface {
+	): ?ConstraintInterface {
 		if (empty($filter->getParameter()) || !is_scalar($filter->getParameter())) {
 			return null;
 		}

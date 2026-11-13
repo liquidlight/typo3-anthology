@@ -43,7 +43,7 @@ Pre-filters
 Pre-filters permanently restrict a list view to matching records, independently of any filters the user selects, they are configured on the plugin's "Source" tab in the same way as regular filters. Pre-filters always apply, regardless of the plugin's filter mode.
 
 .. note::
-	Only Keyword search and Category filters can currently be used as pre-filters; Date filters aren't yet supported for pre-filtering.
+	Only Keyword search, Category and Inverse category filters can currently be used as pre-filters; Date filters aren't yet supported for pre-filtering.
 
 .. note::
 	A filter's pre-filter value is only shown while editing it from within the plugin's "Source" tab. If the same filter record is opened directly (for example from the page's record list), that value won't be shown or saved. Always edit pre-filters from within the plugin they're configured on.
@@ -75,6 +75,11 @@ Category filters allow users to filter records based upon the records' selected 
 	   :alt: Configure category filter
 
    Configuring Anthology's category filter
+
+Inverse category
+----------------
+
+Inverse category filters work like Category filters, but in reverse: records in the selected category are *excluded* from the results. A record is excluded if it has the selected category, even if it also has other categories. It is configured in the same way as a Category filter, and is most useful as a pre-filter to hide a set of records from a list.
 
 Date
 ----
