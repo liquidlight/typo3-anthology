@@ -194,6 +194,33 @@
 							<type>input</type>
 						</config>
 					</settings.template>
+					<settings.allowJsonOutput>
+						<label>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_be.xlf:allowJsonOutput</label>
+						<displayCond>FIELD:sDEF.settings.mode:=:list</displayCond>
+						<onChange>reload</onChange>
+						<exclude>true</exclude>
+						<config>
+							<type>check</type>
+							<renderType>checkboxToggle</renderType>
+							<default>0</default>
+						</config>
+					</settings.allowJsonOutput>
+					<settings.allowJsonOutputFields>
+						<label>LLL:EXT:ll_anthology/Resources/Private/Language/locallang_be.xlf:allowJsonOutputFields</label>
+						<displayCond>
+							<and>
+								<value1>FIELD:sDisplay.settings.allowJsonOutput:=:1</value1>
+								<value2>FIELD:sDEF.settings.mode:=:list</value2>
+							</and>
+						</displayCond>
+						<exclude>true</exclude>
+						<config>
+							<type>select</type>
+							<renderType>selectMultipleSideBySide</renderType>
+							<itemsProcFunc>LiquidLight\Anthology\Hook\PluginConfigurationHook->getEntityFields</itemsProcFunc>
+							<minitems>1</minitems>
+						</config>
+					</settings.allowJsonOutputFields>
 				</el>
 			</ROOT>
 		</sDisplay>
