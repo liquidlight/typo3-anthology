@@ -268,8 +268,8 @@ class AnthologyController extends ActionController
 		$pagination = new SlidingWindowPagination(
 			$paginator,
 			(int)(
-				$this->settings['maximumLinks'] ?? false
-				? $this->settings['maximumLinks']
+				$this->settings['maximumPaginationLinks'] ?? false
+				? $this->settings['maximumPaginationLinks']
 				: static::DEFAULT_MAXIMUM_LINKS
 			)
 		);
