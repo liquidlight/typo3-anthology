@@ -18,6 +18,9 @@
 			<trans-unit id="tx_anthology_domain_model_filter.filter_type.category">
 				<source>Category</source>
 			</trans-unit>
+			<trans-unit id="tx_anthology_domain_model_filter.filter_type.inverse_category">
+				<source>Inverse category</source>
+			</trans-unit>
 			<trans-unit id="tx_anthology_domain_model_filter.filter_type.date">
 				<source>Date</source>
 			</trans-unit>

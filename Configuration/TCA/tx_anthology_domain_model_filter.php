@@ -26,6 +26,7 @@ $settingsDs = [
 	'default' => 'FILE:EXT:ll_anthology/Configuration/FlexForms/Filter/Default.xml',
 	'llanthology_search' => 'FILE:EXT:ll_anthology/Configuration/FlexForms/Filter/Search.xml',
 	'llanthology_category' => 'FILE:EXT:ll_anthology/Configuration/FlexForms/Filter/Category.xml',
+	'llanthology_inversecategory' => 'FILE:EXT:ll_anthology/Configuration/FlexForms/Filter/Category.xml',
 	'llanthology_date' => 'FILE:EXT:ll_anthology/Configuration/FlexForms/Filter/Date.xml',
 ];
 
@@ -187,6 +188,19 @@ return [
 					'config' => [
 						'ds' => $typo3Version >= 14
 							? $settingsDs['llanthology_category']
+							: $settingsDs
+						,
+					],
+				],
+			],
+		],
+		'llanthology_inversecategory' => [
+			'showitem' => $showItem,
+			'columnsOverrides' => [
+				'settings' => [
+					'config' => [
+						'ds' => $typo3Version >= 14
+							? $settingsDs['llanthology_inversecategory']
 							: $settingsDs
 						,
 					],
