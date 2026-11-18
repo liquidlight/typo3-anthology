@@ -1,13 +1,15 @@
 <html
 	xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+	xmlns:a="http://typo3.org/ns/LiquidLight/Anthology/ViewHelpers"
 	data-namespace-typo3-fluid="true"
 >
 	<nav class="pagination" aria-label="{f:translate(key: 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang.xlf:pagination')}">
 		<ul>
 			<f:for each="{pagination.allPageNumbers}" as="paginationPage">
 				<li class="page-item">
+					<f:comment>The arguments omit page 1, so it links to the plain list URL, and keep the pages of any other plugins on the page</f:comment>
 					<f:link.action
-						arguments="{currentPage: paginationPage}"
+						arguments="{a:paginationArguments(page: paginationPage)}"
 						class="page-link {f:if(condition:'{currentPage}=={paginationPage}', then:'active')}"
 						aria-current="{f:if(condition:'{currentPage}=={paginationPage}', then:'page', else:'false')}"
 						aria-label="{f:translate(key: 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang.xlf:page', arguments: '{0: paginationPage}')}"

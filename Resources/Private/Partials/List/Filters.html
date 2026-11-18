@@ -1,5 +1,5 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
-	<f:form class="anthology-filters" action="list" method="get" arguments="{currentPage: 1}" addQueryString="false">
+	<f:form class="anthology-filters" action="list" method="get" addQueryString="false">
 		<f:for each="{filters}" as="filter">
 			<div class="filter {filter.filterType -> f:replace(search: 'llanthology_', replace: 'filterType-')} filterDisplay-{filter.parsedSettings.displayMode}">
 				<f:render partial="Filter/{filter.filterType -> f:format.case(mode: 'capital')}" arguments="{filter: filter, configuration: configuration}" />

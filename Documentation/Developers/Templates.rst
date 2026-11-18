@@ -79,7 +79,7 @@ Inside the templates, you have access to several variables:
    A paginator object that contains the records for the current page (:samp:`paginator.paginatedItems`).
 
 **pagination**
-   The pagination object for building the page links.
+   The pagination object for building the page links. When building links, use :html:`arguments="{a:paginationArguments(page: pageNumber)}"` (namespace :samp:`LiquidLight\\Anthology\\ViewHelpers`) so that several plugins on one page paginate independently and the active filters are kept when changing page. A custom :file:`List/Pagination.html` that links with :html:`arguments="{currentPage: pageNumber}"` keeps working for the first paginated plugin on a page, but links for any further plugins would change the first plugin's page, and none of its links keep the active filters.
 
 **filters**
    A list of the configured filter objects.

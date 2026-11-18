@@ -69,6 +69,10 @@ And a more general configuration for list view pagination:
 	        start: '2'
 	        end: '1000'
 
+Pagination is 1-based. Page 1 is the plain list URL (:samp:`/list-page/`) and later pages are :samp:`/list-page/page-2`, :samp:`/list-page/page-3` and so on.
+
+If a page contains several list plugins, the first plugin on the page with :guilabel:`Enable pagination` switched on owns the :samp:`/page-X` path. Plugins that are not paginated are ignored when working this out. Any further paginated plugins on the same page are paginated independently through the query string, for example :samp:`?tx_llanthology_anthologyview[pages][456]=3`, where :samp:`456` is the plugin's content element UID. Page 1 is never written to the URL.
+
 The list view configuration can be reused across all instances of the Anthology list view as it is not dependent upon a model. Add the list view page UIDs to the :samp:`limitToPages` array.
 
 Each single view requires a route configuration per-model as it requires the :samp:`tableName` configuration. Single view page UIDs can be added to the :samp:`limitToPages` array.
