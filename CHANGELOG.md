@@ -1,3 +1,17 @@
+# 3.3.1
+
+**18th November 2026**
+
+#### Fix
+
+- Resolve collision issue when multiple repositories refer to the same table
+- Replace removed frontend controller page title resolution with PageTitleProviderManager
+- Read correct `maximumPaginationLinks` setting for pagination in AnthologyController (#102)
+
+#### Documentation
+
+- Update FlexForm registration example for TYPO3 v14+ (#91)
+
 # 3.3.0
 
 **15th October 2026**
