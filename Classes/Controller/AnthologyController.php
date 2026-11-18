@@ -110,10 +110,23 @@ class AnthologyController extends ActionController
 				);
 
 			case 'json':
+				if ($this->settings['allowJsonOutput'] ?? true) {
+					break;
+				}
+
+				$outputFields = array_map(
+					GeneralUtility::underscoredToLowerCamelCase(...),
+					GeneralUtility::trimExplode(',', $this->settings['allowJsonOutputFields'] ?? '', true)
+				);
+
 				throw new ImmediateResponseException(
 					new JsonResponse(
 						array_map(
-							ObjectAccess::getGettableProperties(...),
+							fn (AbstractEntity $record) => array_filter(
+								ObjectAccess::getGettableProperties($record),
+								fn ($key) => in_array($key, $outputFields, true),
+								ARRAY_FILTER_USE_KEY
+							),
 							$this->getPaginatedItems()['paginator']?->getPaginatedItems()->toArray()
 						)
 					)
