@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LiquidLight\Anthology\Controller;
 
 use LiquidLight\Anthology\Domain\Repository\FilterRepository;
+use LiquidLight\Anthology\EventListener\RecordHrefLangEventListener;
 use LiquidLight\Anthology\Events\BeforeAnthologyListViewRenderEvent;
 use LiquidLight\Anthology\Events\BeforeAnthologySingleViewRenderEvent;
 use LiquidLight\Anthology\Events\BeforeGetRecordsEvent;
@@ -52,6 +53,7 @@ class AnthologyController extends ActionController
 		protected FilterFactory $filterFactory,
 		protected FilterRepository $filterRepository,
 		protected PageTitleProvider $pageTitleProvider,
+		protected RecordHrefLangEventListener $recordHrefLangEventListener,
 		protected PackageManager $packageManager
 	) {
 	}
@@ -132,8 +134,10 @@ class AnthologyController extends ActionController
 		}
 
 		$this->record = $record;
+		$tcaName = $this->repositoryFactory->getTcaName($this->getRepository());
 
-		$this->pageTitleProvider->setTitle($record, $this->repositoryFactory->getTcaName($this->getRepository()));
+		$this->pageTitleProvider->setTitle($record, $tcaName);
+		$this->recordHrefLangEventListener->setRecord($tcaName, $this->recordUid);
 
 		$this->view->assign('record', $record);
 
