@@ -15,6 +15,13 @@ class PageTitleProvider extends AbstractPageTitleProvider
 	{
 		global $TCA;
 
+		$seoTitle = $this->getSeoTitle($record);
+
+		if ($seoTitle !== '') {
+			$this->title = $seoTitle;
+			return;
+		}
+
 		$labelKey = $TCA[$tcaName]['ctrl']['label'] ?? null;
 
 		if (!$labelKey) {
@@ -52,5 +59,14 @@ class PageTitleProvider extends AbstractPageTitleProvider
 		);
 
 		$this->title = implode(' ', $titleComponents);
+	}
+
+	private function getSeoTitle(AbstractEntity $record): string
+	{
+		if (!ObjectAccess::isPropertyGettable($record, 'seoTitle')) {
+			return '';
+		}
+
+		return trim((string)ObjectAccess::getProperty($record, 'seoTitle'));
 	}
 }

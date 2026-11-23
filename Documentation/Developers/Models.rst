@@ -90,3 +90,12 @@ After completing the steps above and clearing the cache, your new model will be 
 4. You should now see "My Extension Items" (the :samp:`title` from your TCA file) as an option.
 
 Once you select it and save the content element, the plugin will start to query and display the records from your :samp:`tx_myextension_domain_model_item` table.
+
+Page Title and Meta Description
+===============================
+
+On the single view the page title is built from the :samp:`label` field in your TCA :samp:`ctrl` section. If the model has a :samp:`seoTitle` property with a value, that is used instead.
+
+The meta description is taken from the :samp:`seoDescription` property, falling back to :samp:`abstract`. If neither has a value, the page's own description is left in place.
+
+Models that use :samp:`LiquidLight\\Anthology\\Domain\\Model\\AnthologyModelTrait` already have these properties, any other model can add them.
