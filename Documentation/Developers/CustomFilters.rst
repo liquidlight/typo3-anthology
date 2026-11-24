@@ -129,7 +129,7 @@ This template renders the filter on the website. It's a standard Fluid template.
 Supporting Pre-filters
 =======================
 
-Pre-filters (see :doc:`../Integrators/Filters`) let an integrator permanently restrict a list view to matching records, with a value they configure directly on the pre-filter itself rather than one submitted by a site visitor. To make your filter selectable as a pre-filter, add the :php:`AsAnthologyPreFilter` attribute alongside :php:`AsAnthologyFilter`:
+Pre-filters (see :doc:`../Integrators/Filters`) let an integrator permanently restrict a list view to matching records, with a value they configure directly on the pre-filter itself rather than one submitted by a site visitor. To make your filter selectable as a pre-filter, add the :php:`AsAnthologyPreFilter` attribute, passing the filter type, alongside :php:`AsAnthologyFilter`. A filter can use either attribute or both; it is only offered in the selection (filters or pre-filters) its attribute registers it for:
 
 .. code-block:: php
 
@@ -137,7 +137,7 @@ Pre-filters (see :doc:`../Integrators/Filters`) let an integrator permanently re
 	use LiquidLight\Anthology\Attribute\AsAnthologyPreFilter;
 
 	#[AsAnthologyFilter('myextension_tag')]
-	#[AsAnthologyPreFilter]
+	#[AsAnthologyPreFilter('myextension_tag')]
 	class TagFilter extends AbstractFilter implements FilterInterface
 	{
 		// ...

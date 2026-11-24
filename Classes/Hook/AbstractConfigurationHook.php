@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LiquidLight\Anthology\Hook;
 
 use LiquidLight\Anthology\Factory\FilterFactory;
+use LiquidLight\Anthology\Factory\PreFilterFactory;
 use LiquidLight\Anthology\Factory\RepositoryFactory;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
@@ -19,6 +20,7 @@ abstract class AbstractConfigurationHook
 
 	public function __construct(
 		protected readonly FilterFactory $filterFactory,
+		protected readonly PreFilterFactory $preFilterFactory,
 		protected readonly RepositoryFactory $repositoryFactory,
 		protected readonly FlexFormService $flexFormService,
 		protected readonly ConnectionPool $connectionPool

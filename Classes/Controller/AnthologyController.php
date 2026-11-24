@@ -9,6 +9,7 @@ use LiquidLight\Anthology\Events\BeforeAnthologyListViewRenderEvent;
 use LiquidLight\Anthology\Events\BeforeAnthologySingleViewRenderEvent;
 use LiquidLight\Anthology\Events\BeforeGetRecordsEvent;
 use LiquidLight\Anthology\Factory\FilterFactory;
+use LiquidLight\Anthology\Factory\PreFilterFactory;
 use LiquidLight\Anthology\Factory\RepositoryFactory;
 use LiquidLight\Anthology\Provider\PageTitleProvider;
 use Psr\Http\Message\ResponseInterface;
@@ -50,6 +51,7 @@ class AnthologyController extends ActionController
 	public function __construct(
 		protected RepositoryFactory $repositoryFactory,
 		protected FilterFactory $filterFactory,
+		protected PreFilterFactory $preFilterFactory,
 		protected FilterRepository $filterRepository,
 		protected PageTitleProvider $pageTitleProvider,
 		protected PackageManager $packageManager
@@ -296,7 +298,7 @@ class AnthologyController extends ActionController
 		}
 
 		$constraints = $this->filterFactory->getConstraints($filters, $query);
-		$preFilterConstraints = $this->filterFactory->getConstraints($preFilters, $query);
+		$preFilterConstraints = $this->preFilterFactory->getConstraints($preFilters, $query);
 
 		$constraintModeMethod = $this->getConstraintModeMethod($this->settings['filterMode']);
 		$preFilterConstraintModeMethod = $this->getConstraintModeMethod($this->settings['preFilterMode'] ?? 'and');

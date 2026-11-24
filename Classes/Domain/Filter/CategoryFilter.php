@@ -17,7 +17,7 @@ use TYPO3\CMS\Extbase\Persistence\Generic\Qom\ComparisonInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 
 #[AsAnthologyFilter('llanthology_category')]
-#[AsAnthologyPreFilter]
+#[AsAnthologyPreFilter('llanthology_category')]
 class CategoryFilter extends AbstractFilter implements FilterInterface
 {
 	protected const LABEL = 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.filter_type.category';

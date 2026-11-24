@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace LiquidLight\Anthology\DependencyInjection;
 
 use LiquidLight\Anthology\Attribute\AsAnthologyFilter;
+use LiquidLight\Anthology\Attribute\AsAnthologyPreFilter;
 use LiquidLight\Anthology\Attribute\AsAnthologyRepository;
 use LiquidLight\Anthology\Registry\AnthologyFilterRegistry;
+use LiquidLight\Anthology\Registry\AnthologyPreFilterRegistry;
 use LiquidLight\Anthology\Registry\AnthologyRepositoryRegistry;
 use ReflectionClass;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
@@ -17,6 +19,7 @@ final class AnthologyAttributeCompiler implements CompilerPassInterface
 	public function process(ContainerBuilder $container): void
 	{
 		$filterRegistryDefinition = $container->findDefinition(AnthologyFilterRegistry::class);
+		$preFilterRegistryDefinition = $container->findDefinition(AnthologyPreFilterRegistry::class);
 		$repositoryRegistryDefinition = $container->findDefinition(AnthologyRepositoryRegistry::class);
 
 		foreach ($container->getDefinitions() as $definition) {
@@ -35,6 +38,14 @@ final class AnthologyAttributeCompiler implements CompilerPassInterface
 			// Filters
 			foreach ($reflection->getAttributes(AsAnthologyFilter::class) as $attribute) {
 				$filterRegistryDefinition->addMethodCall(
+					'add',
+					[$className]
+				);
+			}
+
+			// Pre-Filters
+			foreach ($reflection->getAttributes(AsAnthologyPreFilter::class) as $attribute) {
+				$preFilterRegistryDefinition->addMethodCall(
 					'add',
 					[$className]
 				);
