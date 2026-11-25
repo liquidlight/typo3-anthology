@@ -96,6 +96,8 @@ Page Title and Meta Description
 
 On the single view the page title is built from the :samp:`label` field in your TCA :samp:`ctrl` section. If the model has a :samp:`seoTitle` property with a value, that is used instead.
 
+On the single view the record's title takes precedence over the SEO title of the page the plugin is on. On other views the page's own title and SEO title are used as normal. To change this, set :typoscript:`config.pageTitleProviders.tx_llanthology.before` so that it no longer comes before :typoscript:`seo`.
+
 The meta description is taken from the :samp:`seoDescription` property, falling back to :samp:`abstract`. If neither has a value, the page's own description is left in place.
 
 Models that use :samp:`LiquidLight\\Anthology\\Domain\\Model\\AnthologyModelTrait` already have these properties, any other model can add them.
