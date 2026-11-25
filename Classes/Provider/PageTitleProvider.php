@@ -67,13 +67,13 @@ class PageTitleProvider extends AbstractPageTitleProvider
 		$this->title = implode(' ', $titleComponents);
 	}
 
-	private function getSeoTitle(AbstractEntity $record): string
+	protected function getSeoTitle(AbstractEntity $record): string
 	{
-		if (!ObjectAccess::isPropertyGettable($record, self::SEO_TITLE_PROPERTY)) {
+		if (!ObjectAccess::isPropertyGettable($record, static::SEO_TITLE_PROPERTY)) {
 			return '';
 		}
 
-		$value = ObjectAccess::getProperty($record, self::SEO_TITLE_PROPERTY);
+		$value = ObjectAccess::getProperty($record, static::SEO_TITLE_PROPERTY);
 
 		if (!is_scalar($value) && !$value instanceof Stringable) {
 			return '';

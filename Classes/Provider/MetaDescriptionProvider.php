@@ -17,7 +17,7 @@ class MetaDescriptionProvider
 	protected const DESCRIPTION_PROPERTIES = ['seoDescription', 'abstract'];
 
 	public function __construct(
-		private readonly MetaTagManagerRegistry $metaTagManagerRegistry
+		protected readonly MetaTagManagerRegistry $metaTagManagerRegistry
 	) {
 	}
 
@@ -35,9 +35,9 @@ class MetaDescriptionProvider
 		;
 	}
 
-	private function getDescription(AbstractEntity $record): string
+	protected function getDescription(AbstractEntity $record): string
 	{
-		foreach (self::DESCRIPTION_PROPERTIES as $property) {
+		foreach (static::DESCRIPTION_PROPERTIES as $property) {
 			if (!ObjectAccess::isPropertyGettable($record, $property)) {
 				continue;
 			}
