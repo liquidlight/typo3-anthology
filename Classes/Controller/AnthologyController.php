@@ -10,6 +10,7 @@ use LiquidLight\Anthology\Events\BeforeAnthologySingleViewRenderEvent;
 use LiquidLight\Anthology\Events\BeforeGetRecordsEvent;
 use LiquidLight\Anthology\Factory\FilterFactory;
 use LiquidLight\Anthology\Factory\RepositoryFactory;
+use LiquidLight\Anthology\Provider\MetaDescriptionProvider;
 use LiquidLight\Anthology\Provider\PageTitleProvider;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionClass;
@@ -52,7 +53,8 @@ class AnthologyController extends ActionController
 		protected FilterFactory $filterFactory,
 		protected FilterRepository $filterRepository,
 		protected PageTitleProvider $pageTitleProvider,
-		protected PackageManager $packageManager
+		protected PackageManager $packageManager,
+		protected MetaDescriptionProvider $metaDescriptionProvider
 	) {
 	}
 
@@ -134,6 +136,7 @@ class AnthologyController extends ActionController
 		$this->record = $record;
 
 		$this->pageTitleProvider->setTitle($record, $this->repositoryFactory->getTcaName($this->getRepository()));
+		$this->metaDescriptionProvider->setDescription($record);
 
 		$this->view->assign('record', $record);
 

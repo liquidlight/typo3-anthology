@@ -22,7 +22,7 @@ Features
 - **Advanced Filtering System**: Search, category, and date filtering with multiple display modes
 - **Flexible Template System**: Custom template paths and template name overrides
 - **Pagination Support**: Configurable items per page and pagination links
-- **SEO-Friendly**: Automatic page title generation from record data
+- **SEO-Friendly**: Page title and meta description generated from record data, with SEO title and description overrides
 - **Route Enhancement**: Built-in route enhancers for clean URLs
 
 Requirements

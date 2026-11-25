@@ -168,4 +168,112 @@ class PageTitleProviderTest extends TestCase
 
 		self::assertSame('Main Title Sub Title', $this->subject->getTitle());
 	}
+
+	/**
+	 * @covers \LiquidLight\Anthology\Provider\PageTitleProvider::setTitle
+	 * @covers \LiquidLight\Anthology\Provider\PageTitleProvider::getSeoTitle
+	 */
+	public function testSetTitlePrefersSeoTitleWhenSet(): void
+	{
+		$GLOBALS['TCA']['test_table'] = [
+			'ctrl' => [
+				'label' => 'title',
+			],
+		];
+
+		$record = new class () extends AbstractEntity {
+			public string $title = 'Test Title';
+
+			public ?string $seoTitle = '  SEO Title  ';
+
+			public function __construct()
+			{
+				// Empty constructor to avoid parent constructor issues
+			}
+		};
+
+		$this->subject->setTitle($record, 'test_table');
+
+		self::assertSame('SEO Title', $this->subject->getTitle());
+	}
+
+	/**
+	 * @covers \LiquidLight\Anthology\Provider\PageTitleProvider::setTitle
+	 * @covers \LiquidLight\Anthology\Provider\PageTitleProvider::getSeoTitle
+	 * @uses \TYPO3\CMS\Core\Utility\GeneralUtility::underscoredToLowerCamelCase
+	 */
+	public function testSetTitleFallsBackToLabelWhenSeoTitleIsEmpty(): void
+	{
+		$GLOBALS['TCA']['test_table'] = [
+			'ctrl' => [
+				'label' => 'title',
+			],
+		];
+
+		$record = new class () extends AbstractEntity {
+			public string $title = 'Test Title';
+
+			public ?string $seoTitle = ' ';
+
+			public function __construct()
+			{
+				// Empty constructor to avoid parent constructor issues
+			}
+		};
+
+		$this->subject->setTitle($record, 'test_table');
+
+		self::assertSame('Test Title', $this->subject->getTitle());
+	}
+
+	/**
+	 * @covers \LiquidLight\Anthology\Provider\PageTitleProvider::setTitle
+	 * @covers \LiquidLight\Anthology\Provider\PageTitleProvider::getSeoTitle
+	 * @uses \TYPO3\CMS\Core\Utility\GeneralUtility::underscoredToLowerCamelCase
+	 */
+	public function testSetTitleFallsBackToLabelWhenSeoTitleCannotBeCastToString(): void
+	{
+		$GLOBALS['TCA']['test_table'] = [
+			'ctrl' => [
+				'label' => 'title',
+			],
+		];
+
+		$record = new class () extends AbstractEntity {
+			public string $title = 'Test Title';
+
+			public array $seoTitle = ['not', 'a', 'string'];
+
+			public function __construct()
+			{
+				// Empty constructor to avoid parent constructor issues
+			}
+		};
+
+		$this->subject->setTitle($record, 'test_table');
+
+		self::assertSame('Test Title', $this->subject->getTitle());
+	}
+
+	/**
+	 * @covers \LiquidLight\Anthology\Provider\PageTitleProvider::setTitle
+	 * @covers \LiquidLight\Anthology\Provider\PageTitleProvider::getSeoTitle
+	 */
+	public function testSetTitleUsesSeoTitleWhenNoLabelKeyConfigured(): void
+	{
+		$GLOBALS['TCA']['test_table'] = [];
+
+		$record = new class () extends AbstractEntity {
+			public ?string $seoTitle = 'SEO Title';
+
+			public function __construct()
+			{
+				// Empty constructor to avoid parent constructor issues
+			}
+		};
+
+		$this->subject->setTitle($record, 'test_table');
+
+		self::assertSame('SEO Title', $this->subject->getTitle());
+	}
 }
