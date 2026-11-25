@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LiquidLight\Anthology\Provider;
 
+use Stringable;
 use TYPO3\CMS\Core\PageTitle\AbstractPageTitleProvider;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
@@ -67,6 +68,12 @@ class PageTitleProvider extends AbstractPageTitleProvider
 			return '';
 		}
 
-		return trim((string)ObjectAccess::getProperty($record, 'seoTitle'));
+		$value = ObjectAccess::getProperty($record, 'seoTitle');
+
+		if (!is_scalar($value) && !$value instanceof Stringable) {
+			return '';
+		}
+
+		return trim((string)$value);
 	}
 }

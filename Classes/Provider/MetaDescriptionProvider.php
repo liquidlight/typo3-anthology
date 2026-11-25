@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LiquidLight\Anthology\Provider;
 
+use Stringable;
 use TYPO3\CMS\Core\MetaTag\MetaTagManagerRegistry;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
@@ -36,11 +37,17 @@ class MetaDescriptionProvider
 				continue;
 			}
 
+			$value = ObjectAccess::getProperty($record, $property);
+
+			if (!is_scalar($value) && !$value instanceof Stringable) {
+				continue;
+			}
+
 			$description = trim(
 				(string)preg_replace(
 					'/\s+/',
 					' ',
-					strip_tags((string)ObjectAccess::getProperty($record, $property))
+					strip_tags((string)$value)
 				)
 			);
 

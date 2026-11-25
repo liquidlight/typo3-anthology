@@ -116,6 +116,27 @@ class MetaDescriptionProviderTest extends TestCase
 	/**
 	 * @covers \LiquidLight\Anthology\Provider\MetaDescriptionProvider::setDescription
 	 */
+	public function testSetDescriptionSkipsValuesThatCannotBeCastToString(): void
+	{
+		$record = new class () extends AbstractEntity {
+			public array $seoDescription = ['not', 'a', 'string'];
+
+			public ?string $abstract = 'The abstract';
+
+			public function __construct()
+			{
+				// Empty constructor to avoid parent constructor issues
+			}
+		};
+
+		$this->expectDescription('The abstract');
+
+		$this->subject->setDescription($record);
+	}
+
+	/**
+	 * @covers \LiquidLight\Anthology\Provider\MetaDescriptionProvider::setDescription
+	 */
 	public function testSetDescriptionDoesNothingWhenNoDescriptionAvailable(): void
 	{
 		$record = new class () extends AbstractEntity {
