@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LiquidLight\Anthology\Tests\Unit\Hook;
 
 use LiquidLight\Anthology\Factory\FilterFactory;
+use LiquidLight\Anthology\Factory\PreFilterFactory;
 use LiquidLight\Anthology\Factory\RepositoryFactory;
 use LiquidLight\Anthology\Hook\AbstractConfigurationHook;
 use LiquidLight\Anthology\Hook\PluginConfigurationHook;
@@ -183,6 +184,7 @@ class PluginConfigurationHookTest extends TestCase
 
 		return new class (
 			$this->createMock(FilterFactory::class),
+			$this->createMock(PreFilterFactory::class),
 			$repositoryFactory,
 			$this->createFlexFormService(),
 			$this->createMock(ConnectionPool::class),
@@ -190,12 +192,13 @@ class PluginConfigurationHookTest extends TestCase
 		) extends PluginConfigurationHook {
 			public function __construct(
 				FilterFactory $filterFactory,
+				PreFilterFactory $preFilterFactory,
 				RepositoryFactory $repositoryFactory,
 				FlexFormService $flexFormService,
 				ConnectionPool $connectionPool,
 				private array &$recordedCalls
 			) {
-				parent::__construct($filterFactory, $repositoryFactory, $flexFormService, $connectionPool);
+				parent::__construct($filterFactory, $preFilterFactory, $repositoryFactory, $flexFormService, $connectionPool);
 			}
 
 			public function getFields(array &$params, array $allowedTypes, ?int $anthologyPluginUid = null): void

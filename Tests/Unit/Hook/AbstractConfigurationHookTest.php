@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LiquidLight\Anthology\Tests\Unit\Hook;
 
 use LiquidLight\Anthology\Factory\FilterFactory;
+use LiquidLight\Anthology\Factory\PreFilterFactory;
 use LiquidLight\Anthology\Factory\RepositoryFactory;
 use LiquidLight\Anthology\Hook\AbstractConfigurationHook;
 use PHPUnit\Framework\TestCase;
@@ -97,6 +98,7 @@ class AbstractConfigurationHookTest extends TestCase
 	{
 		$subject = new class (
 			$this->createMock(FilterFactory::class),
+			$this->createMock(PreFilterFactory::class),
 			$this->createMock(RepositoryFactory::class),
 			$this->createFlexFormService(),
 			$this->createMock(ConnectionPool::class)
@@ -160,6 +162,7 @@ class AbstractConfigurationHookTest extends TestCase
 	{
 		return new class (
 			$this->createMock(FilterFactory::class),
+			$this->createMock(PreFilterFactory::class),
 			$this->createMock(RepositoryFactory::class),
 			$this->createFlexFormService(),
 			$this->createMock(ConnectionPool::class),
@@ -168,13 +171,14 @@ class AbstractConfigurationHookTest extends TestCase
 		) extends AbstractConfigurationHook {
 			public function __construct(
 				FilterFactory $filterFactory,
+				PreFilterFactory $preFilterFactory,
 				RepositoryFactory $repositoryFactory,
 				FlexFormService $flexFormService,
 				ConnectionPool $connectionPool,
 				private readonly ?int $stubAnthologyPluginUid,
 				private readonly ?string $stubTcaTableName
 			) {
-				parent::__construct($filterFactory, $repositoryFactory, $flexFormService, $connectionPool);
+				parent::__construct($filterFactory, $preFilterFactory, $repositoryFactory, $flexFormService, $connectionPool);
 			}
 
 			protected function getAnthologyPluginUid(array $params): int

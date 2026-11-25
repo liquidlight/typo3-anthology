@@ -14,7 +14,7 @@ use TYPO3\CMS\Extbase\Persistence\Generic\Qom\ConstraintInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 
 #[AsAnthologyFilter('llanthology_search')]
-#[AsAnthologyPreFilter]
+#[AsAnthologyPreFilter('llanthology_search')]
 class SearchFilter extends AbstractFilter implements FilterInterface
 {
 	protected const LABEL = 'LLL:EXT:ll_anthology/Resources/Private/Language/locallang_tca.xlf:tx_anthology_domain_model_filter.filter_type.search';
