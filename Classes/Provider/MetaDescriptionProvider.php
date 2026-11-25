@@ -11,6 +11,11 @@ use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 
 class MetaDescriptionProvider
 {
+	/**
+	 * Record properties to take the description from, in order of preference
+	 */
+	protected const DESCRIPTION_PROPERTIES = ['seoDescription', 'abstract'];
+
 	public function __construct(
 		private readonly MetaTagManagerRegistry $metaTagManagerRegistry
 	) {
@@ -32,7 +37,7 @@ class MetaDescriptionProvider
 
 	private function getDescription(AbstractEntity $record): string
 	{
-		foreach (['seoDescription', 'abstract'] as $property) {
+		foreach (self::DESCRIPTION_PROPERTIES as $property) {
 			if (!ObjectAccess::isPropertyGettable($record, $property)) {
 				continue;
 			}

@@ -12,6 +12,11 @@ use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 
 class PageTitleProvider extends AbstractPageTitleProvider
 {
+	/**
+	 * Record property to take the page title from, when it has a value
+	 */
+	protected const SEO_TITLE_PROPERTY = 'seoTitle';
+
 	public function setTitle(AbstractEntity $record, string $tcaName): void
 	{
 		global $TCA;
@@ -64,11 +69,11 @@ class PageTitleProvider extends AbstractPageTitleProvider
 
 	private function getSeoTitle(AbstractEntity $record): string
 	{
-		if (!ObjectAccess::isPropertyGettable($record, 'seoTitle')) {
+		if (!ObjectAccess::isPropertyGettable($record, self::SEO_TITLE_PROPERTY)) {
 			return '';
 		}
 
-		$value = ObjectAccess::getProperty($record, 'seoTitle');
+		$value = ObjectAccess::getProperty($record, self::SEO_TITLE_PROPERTY);
 
 		if (!is_scalar($value) && !$value instanceof Stringable) {
 			return '';
